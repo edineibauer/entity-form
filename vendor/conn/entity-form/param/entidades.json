@@ -1,0 +1,29 @@
+{
+  "title": "Gerenciamento de Entidades",
+  "libraries": {
+    "js": [
+      "jquery",
+      "materialize",
+      "angular"
+    ],
+    "css": [
+      "materialize"
+    ],
+    "font": [
+      "roboto"
+    ],
+    "icon": [
+      "materialize"
+    ]
+  },
+  "dependencies": {
+    "js": [
+      "slug",
+      "entity-default-by-type",
+      "entidade-form"
+    ],
+    "css": [
+      "entidade-form"
+    ]
+  }
+}

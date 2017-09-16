@@ -1,0 +1,20 @@
+{
+  "name": "conn/entity-form",
+  "description": "Gerencia as Entidades de um sistema",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Edinei J. Bauer",
+      "email": "edineibauer@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "EntityForm": "src/"
+    }
+  }
+}

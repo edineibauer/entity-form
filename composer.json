@@ -1,0 +1,10 @@
+{
+  "autoload": {
+    "classmap": [
+      "src/EntityForm"
+    ]
+  },
+  "require": {
+    "conn/config": "^1"
+  }
+}
