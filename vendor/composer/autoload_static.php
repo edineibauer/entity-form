@@ -43,6 +43,8 @@ class ComposerStaticInitda3f7068609315c868848b1369db561e
 
     public static $classMap = array (
         'EntityForm\\EntityEdit' => __DIR__ . '/../..' . '/src/EntityForm/EntityEdit.php',
+        'EntityForm\\EntityUpdate' => __DIR__ . '/../..' . '/src/EntityForm/EntityUpdate.php',
+        'EntityForm\\EntityUpdateStorage' => __DIR__ . '/../..' . '/src/EntityForm/EntityUpdateStorage.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

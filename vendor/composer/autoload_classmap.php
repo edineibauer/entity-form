@@ -7,4 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'EntityForm\\EntityEdit' => $baseDir . '/src/EntityForm/EntityEdit.php',
+    'EntityForm\\EntityUpdate' => $baseDir . '/src/EntityForm/EntityUpdate.php',
+    'EntityForm\\EntityUpdateStorage' => $baseDir . '/src/EntityForm/EntityUpdateStorage.php',
 );

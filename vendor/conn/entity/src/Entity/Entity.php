@@ -337,7 +337,7 @@ class Entity extends EntityCreateStorage
     {
         $data[$field]['link'] = $data[$field]['link'] ?? $this->title;
         $data[$field]['type'] = $data[$this->title]['type'] ?? "varchar";
-        $data[$field]['size'] = $data[$field]['size'] ?? $data[$this->title]['size'];
+        $data[$field]['size'] = $data[$field]['size'] ?? $data[$this->title]['size'] ?? 127;
         $data[$field]['null'] = false;
         $data[$field]['key'] = "unique";
         $data[$field]['class'] = "font-size08";

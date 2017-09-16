@@ -75,139 +75,153 @@ function funcaoValuesEntity(type, attr) {
 }
 
 function on(attr) {
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function select(attr) {
+    attr['list'] = false;
 
     return attr;
 }
 
 function status(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Status";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "status";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "status";
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function password(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Senha";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "senha";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "senha";
+    attr['list'] = false;
 
     return attr;
 }
 
 function cover(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Imagem";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "imagem";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "imagem";
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function time(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Hora";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "hora";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "hora";
+    attr['list'] = false;
 
     return attr;
 }
 
 function datatime(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Data";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "data";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "data";
+    attr['list'] = false;
 
     return attr;
 }
 
 function data(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Data";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "data";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "data";
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function week(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Dias da Semana";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "dias_da_semana";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "dias_da_semana";
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function link(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Url Name";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "urlname";
-    attr['type'] = "link";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "urlname";
+    attr['list'] = false;
 
     return attr;
 }
 
 function title(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Titulo";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "titulo";
-    attr['type'] = "title";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "titulo";
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function listSelectMult(attr) {
+    attr['list'] = false;
 
     return attr;
 }
 
 function listSelect(attr) {
+    attr['list'] = false;
 
     return attr;
 }
 
 function extendMult(attr) {
+    attr['list'] = false;
 
     return attr;
 }
 
 function extend(attr) {
+    attr['list'] = false;
 
     return attr;
 }
 
 function primaryKey(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "id";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "id";
-    attr['type'] = "pri";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "id";
+    attr['update'] = false;
+    attr['list'] = false;
 
     return attr;
 }
 
 function rsValue(attr) {
     attr['title'] = 'title' in attr && attr['title'] !== "" ? attr['title'] : "Valor";
-    attr['slug'] = 'slug' in attr && attr['slug'] !== "" ? attr['slug'] : "valor";
-    attr['type'] = "money";
+    attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "valor";
     attr['size'] = "";
     attr['input'] = "money";
     attr['default'] = 0;
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
 
 function inteiro(attr) {
-    attr['type'] = "int";
     attr['size'] = 11;
     attr['input'] = "number";
+    attr['list'] = false;
 
     return attr;
 }
 
 function textfield(attr) {
-    attr['type'] = "text";
     attr['size'] = "";
     attr['input'] = "textarea";
+    attr['list'] = false;
 
     return attr;
 }
 
 function texto(attr) {
-    attr['type'] = "varchar";
     attr['size'] = 255;
     attr['input'] = "text";
+    attr['list'] = 'list' in attr && attr['list'] !== "" ? attr['list'] : true;
 
     return attr;
 }
