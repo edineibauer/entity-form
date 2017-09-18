@@ -1,10 +1,20 @@
 {
-  "autoload": {
-    "classmap": [
-      "src/EntityForm"
-    ]
-  },
+  "name": "conn/entity-form",
+  "description": "Gerência as Entidades de um sistema. Controlando com uma interface de usuário vinculada ao banco.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Edinei J. Bauer",
+      "email": "edineibauer@gmail.com"
+    }
+  ],
   "require": {
-    "conn/config": "^1"
+    "php": "^7.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "EntityForm": "src/"
+    }
   }
 }
