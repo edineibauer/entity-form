@@ -22,6 +22,7 @@ app.controller('entity-controller', function ($scope) {
      * =======================
      * */
 
+    var editando = false;
     var identificador = 0;
     $scope.entityList = [];
     var attrCriadas = [];
@@ -122,6 +123,7 @@ app.controller('entity-controller', function ($scope) {
         attrDeletadas = [];
 
         if (id !== "") {
+            editando = true;
             $.post(HOME + 'request/post', {file: 'readEntity', lib: 'entity-form', entidade: id}, function (g) {
                 $scope.listAttr = [];
                 var dados = fixValuesAttr($.parseJSON(g));
@@ -136,6 +138,7 @@ app.controller('entity-controller', function ($scope) {
                 }, 1);
             });
         } else {
+            editando = false;
             $("#entity").focus();
             $scope.listAttr = [];
             $scope.addNewAtributo();
@@ -186,13 +189,13 @@ app.controller('entity-controller', function ($scope) {
                     file: "createEntity",
                     dados: $scope.listAttr,
                     entity: $scope.entity.slug,
+                    edit: editando,
                     add: attrCriadas,
                     mod: attrModificadas,
                     del: attrDeletadas
                 }, function (g) {
                     if (g) {
-                        Materialize.toast("Erro ao Salvar Entidade", 3000);
-                        console.log(g);
+                        Materialize.toast(g, 3000);
                     } else {
                         $scope.readEntity();
                         Materialize.toast('Entidade Salva!', 2500);

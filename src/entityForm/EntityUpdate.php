@@ -15,16 +15,19 @@ class EntityUpdate
 {
 
     private $entity;
+    private $edit;
     private $data;
     private $mod;
     private $del;
     private $add;
 
-    public function __construct(string $entity = null)
+    public function __construct(string $entity = null, $edit = false)
     {
         if ($entity) {
             $this->setEntity($entity);
         }
+
+        $this->edit = $edit;
     }
 
     /**
@@ -77,9 +80,30 @@ class EntityUpdate
     private function start()
     {
         if ($this->entity) {
-            $this->data = $this->fixDataEntity($this->data);
-            $this->createEntity();
+            if($this->checkAvaliableEntityName()) {
+                $this->data = $this->fixDataEntity($this->data);
+                $this->createEntity();
+            } else {
+                echo "Nome de Entidade já em uso";
+            }
         }
+    }
+
+    private function checkAvaliableEntityName()
+    {
+        $cont = 0;
+        foreach (\Helpers\Helper::listFolder(PATH_HOME . 'vendor/conn') as $conn) {
+            if(!$this->edit && file_exists(PATH_HOME . 'vendor/conn/' . $conn . "/entity/{$this->entity}.json")){
+                return false;
+            } elseif($this->edit && file_exists(PATH_HOME . 'vendor/conn/' . $conn . "/entity/{$this->entity}.json")) {
+                $cont++;
+                if($cont > 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private function fixDataEntity($data)
@@ -177,6 +201,28 @@ class EntityUpdate
         return null;
     }
 
+    private function createEntity()
+    {
+        $update = $this->checkIfAllreadyExistEntity();
+
+        $fp = fopen(PATH_HOME . "vendor/conn/entity-form/entity/" . $this->entity . ".json", "w");
+        fwrite($fp, json_encode($this->data));
+        fclose($fp);
+
+        $data = new Entity($this->entity, "entity-form");
+
+        if ($update) {
+            $this->convertIdentificadorToColumnAddMod($update, $data->getJsonStructEntity());
+
+            $manageData = new EntityUpdateStorage($this->entity);
+            $manageData->setData($data->getJsonStructEntity());
+            $manageData->setColumnChanged($this->mod);
+            $manageData->setColumnDeleted($this->del);
+            $manageData->setColumnAdded($this->add);
+            $manageData->exeUpdate();
+        }
+    }
+
     private function convertIdentificadorToColumnDel()
     {
         $json = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json"), true);
@@ -214,27 +260,5 @@ class EntityUpdate
 
         $this->add = $add;
         $this->mod = $mod;
-    }
-
-    private function createEntity()
-    {
-        $update = $this->checkIfAllreadyExistEntity();
-
-        $fp = fopen(PATH_HOME . "vendor/conn/entity-form/entity/" . $this->entity . ".json", "w");
-        fwrite($fp, json_encode($this->data));
-        fclose($fp);
-
-        $data = new Entity($this->entity, "entity-form");
-
-        if ($update) {
-            $this->convertIdentificadorToColumnAddMod($update, $data->getJsonStructEntity());
-
-            $manageData = new EntityUpdateStorage($this->entity);
-            $manageData->setData($data->getJsonStructEntity());
-            $manageData->setColumnChanged($this->mod);
-            $manageData->setColumnDeleted($this->del);
-            $manageData->setColumnAdded($this->add);
-            $manageData->exeUpdate();
-        }
     }
 }
