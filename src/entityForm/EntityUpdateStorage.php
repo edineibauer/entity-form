@@ -68,87 +68,53 @@ class EntityUpdateStorage
 
     public function exeUpdate()
     {
-        if ($this->entity) {
-            $json = $this->data;
-            $this->data = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json"), true);
+        if ($this->entity && $this->data) {
+            $this->checkChanges();
+            $this->removeColumnsToEntity();
+            $this->addColumnsToEntity();
+        }
+    }
 
-            if ($this->columnChanged) {
-                $this->checkChanges($json);
-            }
-
-            if ($this->columnDeleted) {
-                $this->removeColumnsToEntity($json);
-            }
-
-            if ($this->columnAdded) {
-                $this->addColumnsToEntity($json);
+    private function checkChanges()
+    {
+        if ($this->columnChanged) {
+            $sql = new SqlCommand();
+            foreach ($this->columnChanged as $old => $novo) {
+                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " CHANGE {$old} " . $this->prepareDataConfig($novo));
             }
         }
     }
 
-    private function checkChanges($json)
+    /**
+     * Remove colunas que existiam
+     */
+    private function removeColumnsToEntity()
     {
-        $sql = new SqlCommand();
-        foreach ($this->columnChanged as $itemm) {
-            foreach ($json as $ent) {
-                if ($ent['column'] === $itemm && $ent['type'] !== $this->data[$itemm]['type']) {
+        if ($this->columnDeleted) {
+            $sql = new SqlCommand();
 
-                    if (!$this->columnDeleted || ($this->columnDeleted && !in_array($itemm, $this->columnDeleted))) {
-                        $this->columnDeleted[] = $itemm;
-                    }
-                    if (!$this->columnAdded || ($this->columnAdded && !in_array($itemm, $this->columnAdded))) {
-                        $this->columnAdded[] = $itemm;
-                    }
-
-                } elseif($ent['column'] === $itemm && $ent['type'] === $this->data[$itemm]['type']) {
-
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " MODIFY " . $this->prepareDataConfig($itemm));
-                }
+            foreach ($this->columnDeleted as $itemd) {
+                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP COLUMN " . $itemd);
             }
         }
     }
 
-    private function removeColumnsToEntity($json)
+    private function addColumnsToEntity()
     {
-        $sql = new SqlCommand();
-
-        foreach ($this->columnDeleted as $itemd) {
-            foreach ($json as $j) {
-                if ($j['column'] === $itemd) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP COLUMN " . $itemd);
-                }
+        if ($this->columnAdded) {
+            $sql = new SqlCommand();
+            foreach ($this->columnAdded as $itema) {
+                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . $this->prepareDataConfig($itema));
             }
         }
     }
 
-    private function addColumnsToEntity($json)
+    private function prepareDataConfig($column)
     {
-        $sql = new SqlCommand();
-        foreach ($this->columnAdded as $itema) {
-            $unico = true;
-
-            foreach ($json as $j) {
-                if ($j['column'] === $itema && (!$this->columnDeleted || ($this->columnDeleted && !in_array($itema, $this->columnDeleted)))) {
-                    $unico = false;
-                }
-            }
-
-            if ($unico) {
-                foreach ($this->data as $dd) {
-                    if ($dd['column'] === $itema) {
-                        $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . $this->prepareDataConfig($itema));
-                    }
-                }
-            }
-        }
-    }
-
-    private function prepareDataConfig($item)
-    {
-        var_dump($this->data[$item]);
-        return $item . " " . $this->data[$item]['type'] . " " . (isset($this->data[$item]['size']) ? "({$this->data[$item]['size']}) " : " ")
-            . (isset($this->data[$item]['null']) && !$this->data[$item]['null'] ? "NOT NULL " : "")
-            . (isset($this->data[$item]['default']) ? $this->prepareDefault($this->data[$item]['default']) : (!isset($this->data[$item]['null']) || $this->data[$item]['null'] ? "DEFAULT NULL" : ""));
+        $item = $this->data[$column];
+        return $column . " " . $item['type'] . " " . (isset($item['size']) ? "({$item['size']}) " : " ")
+            . (isset($item['null']) && !$item['null'] ? "NOT NULL " : "")
+            . (isset($item['default']) ? $this->prepareDefault($item['default']) : (!isset($item['null']) || $item['null'] ? "DEFAULT NULL" : ""));
 
     }
 

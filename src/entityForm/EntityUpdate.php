@@ -89,7 +89,7 @@ class EntityUpdate
 
             foreach ($dado as $item => $value) {
                 $dado[$item] = $this->fixValue($value, $item);
-                if($this->checkDefaultValues($item, $value)) {
+                if ($this->checkDefaultValues($item, $value)) {
                     unset($dado[$item]);
                 }
             }
@@ -112,7 +112,7 @@ class EntityUpdate
 
     private function checkTrueValues($item, $value)
     {
-        $trueTags = array("update", "edit", "list");
+        $trueTags = array("null", "update", "edit", "list");
         if (in_array($item, $trueTags) && ($value === true || $value === 'true')) {
             return true;
         }
@@ -121,7 +121,7 @@ class EntityUpdate
 
     private function checkFalseValues($item, $value)
     {
-        $falseTags = array("null", "unique", "indice");
+        $falseTags = array("unique", "indice");
         if (in_array($item, $falseTags) && (!$value || $value === 'false')) {
             return true;
         }
@@ -132,7 +132,7 @@ class EntityUpdate
     {
         if (!$this->checkEmptyValues($item, $value)) {
             if (!$this->checkTrueValues($item, $value)) {
-                if(!$this->checkFalseValues($item, $value)) {
+                if (!$this->checkFalseValues($item, $value)) {
                     return false;
                 }
             }
@@ -160,9 +160,9 @@ class EntityUpdate
     {
         Helper::createFolderIfNoExist(PATH_HOME . "vendor/conn/entity-form/entity");
 
-        if (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/{$this->entity}.json")) {
+        if (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json")) {
 
-            $json = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json"), true);
+            $json = $this->convertIdentificadorToColumnDel();
 
             if (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json")) {
                 unlink(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json");
@@ -177,19 +177,60 @@ class EntityUpdate
         return null;
     }
 
+    private function convertIdentificadorToColumnDel()
+    {
+        $json = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json"), true);
+
+        $del = null;
+        foreach ($json as $j) {
+            if ($this->del && in_array($j['identificador'], $this->del)) {
+                $del[] = $j['column'];
+            }
+        }
+        $this->del = $del;
+
+        return $json;
+
+    }
+
+    private function convertIdentificadorToColumnAddMod($old, $json)
+    {
+        $add = null;
+        $mod = null;
+        foreach ($json as $j) {
+            if(!$this->del || !in_array($j['column'], $this->del)) {
+                if ($this->add && in_array($j['identificador'], $this->add)) {
+                    $add[] = $j['column'];
+                } elseif ($this->mod && in_array($j['identificador'], $this->mod)) {
+
+                    foreach ($old as $o) {
+                        if($o['identificador'] === $j['identificador']) {
+                            $mod[$o['column']] = $j['column'];
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->add = $add;
+        $this->mod = $mod;
+    }
+
     private function createEntity()
     {
-        $json = $this->checkIfAllreadyExistEntity();
+        $update = $this->checkIfAllreadyExistEntity();
 
         $fp = fopen(PATH_HOME . "vendor/conn/entity-form/entity/" . $this->entity . ".json", "w");
         fwrite($fp, json_encode($this->data));
         fclose($fp);
 
-        new Entity($this->entity, "entity-form");
+        $data = new Entity($this->entity, "entity-form");
 
-        if($json) {
+        if ($update) {
+            $this->convertIdentificadorToColumnAddMod($update, $data->getJsonStructEntity());
+
             $manageData = new EntityUpdateStorage($this->entity);
-            $manageData->setData($json);
+            $manageData->setData($data->getJsonStructEntity());
             $manageData->setColumnChanged($this->mod);
             $manageData->setColumnDeleted($this->del);
             $manageData->setColumnAdded($this->add);

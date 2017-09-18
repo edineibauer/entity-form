@@ -83,7 +83,7 @@
                             <i class="material-icons right">add</i>
                         </button>
                     </div>
-                    <div class="col s12 m6 right-align" ng-show="attrValid()">
+                    <div class="col s12 m6 right-align" ng-show="attrFullFieldsRequireds()">
                         <button class="btn waves-effect waves-light grey lighten-3 grey-text"
                                 name="action" ng-click="deleteAttr()">
                             Remover
@@ -97,7 +97,7 @@
                 <div class="row">
                     <div class="row">
                         <div class="input-field col s12 m6">
-                            <select ng-model="attr.type" id="selectType" ng-required="true">
+                            <select ng-model="attr.type" ng-disabled="attr.$$hashKey" id="selectType" ng-required="true">
                                 <option value="" disabled selected>Selecione</option>
                                 <option ng-repeat="(k, v) in dataList" value="{{k}}">{{v}}</option>
                             </select>

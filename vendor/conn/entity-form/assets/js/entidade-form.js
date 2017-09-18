@@ -12,38 +12,9 @@ app.controller('entity-controller', function ($scope) {
         return this; // for testing purposes
     };
 
-    $scope.attrValid = function () {
+    $scope.attrFullFieldsRequireds = function () {
         return (!(($scope.attr.type === 'list' || $scope.attr.type === 'extend' || $scope.attr.type === 'extendMult' || $scope.attr.type === 'listMult') && !$scope.attr.table) && $scope.attr.type && $scope.attr.title);
-    }
-
-    function checkIdFirst() {
-        var haveId = false;
-        $.each($scope.listAttr, function (i, dado) {
-            if (dado.type === 'pri') {
-                haveId = true;
-                if (i > 0) {
-                    for (var e = i; e > 0; e--) {
-                        $scope.upAttr(dado);
-                    }
-
-                    Materialize.toast("Chave Primária movida para inicio", 3000);
-                }
-            }
-        });
-
-        if (!haveId) {
-            Materialize.toast("entidade sem Chave Primária não pode ser Editada!", 5000);
-        }
-    }
-
-    function fixValuesAttr(dados) {
-        $.each(dados, function (index, dado) {
-            dados[index]['title'] = index;
-            dados[index]['column'] = index;
-        });
-
-        return dados;
-    }
+    };
 
     /**
      * =======================
@@ -51,6 +22,7 @@ app.controller('entity-controller', function ($scope) {
      * =======================
      * */
 
+    var identificador = 0;
     $scope.entityList = [];
     var attrCriadas = [];
     var attrDeletadas = [];
@@ -88,6 +60,49 @@ app.controller('entity-controller', function ($scope) {
      * =======================
      * */
 
+    function notExistSameNome() {
+        var result = true;
+        $.each($scope.listAttr, function (i, attr) {
+            $.each($scope.listAttr, function (e, attr2) {
+                if (i !== e && attr.column === attr2.column) {
+                    result = false;
+                    return false;
+                }
+            });
+        });
+
+        return result;
+    }
+
+    function checkIdFirst() {
+        var haveId = false;
+        $.each($scope.listAttr, function (i, dado) {
+            if (dado.type === 'pri') {
+                haveId = true;
+                if (i > 0) {
+                    for (var e = i; e > 0; e--) {
+                        $scope.upAttr(dado);
+                    }
+
+                    Materialize.toast("Chave Primária movida para inicio", 3000);
+                }
+            }
+        });
+
+        if (!haveId) {
+            Materialize.toast("entidade sem Chave Primária não pode ser Editada!", 5000);
+        }
+    }
+
+    function fixValuesAttr(dados) {
+        $.each(dados, function (index, dado) {
+            dados[index]['title'] = index;
+            dados[index]['column'] = index;
+        });
+
+        return dados;
+    }
+
     $scope.readEntity = function () {
         $.post(HOME + 'request/post', {file: 'readEntitys', lib: 'entity-form'}, function (g) {
             $scope.entityList = $.parseJSON(g);
@@ -101,6 +116,7 @@ app.controller('entity-controller', function ($scope) {
         var id = typeof(id) === "undefined" ? "" : id;
         $scope.entity.title = id;
         $scope.entity.slug = id;
+        identificador = 0;
         attrCriadas = [];
         attrModificadas = [];
         attrDeletadas = [];
@@ -110,8 +126,10 @@ app.controller('entity-controller', function ($scope) {
                 $scope.listAttr = [];
                 var dados = fixValuesAttr($.parseJSON(g));
                 $.each(dados, function (i, dado) {
+                    identificador = identificador < dado.identificador ? dado.identificador : identificador;
                     $scope.listAttr.push(dado);
                 });
+                identificador++;
                 $scope.addNewAtributo();
                 setTimeout(function () {
                     $scope.$apply();
@@ -128,34 +146,31 @@ app.controller('entity-controller', function ($scope) {
     };
 
     $scope.editAttr = function (attr) {
-        if ($scope.attrValid()) {
+        if ($scope.attrFullFieldsRequireds()) {
             $scope.addAttr();
         }
         $scope.addNewAtributo(attr);
     };
 
-    //duplicidade de nomes de atributos
-    //modificações na tabela não muito precisas
-    //algumas incompatibilidades entre a entity e a entity-form no quesito defaults
-
     $scope.addAttr = function () {
-        var update = contain($scope.attr, $scope.listAttr);
+        if ($scope.attrFullFieldsRequireds()) {
+            if (typeof($scope.attr.identificador) === 'undefined') {
 
-        if ($scope.attrValid()) {
-            if (update === -1) {
-                attrCriadas.push($scope.attr.column);
+                $scope.attr.identificador = identificador;
+                identificador++;
                 $scope.listAttr.push($scope.attr);
-            } else {
-                var mod = contain($scope.attr.column, attrModificadas);
-                var del = contain($scope.attr.column, attrDeletadas);
-                var add = contain($scope.attr.column, $scope.listAttr);
-                if (mod === -1 && del === -1 && add === -1) {
-                    attrModificadas.push($scope.attr.column);
+                attrCriadas.push($scope.attr.identificador);
 
-                } else if ((del > -1 || add > -1) && mod > -1) {
-                    attrModificadas.splice(mod, 1);
+            } else {
+
+                var notInMod = contain($scope.attr.identificador, attrModificadas) === -1;
+                var notInDel = contain($scope.attr.identificador, attrDeletadas) === -1;
+                var notInAdd = contain($scope.attr.identificador, attrCriadas) === -1;
+                if (notInMod && notInDel && notInAdd) {
+                    attrModificadas.push($scope.attr.identificador);
                 }
             }
+
             $scope.addNewAtributo();
         }
     };
@@ -163,76 +178,77 @@ app.controller('entity-controller', function ($scope) {
     $scope.createEntity = function () {
         if ($scope.entity.title && $scope.listAttr.length > 1) {
             $scope.addAttr();
-            checkIdFirst();
+            if (notExistSameNome()) {
+                checkIdFirst();
 
-            console.log(attrCriadas);
-            console.log(attrModificadas);
-            console.log(attrDeletadas);
-
-            $.post(HOME + "request/post", {
-                lib: "entity-form",
-                file: "createEntity",
-                dados: $scope.listAttr,
-                entity: $scope.entity.slug,
-                add: attrCriadas,
-                mod: attrModificadas,
-                del: attrDeletadas
-            }, function (g) {
-                if (g) {
-                    Materialize.toast("Erro ao Salvar Entidade", 3000);
-                    console.log(g);
-                } else {
-                    $scope.readEntity();
-                    Materialize.toast('Entidade Salva!', 2500);
-                }
-                attrCriadas = [];
-                attrModificadas = [];
-                attrDeletadas = [];
-            });
+                $.post(HOME + "request/post", {
+                    lib: "entity-form",
+                    file: "createEntity",
+                    dados: $scope.listAttr,
+                    entity: $scope.entity.slug,
+                    add: attrCriadas,
+                    mod: attrModificadas,
+                    del: attrDeletadas
+                }, function (g) {
+                    if (g) {
+                        Materialize.toast("Erro ao Salvar Entidade", 3000);
+                        console.log(g);
+                    } else {
+                        $scope.readEntity();
+                        Materialize.toast('Entidade Salva!', 2500);
+                    }
+                    attrCriadas = [];
+                    attrModificadas = [];
+                    attrDeletadas = [];
+                });
+            } else {
+                Materialize.toast("Nomes de atributos repetidos!", 3000);
+            }
         }
     };
 
     $scope.removeEntity = function () {
-        if ($scope.entity.slug && $scope.listAttr.length > 1) {
-            $.post(HOME + "request/post", {
-                lib: "entity-form",
-                file: "deleteEntity",
-                entity: $scope.entity.slug
-            }, function (g) {
-                if (g) {
-                    Materialize.toast(g, 3000);
-                } else {
-                    $scope.readEntity();
-                    $scope.editEntity();
-                    $scope.addNewAtributo();
-                    Materialize.toast('Entidade Removida!', 2500);
-                }
-            });
+        if (confirm("Deletar entidade e dados?")) {
+            if ($scope.entity.slug && $scope.listAttr.length > 1) {
+                $.post(HOME + "request/post", {
+                    lib: "entity-form",
+                    file: "deleteEntity",
+                    entity: $scope.entity.slug
+                }, function (g) {
+                    if (g) {
+                        Materialize.toast(g, 3000);
+                    } else {
+                        $scope.readEntity();
+                        $scope.editEntity();
+                        $scope.addNewAtributo();
+                        Materialize.toast('Entidade Removida!', 2500);
+                    }
+                });
+            }
         }
     };
 
     $scope.deleteAttr = function () {
-        var indice = $scope.listAttr.indexOf($scope.attr);
-        if (indice > -1) {
-            $scope.listAttr.splice(indice, 1);
+        if (confirm("Remover atributo?")) {
+            var indice = $scope.listAttr.indexOf($scope.attr);
 
-            var mod = contain($scope.attr.column, attrModificadas);
-            if (mod > -1) {
-                attrModificadas.splice(mod, 1);
-            }
-            var add = contain($scope.attr.column, attrCriadas);
-            if (add > -1) {
-                attrCriadas.splice(add, 1);
-            } else {
-                if (contain($scope.attr.column, attrDeletadas) === -1) {
-                    attrDeletadas.push($scope.attr.column);
+            if (indice > -1) {
+                $scope.listAttr.splice(indice, 1);
+
+                var add = contain($scope.attr.identificador, attrCriadas);
+                if (add > -1) {
+                    attrCriadas.splice(add, 1);
+                } else {
+                    var mod = contain($scope.attr.identificador, attrModificadas);
+                    if (mod > -1) {
+                        attrModificadas.splice(mod, 1);
+                    }
+                    attrDeletadas.push($scope.attr.identificador);
                 }
-            }
 
-            Materialize.toast("Atributo Removido", 2500);
-            $scope.addNewAtributo();
-        } else {
-            $scope.addNewAtributo();
+                Materialize.toast("Atributo Removido", 2500);
+                $scope.addNewAtributo();
+            }
         }
     };
 
@@ -257,7 +273,7 @@ app.controller('entity-controller', function ($scope) {
         $scope.attr["allow"] = "allow" in $scope.attr ? $scope.attr['allow'] : "";
         $scope.attr["allowRelation"] = "allowRelation" in $scope.attr ? $scope.attr['allowRelation'] : "";
         $scope.attr["default"] = "default" in $scope.attr ? $scope.attr['default'] : "";
-        $scope.attr["null"] = "null" in $scope.attr ? $scope.attr['null'] : false;
+        $scope.attr["null"] = "null" in $scope.attr ? $scope.attr['null'] : true;
         $scope.attr["unique"] = "unique" in $scope.attr ? $scope.attr['unique'] : false;
         $scope.attr["indice"] = "indice" in $scope.attr ? $scope.attr['indice'] : false;
         $scope.attr["update"] = "update" in $scope.attr ? $scope.attr['update'] : true;
@@ -302,6 +318,7 @@ app.controller('entity-controller', function ($scope) {
             }, 1);
         }
     });
+
     $scope.$watch('entity.title', function (newNames, oldNames) {
         if (typeof(newNames) !== 'undefined') {
             $scope.entity.slug = slug(newNames, "_");
