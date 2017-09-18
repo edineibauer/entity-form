@@ -72,6 +72,7 @@ class EntityUpdateStorage
             $this->checkChanges();
             $this->removeColumnsToEntity();
             $this->addColumnsToEntity();
+            $this->createKeys();
         }
     }
 
@@ -128,5 +129,29 @@ class EntityUpdateStorage
             return "DEFAULT {$default}";
         }
         return "DEFAULT '{$default}'";
+    }
+
+    private function createKeys()
+    {
+        if ($this->data && is_array($this->data)) {
+            $sql = new SqlCommand();
+            foreach ($this->data as $column => $dados) {
+
+                $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME = 'unique_{$dados['identificador']}'");
+                if ($sql->getRowCount() > 0 && !$dados['unique']) {
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX unique_" . $dados['identificador']);
+                } elseif ($sql->getRowCount() === 0 && $dados['unique']) {
+                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD UNIQUE KEY `unique_{$dados['identificador']}` (`{$column}`)");
+                }
+
+                $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$dados['identificador']}'");
+                if ($sql->getRowCount() > 0 && !$dados['indice']) {
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX index_" . $dados['identificador']);
+                } elseif ($sql->getRowCount() === 0 && $dados['indice']) {
+                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD KEY `index_{$dados['identificador']}` (`{$column}`)");
+
+                }
+            }
+        }
     }
 }

@@ -76,46 +76,6 @@
         "description": "Conexão ao banco de  dados para operações CRUD"
     },
     {
-        "name": "conn/entity",
-        "version": "1.1.4",
-        "version_normalized": "1.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/edineibauer/entity.git",
-            "reference": "ee8512e5a786582875c5919cdb47cb6688fbd0a9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/edineibauer/entity/zipball/ee8512e5a786582875c5919cdb47cb6688fbd0a9",
-            "reference": "ee8512e5a786582875c5919cdb47cb6688fbd0a9",
-            "shasum": ""
-        },
-        "require": {
-            "conn/conn-crud": "^1.1",
-            "conn/helpers": "^1",
-            "php": "^7.0"
-        },
-        "time": "2017-09-09T20:43:12+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Entity": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Edinei J. Bauer",
-                "email": "edineibauer@gmail.com"
-            }
-        ],
-        "description": "Entidades de um sistema"
-    },
-    {
         "name": "smarty/smarty",
         "version": "v3.1.31",
         "version_normalized": "3.1.31.0",
@@ -244,5 +204,45 @@
             }
         ],
         "description": "Configurações base para novo projeto"
+    },
+    {
+        "name": "conn/entity",
+        "version": "1.1.5",
+        "version_normalized": "1.1.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/edineibauer/entity.git",
+            "reference": "4a3157ec12f26c5253b383e207cbb75f9db6938f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/edineibauer/entity/zipball/4a3157ec12f26c5253b383e207cbb75f9db6938f",
+            "reference": "4a3157ec12f26c5253b383e207cbb75f9db6938f",
+            "shasum": ""
+        },
+        "require": {
+            "conn/conn-crud": "^1.1",
+            "conn/helpers": "^1",
+            "php": "^7.0"
+        },
+        "time": "2017-09-18T15:10:08+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Entity": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Edinei J. Bauer",
+                "email": "edineibauer@gmail.com"
+            }
+        ],
+        "description": "Entidades de um sistema"
     }
 ]
