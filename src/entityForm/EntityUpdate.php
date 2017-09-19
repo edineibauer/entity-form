@@ -86,6 +86,8 @@ class EntityUpdate
             } else {
                 echo "Nome de Entidade já em uso";
             }
+        } else {
+            echo "Nome da entidade ausente";
         }
     }
 

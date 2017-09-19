@@ -1,5 +1,6 @@
 {
   "title": "Gerenciamento de Entidades",
+  "level": 5,
   "libraries": {
     "js": [
       "jquery",

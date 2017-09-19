@@ -199,10 +199,10 @@ app.controller('entity-controller', function ($scope) {
                     } else {
                         $scope.readEntity();
                         Materialize.toast('Entidade Salva!', 2500);
+                        attrCriadas = [];
+                        attrModificadas = [];
+                        attrDeletadas = [];
                     }
-                    attrCriadas = [];
-                    attrModificadas = [];
-                    attrDeletadas = [];
                 });
             } else {
                 Materialize.toast("Nomes de atributos repetidos!", 3000);

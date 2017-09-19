@@ -113,9 +113,9 @@ class EntityUpdateStorage
     private function prepareDataConfig($column)
     {
         $item = $this->data[$column];
-        return $column . " " . $item['type'] . " " . (isset($item['size']) ? "({$item['size']}) " : " ")
+        return $column . " " . $item['type'] . " " . (isset($item['size']) && !empty($item['size']) ? "({$item['size']}) " : " ")
             . (isset($item['null']) && !$item['null'] ? "NOT NULL " : "")
-            . (isset($item['default']) ? $this->prepareDefault($item['default']) : (!isset($item['null']) || $item['null'] ? "DEFAULT NULL" : ""));
+            . (isset($item['default']) && !empty($item['default']) ? $this->prepareDefault($item['default']) : (!isset($item['null']) || $item['null'] ? "DEFAULT NULL" : ""));
 
     }
 
