@@ -161,23 +161,21 @@ class EntityUpdateStorage
     {
         $dados = $this->data[$column];
 
-        if(!empty($dados['key'])) {
+        if (!empty($dados['key'])) {
             $sql = new SqlCommand();
 
-            switch ($dados['key']) {
-                case "primary":
-                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD PRIMARY KEY (`{$column}`), MODIFY `{$column}` int(11) NOT NULL AUTO_INCREMENT");
-                    break;
-                case "fk":
-                    if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table'])) {
-                        if (!$this->existEntityStorage($dados['table'])) {
-                            new Entity($dados['table'], 'entity-form');
-                        }
+            if ($dados['key'] === "primary") {
+                $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD PRIMARY KEY (`{$column}`), MODIFY `{$column}` int(11) NOT NULL AUTO_INCREMENT");
 
-                        $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD KEY `fk_{$column}` (`{$column}`)");
-                        $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD CONSTRAINT `" . PRE . $column . "_" . $this->entity . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $dados['table'] . "` (`id`) ON DELETE " . strtoupper($dados['key_delete']) . " ON UPDATE " . strtoupper($dados['key_update']));
+            } elseif (in_array($dados['key'], array('extend', 'extend_mult', 'list', 'list_mult'))) {
+                if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table'])) {
+                    if (!$this->existEntityStorage($dados['table'])) {
+                        new Entity($dados['table'], 'entity-form');
                     }
-                    break;
+
+                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD KEY `fk_{$column}` (`{$column}`)");
+                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD CONSTRAINT `" . PRE . $column . "_" . $this->entity . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $dados['table'] . "` (`id`) ON DELETE " . strtoupper($dados['key_delete']) . " ON UPDATE " . strtoupper($dados['key_update']));
+                }
             }
         }
     }
