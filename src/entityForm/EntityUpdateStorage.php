@@ -9,6 +9,7 @@
 namespace EntityForm;
 
 
+use Entity\Entity;
 use ConnCrud\SqlCommand;
 
 class EntityUpdateStorage
@@ -106,6 +107,7 @@ class EntityUpdateStorage
             $sql = new SqlCommand();
             foreach ($this->columnAdded as $itema) {
                 $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . $this->prepareDataConfig($itema));
+                $this->checkFk($itema);
             }
         }
     }
@@ -153,5 +155,38 @@ class EntityUpdateStorage
                 }
             }
         }
+    }
+
+    private function checkFk($column)
+    {
+        $dados = $this->data[$column];
+
+        if(!empty($dados['key'])) {
+            $sql = new SqlCommand();
+
+            switch ($dados['key']) {
+                case "primary":
+                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD PRIMARY KEY (`{$column}`), MODIFY `{$column}` int(11) NOT NULL AUTO_INCREMENT");
+                    break;
+                case "fk":
+                    if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table'])) {
+                        if (!$this->existEntityStorage($dados['table'])) {
+                            new Entity($dados['table'], 'entity-form');
+                        }
+
+                        $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD KEY `fk_{$column}` (`{$column}`)");
+                        $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD CONSTRAINT `" . PRE . $column . "_" . $this->entity . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $dados['table'] . "` (`id`) ON DELETE " . strtoupper($dados['key_delete']) . " ON UPDATE " . strtoupper($dados['key_update']));
+                    }
+                    break;
+            }
+        }
+    }
+
+    private function existEntityStorage($entity)
+    {
+        $sqlTest = new SqlCommand();
+        $sqlTest->exeCommand("SHOW TABLES LIKE '" . PRE . $entity . "'");
+
+        return $sqlTest->getRowCount() > 0;
     }
 }
