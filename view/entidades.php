@@ -133,7 +133,7 @@
                     <div class="col s12 m6">
                         <div class="input-field col s12"
                              ng-show="attr.type == 'list' || attr.type == 'extend' || attr.type == 'extendMult' || attr.type == 'listMult'">
-                            <select ng-model="attr.table"
+                            <select ng-model="attr.table" ng-disabled="attr.$$hashKey"
                                     ng-required="attr.type == 'list' || attr.type == 'extend' || attr.type == 'extendMult' || attr.type == 'listMult'">
                                 <option value="" disabled selected>Selecione um</option>
                                 <option ng-repeat="entSelect in entityList">{{entSelect}}</option>
