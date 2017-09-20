@@ -22,7 +22,7 @@ app.controller('entity-controller', function ($scope) {
      * =======================
      * */
 
-    var editando = false;
+    var editando = "";
     var identificador = 0;
     $scope.entityList = [];
     var attrCriadas = [];
@@ -124,7 +124,7 @@ app.controller('entity-controller', function ($scope) {
         attrDeletadas = [];
 
         if (id !== "") {
-            editando = true;
+            editando = id;
             $.post(HOME + 'request/post', {file: 'readEntity', lib: 'entity-form', entidade: id}, function (g) {
                 $scope.listAttr = [];
                 var dados = fixValuesAttr($.parseJSON(g));
@@ -139,7 +139,7 @@ app.controller('entity-controller', function ($scope) {
                 }, 1);
             });
         } else {
-            editando = false;
+            editando = "";
             $("#entity").focus();
             $scope.listAttr = [];
             $scope.addNewAtributo();

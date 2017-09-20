@@ -21,7 +21,7 @@ class EntityUpdate
     private $del;
     private $add;
 
-    public function __construct(string $entity = null, $edit = false)
+    public function __construct(string $entity = null, $edit = "")
     {
         if ($entity) {
             $this->setEntity($entity);
@@ -80,7 +80,7 @@ class EntityUpdate
     private function start()
     {
         if ($this->entity) {
-            if($this->checkAvaliableEntityName()) {
+            if ($this->checkAvaliableEntityName()) {
                 $this->data = $this->fixDataEntity($this->data);
                 $this->createEntity();
             } else {
@@ -93,16 +93,10 @@ class EntityUpdate
 
     private function checkAvaliableEntityName()
     {
-        $cont = 0;
-        foreach (\Helpers\Helper::listFolder(PATH_HOME . 'vendor/conn') as $conn) {
-            if(!$this->edit && file_exists(PATH_HOME . 'vendor/conn/' . $conn . "/entity/{$this->entity}.json")){
-                return false;
-            } elseif($this->edit && file_exists(PATH_HOME . 'vendor/conn/' . $conn . "/entity/{$this->entity}.json")) {
-                $cont++;
-                if($cont > 1) {
-                    return false;
-                }
-            }
+        if (empty($this->edit) && file_exists(PATH_HOME . "entity/{$this->entity}.json")) {
+            return false;
+        } elseif (!empty($this->edit) && $this->edit !== $this->entity && file_exists(PATH_HOME . "/entity/{$this->entity}.json")) {
+            return false;
         }
 
         return true;
@@ -247,13 +241,13 @@ class EntityUpdate
         $add = null;
         $mod = null;
         foreach ($json as $j) {
-            if(!$this->del || !in_array($j['column'], $this->del)) {
+            if (!$this->del || !in_array($j['column'], $this->del)) {
                 if ($this->add && in_array($j['identificador'], $this->add)) {
                     $add[] = $j['column'];
                 } elseif ($this->mod && in_array($j['identificador'], $this->mod)) {
 
                     foreach ($old as $o) {
-                        if($o['identificador'] === $j['identificador']) {
+                        if ($o['identificador'] === $j['identificador']) {
                             $mod[$o['column']] = $j['column'];
                         }
                     }

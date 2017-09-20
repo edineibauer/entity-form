@@ -1,7 +1,7 @@
 <?php
 
 $entity = filter_input(INPUT_POST, 'entity', FILTER_DEFAULT);
-$edit = filter_input(INPUT_POST, 'edit', FILTER_VALIDATE_BOOLEAN);
+$edit = filter_input(INPUT_POST, 'edit', FILTER_DEFAULT);
 
 $updateEntity = new \EntityForm\EntityUpdate($entity, $edit);
 $updateEntity->setMod($_POST['mod'] ?? null);
