@@ -97,11 +97,12 @@ class EntityUpdateStorage
 
             foreach ($this->columnDeleted as $i => $itemd) {
                 if($itemd['fk']) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY fk_" . $itemd['column']);
-                }
-                $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
-                if ($sql->getRowCount() > 0) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX index_" . $i);
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " .  PRE . $itemd['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $itemd['column']);
+                } else {
+                    $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
+                    if ($sql->getRowCount() > 0) {
+                        $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX index_" . $i);
+                    }
                 }
                 $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='unique_{$i}'");
                 if ($sql->getRowCount() > 0) {
