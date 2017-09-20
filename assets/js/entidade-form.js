@@ -13,7 +13,7 @@ app.controller('entity-controller', function ($scope) {
     };
 
     $scope.attrFullFieldsRequireds = function () {
-        return (!(($scope.attr.type === 'list' || $scope.attr.type === 'extend' || $scope.attr.type === 'extendMult' || $scope.attr.type === 'listMult') && !$scope.attr.table) && $scope.attr.type && $scope.attr.title);
+        return (!(($scope.attr.type === 'list' || $scope.attr.type === 'extend' || $scope.attr.type === 'extend_mult' || $scope.attr.type === 'list_mult') && !$scope.attr.table) && $scope.attr.type && $scope.attr.title);
     };
 
     /**
@@ -35,24 +35,25 @@ app.controller('entity-controller', function ($scope) {
         'link': 'Link',
         'cover': 'Cover',
         'status': 'Status',
-        'on': 'On',
         'date': 'Data',
-        'datetime': 'Data & Hora',
-        'time': 'Hora',
-        'week': 'Semana',
         'extend': 'Extensão',
-        'extendMult': 'Extensão Multipla',
-        'list': 'Lista de Seleção',
-        'listMult': 'Lista Multipla',
+        'extend_mult': 'Extensão Multipla',
+        'list': 'Lista',
+        'list_mult': 'Lista Multipla',
         'text': 'Texto',
         'textarea': 'Área de Texto',
         'int': 'Inteiro',
+        'float': 'Float',
+        'datetime': 'Data & Hora',
+        'time': 'Hora',
+        'week': 'Semana',
+        'on': 'On',
         'valor': 'R$ Valor',
+        'select': 'Select',
         'email': 'Email',
         'cpf': 'Cpf',
         'cnpj': 'Cnpj',
-        'password': 'Password',
-        'select': 'Select'
+        'password': 'Password'
     };
 
     /**

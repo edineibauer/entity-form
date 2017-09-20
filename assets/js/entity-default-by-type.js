@@ -27,13 +27,13 @@ function funcaoValuesEntity(type, attr) {
         case 'extend':
             return extend(attr);
             break;
-        case 'extendMult':
+        case 'extend_mult':
             return extendMult(attr);
             break;
         case 'list':
             return listSelect(attr);
             break;
-        case 'listMult':
+        case 'list_mult':
             return listSelectMult(attr);
             break;
         case 'title':
