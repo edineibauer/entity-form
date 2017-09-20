@@ -105,7 +105,7 @@ class EntityUpdate
     private function fixDataEntity($data)
     {
         foreach ($data as $i => $dado) {
-            unset($dado['$$hashKey'], $dado['identificador']);
+            unset($dado['$$hashKey']);
 
             foreach ($dado as $item => $value) {
                 $dado[$item] = $this->fixValue($value, $item);
