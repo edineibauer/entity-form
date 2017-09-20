@@ -199,6 +199,7 @@ app.controller('entity-controller', function ($scope) {
                         Materialize.toast(g, 3000);
                     } else {
                         $scope.readEntity();
+                        $scope.editEntity($scope.entity.slug);
                         Materialize.toast('Entidade Salva!', 2500);
                         attrCriadas = [];
                         attrModificadas = [];
