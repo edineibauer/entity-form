@@ -96,9 +96,8 @@ class EntityUpdateStorage
             $sql = new SqlCommand();
 
             foreach ($this->columnDeleted as $i => $itemd) {
-                $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='fk_{$itemd}'");
-                if ($sql->getRowCount() > 0) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX fk_" . $itemd);
+                if($itemd['key']) {
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY fk_" . $itemd['column']);
                 }
                 $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
                 if ($sql->getRowCount() > 0) {
@@ -108,7 +107,7 @@ class EntityUpdateStorage
                 if ($sql->getRowCount() > 0) {
                     $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX unique_" . $i);
                 }
-                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP COLUMN " . $itemd);
+                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP COLUMN " . $itemd['column']);
             }
         }
     }
