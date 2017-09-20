@@ -96,7 +96,7 @@ class EntityUpdateStorage
             $sql = new SqlCommand();
 
             foreach ($this->columnDeleted as $i => $itemd) {
-                if($itemd['key']) {
+                if($itemd['fk']) {
                     $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY fk_" . $itemd['column']);
                 }
                 $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
