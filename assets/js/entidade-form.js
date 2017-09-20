@@ -337,6 +337,7 @@ app.controller('entity-controller', function ($scope) {
             $scope.attr = funcaoValuesEntity(newValue, $scope.attr);
             setTimeout(function () {
                 Materialize.updateTextFields();
+                $("#nome").focus();
             }, 1);
         }
     });
