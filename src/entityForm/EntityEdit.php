@@ -45,8 +45,8 @@ class EntityEdit
 
     private function loadEntity($entity)
     {
-        if (file_exists(PATH_HOME . 'vendor/conn/entity-form/entity/' . $entity . '.json')) {
-            return json_decode(file_get_contents(PATH_HOME . 'vendor/conn/entity-form/entity/' . $entity . '.json'), true);
+        if (file_exists(PATH_HOME . 'entity/' . $entity . '.json')) {
+            return json_decode(file_get_contents(PATH_HOME . 'entity/' . $entity . '.json'), true);
         }
 
         return array();

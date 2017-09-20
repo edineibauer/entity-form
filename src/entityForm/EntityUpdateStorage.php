@@ -170,7 +170,7 @@ class EntityUpdateStorage
             } elseif (in_array($dados['key'], array('extend', 'extend_mult', 'list', 'list_mult'))) {
                 if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table'])) {
                     if (!$this->existEntityStorage($dados['table'])) {
-                        new Entity($dados['table'], 'entity-form');
+                        new Entity($dados['table']);
                     }
 
                     $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD KEY `fk_{$column}` (`{$column}`)");

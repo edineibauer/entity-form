@@ -184,17 +184,17 @@ class EntityUpdate
 
     private function checkIfAllreadyExistEntity()
     {
-        Helper::createFolderIfNoExist(PATH_HOME . "vendor/conn/entity-form/entity");
+        Helper::createFolderIfNoExist(PATH_HOME . "entity");
 
-        if (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json")) {
+        if (file_exists(PATH_HOME . "entity/cache/{$this->entity}.json")) {
 
             $json = $this->convertIdentificadorToColumnDel();
 
-            if (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json")) {
-                unlink(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json");
+            if (file_exists(PATH_HOME . "entity/cache/{$this->entity}.json")) {
+                unlink(PATH_HOME . "entity/cache/{$this->entity}.json");
             }
-            if (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}_info.json")) {
-                unlink(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}_info.json");
+            if (file_exists(PATH_HOME . "entity/cache/{$this->entity}_info.json")) {
+                unlink(PATH_HOME . "entity/cache/{$this->entity}_info.json");
             }
 
             return $json;
@@ -207,11 +207,11 @@ class EntityUpdate
     {
         $update = $this->checkIfAllreadyExistEntity();
 
-        $fp = fopen(PATH_HOME . "vendor/conn/entity-form/entity/" . $this->entity . ".json", "w");
+        $fp = fopen(PATH_HOME . "entity/" . $this->entity . ".json", "w");
         fwrite($fp, json_encode($this->data));
         fclose($fp);
 
-        $data = new Entity($this->entity, "entity-form");
+        $data = new Entity($this->entity);
 
         if ($update) {
             $this->convertIdentificadorToColumnAddMod($update, $data->getJsonStructEntity());
@@ -227,7 +227,7 @@ class EntityUpdate
 
     private function convertIdentificadorToColumnDel()
     {
-        $json = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/cache/{$this->entity}.json"), true);
+        $json = json_decode(file_get_contents(PATH_HOME . "entity/cache/{$this->entity}.json"), true);
 
         $del = null;
         foreach ($json as $j) {
