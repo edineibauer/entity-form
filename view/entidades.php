@@ -112,7 +112,7 @@
 
                     <div class="col s12 m6">
                         <div class="switch col s12">
-                            <input type="checkbox" ng-disabled="attr.type == 'pri'" id="null" ng-model="attr.null"/>
+                            <input type="checkbox" ng-disabled="attr.unique || attr.type == 'pri'" id="null" ng-model="attr.null"/>
                             <label for="null">Nulo</label>
                         </div>
                         <div class="switch col s12">

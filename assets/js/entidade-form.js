@@ -342,6 +342,12 @@ app.controller('entity-controller', function ($scope) {
         }
     });
 
+    $scope.$watch('attr.unique', function (newValue, oldNames) {
+        if (newValue) {
+            $scope.attr.null = false;
+        }
+    });
+
     /**
      * =======================
      *      CALLS
