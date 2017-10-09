@@ -8,13 +8,13 @@ if (file_exists(PATH_HOME . "entity/{$entityName}.json")) {
     $info = $entity->getJsonInfoEntity();
     $dados = $entity->getJsonStructEntity();
 
-    if (!empty($info['extendMult'])) {
-        foreach ($info['extendMult'] as $item) {
+    if (!empty($info['extend_mult'])) {
+        foreach ($info['extend_mult'] as $item) {
             $sql->exeCommand("DROP TABLE " . PRE . $entityName . "_" . $dados[$item]['table']);
         }
     }
-    if (!empty($info['listMult'])) {
-        foreach ($info['listMult'] as $item) {
+    if (!empty($info['list_mult'])) {
+        foreach ($info['list_mult'] as $item) {
             $sql->exeCommand("DROP TABLE " . PRE . $entityName . "_" . $dados[$item]['table']);
         }
     }
