@@ -160,24 +160,32 @@ function title(attr) {
 
 function listSelectMult(attr) {
     attr['list'] = false;
+    attr['null'] = false;
+    attr['unique'] = false;
 
     return attr;
 }
 
 function listSelect(attr) {
     attr['list'] = false;
+    attr['null'] = true;
+    attr['unique'] = false;
 
     return attr;
 }
 
 function extendMult(attr) {
     attr['list'] = false;
+    attr['null'] = false;
+    attr['unique'] = true;
 
     return attr;
 }
 
 function extend(attr) {
     attr['list'] = false;
+    attr['null'] = false;
+    attr['unique'] = true;
 
     return attr;
 }
@@ -187,6 +195,8 @@ function primaryKey(attr) {
     attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "id";
     attr['update'] = false;
     attr['list'] = false;
+    attr['null'] = false;
+    attr['unique'] = false;
 
     return attr;
 }
