@@ -196,7 +196,7 @@ class EntityUpdateStorage
         }
     }
 
-    private function createRelationalTable($column, $dados)
+    private function createRelationalTable($dados)
     {
         $table = $this->entity . "_" . $dados['table'];
 
