@@ -174,9 +174,8 @@ class EntityUpdateStorage
         $dados = $this->data[$column];
 
         if (!empty($dados['key'])) {
-            $sql = new SqlCommand();
-
             if ($dados['key'] === "primary") {
+                $sql = new SqlCommand();
                 $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD PRIMARY KEY (`{$column}`), MODIFY `{$column}` int(11) NOT NULL AUTO_INCREMENT");
 
             } elseif (in_array($dados['key'], array('extend', 'extend_mult', 'list', 'list_mult'))) {
@@ -185,11 +184,41 @@ class EntityUpdateStorage
                         new Entity($dados['table']);
                     }
 
-                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD KEY `fk_{$column}` (`{$column}`)");
-                    $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD CONSTRAINT `" . PRE . $column . "_" . $this->entity . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $dados['table'] . "` (`id`) ON DELETE " . strtoupper($dados['key_delete']) . " ON UPDATE " . strtoupper($dados['key_update']));
+                    if ($dados['key'] === "extend" || $dados['key'] === "list") {
+                        $this->createIndexFk($this->entity, $column, 'id', $dados['table'], $dados['key_delete'], $dados['key_update']);
+                    } else {
+                        $this->createRelationalTable($column, $dados);
+                    }
                 }
             }
         }
+    }
+
+    private function createRelationalTable($column, $dados)
+    {
+        $table = $this->entity . "_" . $dados['table'];
+
+        $string = "CREATE TABLE IF NOT EXISTS `" . $this->getPre($table) . "` ("
+            . "`{$this->entity}_id` INT(11) NOT NULL,"
+            . "`{$dados['table']}_id` INT(11) NOT NULL"
+            . ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+
+        $this->exeSql($string);
+
+        $this->createIndexFk($table, $this->entity."_id", $column, $this->entity, $dados['key_delete'], $dados['key_update']);
+        $this->createIndexFk($table, $dados['table']."_id", 'id', $dados['table'], $dados['key_delete'], $dados['key_update']);
+    }
+
+    private function getPre($table)
+    {
+        return (defined("PRE") && !preg_match("/^" . PRE . "/i", $table) ? PRE : "") . $table;
+    }
+
+    private function createIndexFk($table, $column, $columnTarget, $tableTarget, $delete, $update)
+    {
+        $exe = new SqlCommand();
+        $exe->exeCommand("ALTER TABLE `" . $this->getPre($table) . "` ADD KEY `fk_{$column}` (`{$column}`)");
+        $exe->exeCommand("ALTER TABLE `" . $this->getPre($table) . "` ADD CONSTRAINT `" . $this->getPre($column . "_" . $table) . "` FOREIGN KEY (`{$column}`) REFERENCES `" . $this->getPre($tableTarget) . "` (`" . $columnTarget . "`) ON DELETE " . strtoupper($delete) . " ON UPDATE " . strtoupper($update));
     }
 
     private function existEntityStorage($entity)
