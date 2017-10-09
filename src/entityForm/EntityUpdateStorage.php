@@ -96,8 +96,8 @@ class EntityUpdateStorage
             $sql = new SqlCommand();
 
             foreach ($this->columnDeleted as $i => $itemd) {
-                if($itemd['fk']) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " .  PRE . $itemd['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $itemd['column']);
+                if ($itemd['fk']) {
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $itemd['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $itemd['column']);
                 } else {
                     $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
                     if ($sql->getRowCount() > 0) {
@@ -118,9 +118,11 @@ class EntityUpdateStorage
         if ($this->columnAdded) {
             $sql = new SqlCommand();
             foreach ($this->columnAdded as $itema) {
-                if($this->notIsMult($this->data[$itema]['key'] ?? null)) {
+                if ($this->notIsMult($this->data[$itema]['key'] ?? null)) {
                     $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . $this->prepareDataConfig($itema));
                     $this->checkFk($itema);
+                } else {
+                    $this->createFkRelational($itema);
                 }
             }
         }
@@ -171,27 +173,39 @@ class EntityUpdateStorage
         }
     }
 
+    private function createFkRelational($column)
+    {
+        $dados = $this->data[$column];
+
+        if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table']) && $dados['key'] === "extend_mult" || $dados['key'] === "list_mult") {
+            if (!$this->existEntityStorage($dados['table'])) {
+                new Entity($dados['table']);
+            }
+
+            $this->createRelationalTable($dados);
+        }
+    }
+
     private function checkFk($column)
     {
         $dados = $this->data[$column];
 
         if (!empty($dados['key'])) {
             if ($dados['key'] === "primary") {
+
                 $sql = new SqlCommand();
                 $sql->exeCommand("ALTER TABLE `" . PRE . $this->entity . "` ADD PRIMARY KEY (`{$column}`), MODIFY `{$column}` int(11) NOT NULL AUTO_INCREMENT");
 
-            } elseif (in_array($dados['key'], array('extend', 'extend_mult', 'list', 'list_mult'))) {
+            } elseif (in_array($dados['key'], array('extend', 'list'))) {
+
                 if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table'])) {
                     if (!$this->existEntityStorage($dados['table'])) {
                         new Entity($dados['table']);
                     }
 
-                    if ($dados['key'] === "extend" || $dados['key'] === "list") {
-                        $this->createIndexFk($this->entity, $column, $dados['table'], $dados['key_delete'], $dados['key_update']);
-                    } else {
-                        $this->createRelationalTable($dados);
-                    }
+                    $this->createIndexFk($this->entity, $column, $dados['table'], $dados['key_delete'], $dados['key_update']);
                 }
+
             }
         }
     }
@@ -208,8 +222,8 @@ class EntityUpdateStorage
         $sql = new SqlCommand();
         $sql->exeCommand($string);
 
-        $this->createIndexFk($table, $this->entity."_id", $this->entity, $dados['key_delete'], $dados['key_update']);
-        $this->createIndexFk($table, $dados['table']."_id", $dados['table'], $dados['key_delete'], $dados['key_update']);
+        $this->createIndexFk($table, $this->entity . "_id", $this->entity, $dados['key_delete'], $dados['key_update']);
+        $this->createIndexFk($table, $dados['table'] . "_id", $dados['table'], $dados['key_delete'], $dados['key_update']);
     }
 
     private function createIndexFk($table, $column, $tableTarget, $delete, $update)
