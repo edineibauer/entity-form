@@ -118,8 +118,10 @@ class EntityUpdateStorage
         if ($this->columnAdded) {
             $sql = new SqlCommand();
             foreach ($this->columnAdded as $itema) {
-                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . $this->prepareDataConfig($itema));
-                $this->checkFk($itema);
+                if($this->notIsMult($this->data[$itema]['key'] ?? null)) {
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . $this->prepareDataConfig($itema));
+                    $this->checkFk($itema);
+                }
             }
         }
     }
@@ -185,7 +187,7 @@ class EntityUpdateStorage
                     }
 
                     if ($dados['key'] === "extend" || $dados['key'] === "list") {
-                        $this->createIndexFk($this->entity, $column, 'id', $dados['table'], $dados['key_delete'], $dados['key_update']);
+                        $this->createIndexFk($this->entity, $column, $dados['table'], $dados['key_delete'], $dados['key_update']);
                     } else {
                         $this->createRelationalTable($column, $dados);
                     }
@@ -206,20 +208,15 @@ class EntityUpdateStorage
         $sql = new SqlCommand();
         $sql->exeCommand($string);
 
-        $this->createIndexFk($table, $this->entity."_id", $column, $this->entity, $dados['key_delete'], $dados['key_update']);
-        $this->createIndexFk($table, $dados['table']."_id", 'id', $dados['table'], $dados['key_delete'], $dados['key_update']);
+        $this->createIndexFk($table, $this->entity."_id", $this->entity, $dados['key_delete'], $dados['key_update']);
+        $this->createIndexFk($table, $dados['table']."_id", $dados['table'], $dados['key_delete'], $dados['key_update']);
     }
 
-    private function getPre($table)
-    {
-        return (defined("PRE") && !preg_match("/^" . PRE . "/i", $table) ? PRE : "") . $table;
-    }
-
-    private function createIndexFk($table, $column, $columnTarget, $tableTarget, $delete, $update)
+    private function createIndexFk($table, $column, $tableTarget, $delete, $update)
     {
         $exe = new SqlCommand();
         $exe->exeCommand("ALTER TABLE `" . $this->getPre($table) . "` ADD KEY `fk_{$column}` (`{$column}`)");
-        $exe->exeCommand("ALTER TABLE `" . $this->getPre($table) . "` ADD CONSTRAINT `" . $this->getPre($column . "_" . $table) . "` FOREIGN KEY (`{$column}`) REFERENCES `" . $this->getPre($tableTarget) . "` (`" . $columnTarget . "`) ON DELETE " . strtoupper($delete) . " ON UPDATE " . strtoupper($update));
+        $exe->exeCommand("ALTER TABLE `" . $this->getPre($table) . "` ADD CONSTRAINT `" . $this->getPre($column . "_" . $table) . "` FOREIGN KEY (`{$column}`) REFERENCES `" . $this->getPre($tableTarget) . "` (`id`) ON DELETE " . strtoupper($delete) . " ON UPDATE " . strtoupper($update));
     }
 
     private function existEntityStorage($entity)
@@ -228,5 +225,15 @@ class EntityUpdateStorage
         $sqlTest->exeCommand("SHOW TABLES LIKE '" . PRE . $entity . "'");
 
         return $sqlTest->getRowCount() > 0;
+    }
+
+    private function getPre($table)
+    {
+        return (defined("PRE") && !preg_match("/^" . PRE . "/i", $table) ? PRE : "") . $table;
+    }
+
+    private function notIsMult($key = null)
+    {
+        return (!$key || $key === "list_mult" || $key === "extend_mult");
     }
 }
