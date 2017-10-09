@@ -203,7 +203,8 @@ class EntityUpdateStorage
             . "`{$dados['table']}_id` INT(11) NOT NULL"
             . ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
-        $this->exeSql($string);
+        $sql = new SqlCommand();
+        $sql->exeCommand($string);
 
         $this->createIndexFk($table, $this->entity."_id", $column, $this->entity, $dados['key_delete'], $dados['key_update']);
         $this->createIndexFk($table, $dados['table']."_id", 'id', $dados['table'], $dados['key_delete'], $dados['key_update']);
