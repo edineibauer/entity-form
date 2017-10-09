@@ -189,7 +189,7 @@ class EntityUpdateStorage
                     if ($dados['key'] === "extend" || $dados['key'] === "list") {
                         $this->createIndexFk($this->entity, $column, $dados['table'], $dados['key_delete'], $dados['key_update']);
                     } else {
-                        $this->createRelationalTable($column, $dados);
+                        $this->createRelationalTable($dados);
                     }
                 }
             }
