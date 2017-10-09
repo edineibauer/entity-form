@@ -227,7 +227,8 @@ class EntityUpdate
         foreach ($json as $j) {
             if ($this->del && in_array($j['identificador'], $this->del)) {
                 $del[$j['identificador']]['column'] = $j['column'];
-                $del[$j['identificador']]['fk'] = $j['key'] ?? null;
+                $del[$j['identificador']]['key'] = $j['key'] ?? null;
+                $del[$j['identificador']]['table'] = $j['table'] ?? null;
             }
         }
         $this->del = $del;

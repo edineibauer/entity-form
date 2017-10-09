@@ -93,23 +93,42 @@ class EntityUpdateStorage
     private function removeColumnsToEntity()
     {
         if ($this->columnDeleted) {
-            $sql = new SqlCommand();
 
             foreach ($this->columnDeleted as $i => $itemd) {
-                if ($itemd['fk']) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $itemd['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $itemd['column']);
-                } else {
-                    $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
-                    if ($sql->getRowCount() > 0) {
-                        $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX index_" . $i);
-                    }
-                }
-                $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='unique_{$i}'");
-                if ($sql->getRowCount() > 0) {
-                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX unique_" . $i);
-                }
+                $this->dropKeysFromColumnRemoved($i, $itemd);
+
+                $sql = new SqlCommand();
                 $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP COLUMN " . $itemd['column']);
             }
+        }
+    }
+
+    private function dropKeysFromColumnRemoved($i, $dados)
+    {
+        $sql = new SqlCommand();
+        if ($dados['key'] === "list" || $dados['key'] === "extend") {
+
+            //FK
+            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $dados['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $dados['column']);
+
+        } elseif ($dados['key'] === "list_mult" || $dados['key'] === "extend_mult") {
+
+            //FK
+            $sql->exeCommand("DROP TABLE " . PRE . $this->entity . "_" . $dados['table']);
+
+        } else {
+
+            //INDEX
+            $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$i}'");
+            if ($sql->getRowCount() > 0) {
+                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX index_" . $i);
+            }
+        }
+
+            //UNIQUE
+        $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='unique_{$i}'");
+        if ($sql->getRowCount() > 0) {
+            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP INDEX unique_" . $i);
         }
     }
 
