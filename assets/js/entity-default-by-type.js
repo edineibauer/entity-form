@@ -195,7 +195,7 @@ function primaryKey(attr) {
     attr['column'] = 'column' in attr && attr['column'] !== "" ? attr['column'] : "id";
     attr['update'] = false;
     attr['list'] = false;
-    attr['null'] = false;
+    attr['null'] = true;
     attr['unique'] = false;
 
     return attr;
