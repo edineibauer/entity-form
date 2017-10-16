@@ -1,12 +1,5 @@
 <?php
 
-/**
- * <b>CreateTable:</b>
- * Obtem um arquivo JSON e o cria a tabela relacionada a ele
- *
- * @copyright (c) 2017, Edinei J. Bauer
- */
-
 namespace EntityForm;
 
 use ConnCrud\Delete;
@@ -14,17 +7,16 @@ use ConnCrud\Read;
 use ConnCrud\TableCrud;
 use Helpers\Check;
 
-class EntityEdit
+class ReadEntityForm
 {
     private $entity;
-    private $erro;
     private $dados;
 
     public function __construct(string $entity)
     {
         $this->setEntity($entity);
         $this->dados = $this->loadEntity($entity);
-        $this->fixValuesInfo();
+        $this->dados = $this->fixValuesInfo($this->dados);
     }
 
     /**
@@ -52,17 +44,21 @@ class EntityEdit
         return array();
     }
 
-    private function fixValuesInfo()
+    private function fixValuesInfo($dados = null)
     {
-        foreach ($this->dados as $i => $dado) {
-            if(isset($dado['allow']) && !empty($dado['allow']) && is_array($dado['allow'])) {
+        if($dados){
+            foreach ($dados as $i => $dado) {
+                if(!empty($dado) && isset($dado['allow']) && !empty($dado['allow']) && is_array($dado['allow'])) {
 
-                $this->dados[$i]['allow'] = implode(",", $dado['allow']);
+                    $dados[$i]['allow'] = implode(",", $dado['allow']);
 
-                if(isset($dado['allowRelation']) && !empty($dado['allowRelation']) && is_array($dado['allowRelation'])) {
-                    $this->dados[$i]['allowRelation'] = implode(",", $dado['allowRelation']);
+                    if(isset($dado['allowRelation']) && !empty($dado['allowRelation']) && is_array($dado['allowRelation'])) {
+                        $dados[$i]['allowRelation'] = implode(",", $dado['allowRelation']);
+                    }
                 }
             }
         }
+
+        return $dados;
     }
 }

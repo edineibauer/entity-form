@@ -1,18 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nenab
- * Date: 16/09/2017
- * Time: 13:50
- */
 
 namespace EntityForm;
 
 
 use Entity\Entity;
 use ConnCrud\SqlCommand;
+use Entity\Metadados;
 
-class EntityUpdateStorage
+class SaveDatabaseEntityForm
 {
     private $entity;
     private $data;
@@ -198,7 +193,7 @@ class EntityUpdateStorage
 
         if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table']) && $dados['key'] === "extend_mult" || $dados['key'] === "list_mult") {
             if (!$this->existEntityStorage($dados['table'])) {
-                new Entity($dados['table']);
+                Metadados::getStruct($dados['table']);
             }
 
             $this->createRelationalTable($dados);
@@ -219,7 +214,7 @@ class EntityUpdateStorage
 
                 if (isset($dados['key_delete']) && isset($dados['key_update']) && !empty($dados['table'])) {
                     if (!$this->existEntityStorage($dados['table'])) {
-                        new Entity($dados['table']);
+                        Metadados::getStruct($dados['table']);
                     }
 
                     $this->createIndexFk($this->entity, $column, $dados['table'], $dados['key_delete'], $dados['key_update']);
