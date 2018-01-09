@@ -1,30 +1,21 @@
 {
   "title": "Gerenciamento de Entidades",
   "level": 5,
-  "libraries": {
-    "js": [
-      "jquery",
-      "materialize",
-      "angular"
-    ],
-    "css": [
-      "materialize"
-    ],
-    "font": [
-      "roboto"
-    ],
-    "icon": [
-      "materialize"
-    ]
-  },
-  "dependencies": {
-    "js": [
-      "slug",
-      "entity-default-by-type",
-      "entidade-form"
-    ],
-    "css": [
-      "entidade-form"
-    ]
-  }
+  "js": [
+    "jquery",
+    "resizeSensor",
+    "panel"
+  ],
+  "css": [
+    "w3",
+    "font",
+    "color",
+    "panel"
+  ],
+  "font": [
+    "roboto"
+  ],
+  "icon": [
+    "material"
+  ]
 }
