@@ -1,0 +1,392 @@
+{
+  "": {},
+  "default": {
+    "format": "text",
+    "type": "varchar",
+    "nome": null,
+    "column": null,
+    "size": false,
+    "key": null,
+    "unique": false,
+    "default": null,
+    "update": true,
+    "allow": {
+      "regex": null,
+      "values": [],
+      "names": [],
+      "validate": null
+    },
+    "form": {
+      "input": "text",
+      "class": null,
+      "style": null,
+      "cols": 12,
+      "colm": null,
+      "coll": null
+    }
+  },
+  "text": {
+    "size": 127
+  },
+  "textarea": {
+    "format": "textarea",
+    "type": "text",
+    "key": "description",
+    "form": {
+      "input": "textarea"
+    }
+  },
+  "int": {
+    "format": "int",
+    "type": "int",
+    "form": {
+      "input": "number"
+    }
+  },
+  "float": {
+    "format": "float",
+    "type": "float",
+    "form": {
+      "input": "decimal"
+    }
+  },
+  "boolean": {
+    "format": "boolean",
+    "type": "tinyint",
+    "size": 1,
+    "default": 0,
+    "allow": {
+      "values" : [0,1],
+      "names": ["não", "sim"]
+    },
+    "form": {
+      "input": "switch"
+    }
+  },
+  "status": {
+    "format": "status",
+    "type": "tinyint",
+    "nome": "status",
+    "size": 1,
+    "default": 0,
+    "allow": {
+      "values" : [0,1],
+      "names": ["desativado", "ativado"]
+    },
+    "form": {
+      "input": "switch"
+    }
+  },
+  "date": {
+    "format": "date",
+    "type": "date",
+    "nome": "data",
+    "key": "date",
+    "default": "date",
+    "allow": {
+      "regex": "/^\\d{4}-\\d{2}-\\d{2}$/"
+    },
+    "form": {
+      "input": "date"
+    }
+  },
+  "time": {
+    "format": "time",
+    "type": "time",
+    "nome": "hora",
+    "default": "time",
+    "allow": {
+      "regex": "/^\\d{2}:\\d{2}:\\d{2}$/"
+    },
+    "form": {
+      "input": "time"
+    }
+  },
+  "datetime": {
+    "format": "datetime",
+    "type": "datetime",
+    "nome": "data",
+    "default": "datetime",
+    "allow": {
+      "regex": "/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/"
+    },
+    "form": {
+      "input": "datetime"
+    }
+  },
+  "week": {
+    "format": "week",
+    "type": "tinyint",
+    "nome": "semana",
+    "allow": {
+      "values": [1,2,3,4,5,6,7],
+      "names": ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"]
+    },
+    "form": {
+      "input": "week"
+    }
+  },
+  "month": {
+    "format": "month",
+    "type": "tinyint",
+    "nome": "mês",
+    "allow": {
+      "values": [1,2,3,4,5,6,7,8,9,10,11,12],
+      "names": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
+    },
+    "form": {
+      "input": "decimal"
+    }
+  },
+  "year": {
+    "format": "year",
+    "type": "smallint",
+    "nome": "ano",
+    "allow": {
+      "regex": "/^(\\d{2}|\\d{4})$/"
+    },
+    "form": {
+      "input": "year"
+    }
+  },
+  "title": {
+    "format": "title",
+    "nome": "titulo",
+    "size": 127,
+    "key": "title",
+    "unique": true,
+    "default": false,
+    "form": {
+      "style": "font-size:1.7em;font-weight:bold"
+    }
+  },
+  "link": {
+    "format": "link",
+    "type": "varchar",
+    "nome": "name",
+    "size": 127,
+    "key": "link",
+    "unique": true,
+    "default": false
+  },
+  "select": {
+    "format": "select",
+    "type": "tinyint",
+    "default": 0,
+    "allow": {
+      "values": [0,1],
+      "names": ["selecione uma opção", "opção 1"]
+    },
+    "form": {
+      "input": "select"
+    }
+  },
+  "radio": {
+    "format": "radio",
+    "type": "tinyint",
+    "default": 0,
+    "allow": {
+      "values": [0,1],
+      "names": ["selecione uma opção", "opção 1"]
+    },
+    "form": {
+      "input": "radio"
+    }
+  },
+  "checkbox": {
+    "format": "checkbox",
+    "type": "json",
+    "allow": {
+      "values": [0,1],
+      "names": ["opção 0", "opção 1"]
+    },
+    "form": {
+      "input": "checkbox"
+    }
+  },
+  "range": {
+    "format": "range",
+    "type": "json",
+    "allow": {
+      "between": [0,100]
+    },
+    "form": {
+      "input": "range"
+    }
+  },
+  "color": {
+    "format": "color",
+    "type": "varchar",
+    "nome": "cor",
+    "size": 40,
+    "allow": {
+      "regex": "/^(#[0-9abcdefABCDEF]{3}|#[0-9abcdefABCDEF]{6}|\\s*rgb\\s*\\(\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*\\)\\s*|\\s*rgba\\s*\\(\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*(0\\.\\d{1,2}|1)\\s*\\)\\s*)$/"
+    },
+    "form": {
+      "input": "color"
+    }
+  },
+  "identifier": {
+    "format": "identifier",
+    "type": "int",
+    "nome": "id",
+    "key": "identifier",
+    "unique": true,
+    "default": false,
+    "update": false,
+    "form": {
+      "input": "hidden"
+    }
+  },
+  "extend": {
+    "format": "extend",
+    "type": "int",
+    "key": "extend",
+    "unique": true,
+    "default": false,
+    "update": false,
+    "form": {
+      "input": "extend"
+    }
+  },
+  "extend_mult": {
+    "format": "extend_mult",
+    "type": "int",
+    "key": "extend_mult",
+    "unique": true,
+    "default": false,
+    "update": false,
+    "form": {
+      "input": "extend_mult"
+    }
+  },
+  "list": {
+    "format": "list",
+    "type": "int",
+    "key": "list",
+    "form": {
+      "input": "list"
+    }
+  },
+  "list_mult": {
+    "format": "list_mult",
+    "type": "int",
+    "key": "list_mult",
+    "form": {
+      "input": "list_mult"
+    }
+  },
+  "source": {
+    "format": "source",
+    "type": "varchar",
+    "nome": "imagem",
+    "size": 127,
+    "key": "source",
+    "allow": {
+      "type": "image"
+    },
+    "form": {
+      "input": "file"
+    }
+  },
+  "email": {
+    "format": "email",
+    "type": "varchar",
+    "nome": "email",
+    "size": 127,
+    "unique": true,
+    "default": false,
+    "allow": {
+      "validate": "email"
+    },
+    "form": {
+      "input": "email"
+    }
+  },
+  "password": {
+    "format": "password",
+    "type": "varchar",
+    "nome": "senha",
+    "size": 254,
+    "default": false,
+    "form": {
+      "input": "password"
+    }
+  },
+  "url": {
+    "format": "url",
+    "type": "varchar",
+    "nome": "link",
+    "size": 254,
+    "allow": {
+      "regex": "/^https?:\\/\\/(www\\.)?\\w{2,}\\.\\w{2,}/"
+    },
+    "form": {
+      "input": "password"
+    }
+  },
+  "cpf": {
+    "format": "cpf",
+    "type": "varchar",
+    "nome": "cpf",
+    "size": 11,
+    "unique": true,
+    "allow": {
+      "validate": "cpf"
+    },
+    "form": {
+      "input": "cpf"
+    }
+  },
+  "cnpj": {
+    "format": "cnpj",
+    "type": "varchar",
+    "nome": "cnpj",
+    "size": 14,
+    "unique": true,
+    "allow": {
+      "validate": "cnpj"
+    },
+    "form": {
+      "input": "cnpj"
+    }
+  },
+  "cep": {
+    "format": "cep",
+    "type": "varchar",
+    "nome": "cep",
+    "size": 8,
+    "unique": true,
+    "default": false,
+    "allow": {
+      "regex": "/^\\d{5}[- ]?\\d{3}$/"
+    },
+    "form": {
+      "input": "cep"
+    }
+  },
+  "tel": {
+    "format": "tel",
+    "type": "varchar",
+    "nome": "telefone",
+    "size": 17,
+    "unique": true,
+    "allow": {
+      "regex": "/^(\\+*\\d{1,3})?\\s*(\\d{2}\\s*)?\\d{4,5}-*\\d{4}$/"
+    },
+    "form": {
+      "input": "tel"
+    }
+  },
+  "valor": {
+    "format": "valor",
+    "type": "double",
+    "nome": "valor",
+    "allow": {
+      "regex": "/^(\\d{1,9})?([\\.,]\\d{1,9})?$/"
+    },
+    "form": {
+      "input": "valor"
+    }
+  }
+}
