@@ -10,6 +10,7 @@
     "unique": false,
     "default": null,
     "update": true,
+    "relation": null,
     "allow": {
       "regex": null,
       "values": [],
@@ -282,9 +283,6 @@
     "nome": "imagem",
     "size": 127,
     "key": "source",
-    "allow": {
-      "type": "image"
-    },
     "form": {
       "input": "file"
     }
