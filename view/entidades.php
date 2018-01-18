@@ -54,7 +54,9 @@
         </div>
         <div class="col s12"><br></div>
         <ul class="row" id="entityAttr"></ul>
-        <li class="col s12 hide" id="tpl-attrEntity">{{$1}}
+
+        <li class="col s12 hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;">
+            {{$1}}
             <a class="waves-effect waves-red btn-flat pointer right" onclick="deleteAttr({{$0}})"><i
                         class="material-icons right">delete</i></a>
             <a class="waves-effect waves-red btn-flat pointer right" style="margin-right: 10px;"
