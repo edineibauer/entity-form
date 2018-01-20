@@ -191,6 +191,8 @@
                 </label>
             </header>
 
+            <input type="hidden" id="input" class="input" />
+
             <div class="row hide form_body">
                 <div class="col s4 padding-small form_body">
                     <label>Colunas</label>
