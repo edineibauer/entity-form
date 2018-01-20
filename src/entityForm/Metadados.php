@@ -28,7 +28,7 @@ class Metadados
      */
     public static function getInfo($entity)
     {
-        $path = PATH_HOME . "entity/cache/" . $entity . '_info.json';
+        $path = PATH_HOME . "entity/cache/info/" . $entity . '.json';
         $data = file_exists($path) ? json_decode(file_get_contents($path), true) : null;
         if($data)
             return Helper::convertStringToValueArray($data);

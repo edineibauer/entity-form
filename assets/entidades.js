@@ -1,5 +1,6 @@
 var entity = {};
 var dicionarios = {};
+var identifier = {};
 var defaults = {};
 var data = {
     "image": ["png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "psd", "svg"],
@@ -10,9 +11,9 @@ var data = {
     "denveloper": ["html", "css", "scss", "js", "tpl", "json", "xml", "md", "sql", "dll"]
 };
 
+readDefaults();
 readDicionarios();
 entityReset();
-readDefaults();
 
 function readDefaults() {
     post("entity-form", "load/defaults", function (data) {
@@ -20,10 +21,16 @@ function readDefaults() {
     });
 }
 
+function readIdentifier() {
+    post("entity-form", "load/identifier", function (data) {
+        identifier = data;
+    });
+}
+
 function readDicionarios() {
+    readIdentifier();
     post("entity-form", "load/dicionarios", function (data) {
         dicionarios = data;
-        console.log(dicionarios);
         $("#entity-space, #relation").html("");
 
         $.each(dicionarios, function (i, e) {
@@ -36,23 +43,16 @@ function readDicionarios() {
 function entityReset() {
     entity = {
         "name": "",
-        "identificador": 1,
         "edit": null
     };
 }
 
 function entityEdit(id) {
-    saveEntity();
+    saveEntity(true);
     entityReset();
 
-    if (typeof(id) !== "undefined") {
+    if (typeof(id) !== "undefined")
         entity.name = id;
-
-        $.each(dicionarios[id], function (i, column) {
-            if (i > entity.identificador) entity.identificador = i;
-        });
-        entity.identificador++;
-    }
 
     showEntity();
 }
@@ -66,11 +66,10 @@ function showEntity() {
     });
 }
 
-function saveEntity() {
+function saveEntity(silent) {
     if (checkSaveAttr() && entity.name.length > 2 && typeof(dicionarios[entity.name]) !== "undefined" && !$.isEmptyObject(dicionarios[entity.name])) {
-        console.log(dicionarios[entity.name]);
-        post("entity-form", "save/entity", {"name": entity.name, "dados": dicionarios[entity.name]}, function (g) {
-            if (g) {
+        post("entity-form", "save/entity", {"name": entity.name, "dados": dicionarios[entity.name], "id": identifier[entity.name]}, function (g) {
+            if (g && typeof(silent) === "undefined") {
                 $("body").panel(themeNotify("Salvo"));
                 readDicionarios()
             }
@@ -117,12 +116,13 @@ function checkSaveAttr() {
                 });
                 if(yes) {
                     entity.name = temp;
+                    identifier[entity.name] = 1;
                     dicionarios[entity.name] = {};
                 }
             }
             if(yes) {
-                entity.edit = entity.identificador;
-                entity.identificador++;
+                entity.edit = identifier[entity.name];
+                identifier[entity.name]++;
             }
         }
         if(yes) {

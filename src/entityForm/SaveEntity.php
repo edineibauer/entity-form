@@ -6,37 +6,24 @@ use Helpers\Helper;
 
 class SaveEntity
 {
-
     private $entity;
     private $data;
-    private $erro;
-
-    public function __construct(string $entity = null, $data = null)
-    {
-        if ($entity) {
-            $this->setEntity($entity);
-            if ($data)
-                $this->setData($data);
-        }
-    }
+    private $id;
 
     /**
+     * Nome da entidade, dicionário de dados e identificador atual
+     *
      * @param string $entity
+     * @param array $data
+     * @param int $id
      */
-    public function setEntity(string $entity)
+    public function __construct(string $entity = null, $data = null, int $id)
     {
         $this->entity = $entity;
-    }
+        $this->data = $data;
+        $this->id = $id;
 
-    /**
-     * @param array $data
-     */
-    public function setData(array $data)
-    {
-        if ($this->entity) {
-            $this->data = $data;
-            $this->start();
-        }
+        $this->start();
     }
 
     private function start()
@@ -59,7 +46,8 @@ class SaveEntity
             new SaveStorage($this->entity, $data);
 
         } catch (\Exception $e) {
-            $this->erro = $e->getMessage() . " #linha {$e->getLine()}";
+            echo $e->getMessage() . " #linha {$e->getLine()}";
+            die;
         }
     }
 
@@ -110,7 +98,7 @@ class SaveEntity
     private function generateInfo(): array
     {
         $data = [
-            "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
+            "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
             "required" => null, "unique" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null,
             "source" => [
                 "image" => null,
