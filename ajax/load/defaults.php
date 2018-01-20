@@ -1,2 +1,3 @@
 <?php
-$data['data'] = json_decode(file_get_contents(PATH_HOME . "entity/input_type.json"), true);
+$path = file_exists(PATH_HOME . "entity/input_type.json") ? PATH_HOME . "entity/input_type.json" : PATH_HOME . "vendor/conn/entity-form/entity/input_type.json";
+$data['data'] = json_decode(file_get_contents($path), true);
