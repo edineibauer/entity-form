@@ -70,11 +70,11 @@ function saveEntity() {
     if (checkSaveAttr() && entity.name.length > 2 && typeof(dicionarios[entity.name]) !== "undefined" && !$.isEmptyObject(dicionarios[entity.name])) {
         console.log(dicionarios[entity.name]);
         post("entity-form", "save/entity", {"name": entity.name, "dados": dicionarios[entity.name]}, function (g) {
-            if(g) {
+            if (g) {
                 $("body").panel(themeNotify("Salvo"));
                 readDicionarios()
             }
-        }, true);
+        });
     }
 }
 
@@ -89,9 +89,9 @@ function resetAttr(id) {
         $("." + $(this).attr("id") + "-format").prop("checked", false);
     });
     if (entity.edit !== null)
-        $(".selectInput").attr("disabled", "disabled").addClass("disabled");
+        $(".selectInput, #relation").attr("disabled", "disabled").addClass("disabled");
     else
-        $(".selectInput").removeAttr("disabled").removeClass("disabled");
+        $(".selectInput, #relation").removeAttr("disabled").removeClass("disabled");
 
     applyAttr(getDefaultsInfo());
 }

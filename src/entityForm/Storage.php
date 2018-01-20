@@ -37,8 +37,8 @@ abstract class Storage
     {
         $delete = !$key || $key === "extend" ? "CASCADE" : "RESTRICT";
 
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_{$i}` (`{$column}`)");
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `" . PRE . $i . "_" . $table . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_{$column}` (`{$column}`)");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `" . PRE . $column . "_" . $table . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
     }
 
     protected function prepareSqlColumn($dados)

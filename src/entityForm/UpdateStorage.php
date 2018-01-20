@@ -94,7 +94,7 @@ class UpdateStorage extends Storage
         $dados = $this->old[$id];
         $sql = new SqlCommand();
         if ($dados['key'] === "list" || $dados['key'] === "extend") {
-            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $id . "_" . $this->entity . ", DROP INDEX fk_" . $id);
+            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $dados['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $dados['column']);
 
         } elseif ($dados['key'] === "list_mult" || $dados['key'] === "extend_mult") {
             $sql->exeCommand("DROP TABLE " . PRE . $this->entity . "_" . $dados['relation']);
