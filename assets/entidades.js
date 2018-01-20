@@ -48,13 +48,15 @@ function entityReset() {
 }
 
 function entityEdit(id) {
-    saveEntity(true);
-    entityReset();
+    if((typeof(id) === "undefined" && entity.name !== "") || (typeof(id) !== "undefined" && id !== entity.name)) {
+        saveEntity(true);
+        entityReset();
 
-    if (typeof(id) !== "undefined")
-        entity.name = id;
+        if (typeof(id) !== "undefined")
+            entity.name = id;
 
-    showEntity();
+        showEntity();
+    }
 }
 
 function showEntity() {
