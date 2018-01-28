@@ -292,7 +292,7 @@ function getSelectInput(val) {
 
 function checkRequiresFields() {
     var type = getType();
-    return (type !== "" && $("#nome").val().length > 1 && (["extend", "extend_mult", "list", "list_mult"].indexOf(type) < 0 || $("#relation").val() !== null));
+    return (type !== "" && $("#nome").val().length > 1 && $("#nome").val() !== "id" && (["extend", "extend_mult", "list", "list_mult"].indexOf(type) < 0 || $("#relation").val() !== null));
 }
 
 function checkFieldsOpenOrClose() {
