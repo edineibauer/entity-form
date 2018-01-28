@@ -101,6 +101,8 @@
                         <option value="tel">Telefone</option>
                         <option value="cpf">Cpf</option>
                         <option value="cnpj">Cnpj</option>
+                        <option value="ie">Inscrição Estadual</option>
+                        <option value="rg">RG</option>
                         <option value="cep">Cep</option>
                         <option value="date">Data</option>
                         <option value="datetime">Data & Hora</option>

@@ -136,7 +136,7 @@
       "names": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
     },
     "form": {
-      "input": "decimal"
+      "input": "month"
     }
   },
   "year": {
@@ -334,6 +334,32 @@
     },
     "form": {
       "input": "cpf"
+    }
+  },
+  "ie": {
+    "format": "ie",
+    "type": "varchar",
+    "nome": "Inscrição Estadual",
+    "size": 12,
+    "unique": true,
+    "allow": {
+      "validate": "ie"
+    },
+    "form": {
+      "input": "ie"
+    }
+  },
+  "rg": {
+    "format": "rg",
+    "type": "varchar",
+    "nome": "RG",
+    "size": 10,
+    "unique": true,
+    "allow": {
+      "validate": "rg"
+    },
+    "form": {
+      "input": "rg"
     }
   },
   "cnpj": {
