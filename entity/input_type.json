@@ -124,7 +124,7 @@
       "names": ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"]
     },
     "form": {
-      "input": "week"
+      "input": "select"
     }
   },
   "month": {
@@ -136,7 +136,7 @@
       "names": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
     },
     "form": {
-      "input": "month"
+      "input": "select"
     }
   },
   "year": {
