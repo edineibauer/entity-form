@@ -41,7 +41,7 @@
     "format": "int",
     "type": "int",
     "form": {
-      "input": "number"
+      "input": "decimal"
     }
   },
   "float": {
