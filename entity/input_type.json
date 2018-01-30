@@ -383,7 +383,7 @@
     "unique": true,
     "default": false,
     "allow": {
-      "regex": "/^\\d{5}[- ]?\\d{3}$/"
+      "regex": "/^\\d{9}$/"
     },
     "form": {
       "input": "cep"
@@ -396,7 +396,7 @@
     "size": 17,
     "unique": true,
     "allow": {
-      "regex": "/^(\\+*\\d{1,3})?\\s*(\\d{2}\\s*)?\\d{4,5}-*\\d{4}$/"
+      "regex": "/^\\d{10,14}$/"
     },
     "form": {
       "input": "tel"
