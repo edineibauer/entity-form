@@ -8,14 +8,17 @@ class Metadados
 {
     /**
      * @param string $entity
+     * @param mixed $keepId
      * @return mixed
      */
-    public static function getDicionario($entity)
+    public static function getDicionario($entity, $keepId = null)
     {
         $path = PATH_HOME . "entity/cache/" . $entity . '.json';
         $data = file_exists($path) ? json_decode(file_get_contents($path), true) : null;
-        if($data) {
-            unset($data[0]);
+        if ($data) {
+            if (!$keepId)
+                unset($data[0]);
+
             return Helper::convertStringToValueArray($data);
         }
 
@@ -30,7 +33,7 @@ class Metadados
     {
         $path = PATH_HOME . "entity/cache/info/" . $entity . '.json';
         $data = file_exists($path) ? json_decode(file_get_contents($path), true) : null;
-        if($data)
+        if ($data)
             return Helper::convertStringToValueArray($data);
 
         return null;
