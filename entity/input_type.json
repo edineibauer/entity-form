@@ -40,6 +40,9 @@
   "int": {
     "format": "int",
     "type": "int",
+    "allow": {
+      "regex": "/^\\d{1,10}$/"
+    },
     "form": {
       "input": "decimal"
     }
@@ -47,6 +50,9 @@
   "float": {
     "format": "float",
     "type": "float",
+    "allow": {
+      "regex": "/^\\d{1,7}(.,)?(\\d{5})?$/"
+    },
     "form": {
       "input": "decimal"
     }
@@ -109,7 +115,7 @@
     "nome": "data",
     "default": "datetime",
     "allow": {
-      "regex": "/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/"
+      "regex": "/^\\d{4}-\\d{2}-\\d{2}(\\s|T)\\d{2}:\\d{2}(:\\d{2})*$/"
     },
     "form": {
       "input": "datetime"
@@ -173,9 +179,9 @@
   "select": {
     "format": "select",
     "type": "tinyint",
-    "default": 0,
+    "default": 1,
     "allow": {
-      "values": [0,1],
+      "values": [1,2],
       "names": ["selecione uma opção", "opção 1"]
     },
     "form": {
@@ -185,9 +191,9 @@
   "radio": {
     "format": "radio",
     "type": "tinyint",
-    "default": 0,
+    "default": 1,
     "allow": {
-      "values": [0,1],
+      "values": [1,2],
       "names": ["selecione uma opção", "opção 1"]
     },
     "form": {
@@ -198,8 +204,8 @@
     "format": "checkbox",
     "type": "json",
     "allow": {
-      "values": [0,1],
-      "names": ["opção 0", "opção 1"]
+      "values": [1,2],
+      "names": ["opção 1", "opção 2"]
     },
     "form": {
       "input": "checkbox"
@@ -209,7 +215,7 @@
     "format": "range",
     "type": "json",
     "allow": {
-      "between": [0,100]
+      "between": [1,100]
     },
     "form": {
       "input": "range"
@@ -320,7 +326,7 @@
       "regex": "/^https?:\\/\\/(www\\.)?\\w{2,}\\.\\w{2,}/"
     },
     "form": {
-      "input": "password"
+      "input": "text"
     }
   },
   "cpf": {
@@ -343,6 +349,7 @@
     "size": 12,
     "unique": true,
     "allow": {
+      "regex": "/^\\d{12}$/",
       "validate": "ie"
     },
     "form": {
@@ -356,6 +363,7 @@
     "size": 10,
     "unique": true,
     "allow": {
+      "regex": "/^\\d{10}$/",
       "validate": "rg"
     },
     "form": {
@@ -383,7 +391,7 @@
     "unique": true,
     "default": false,
     "allow": {
-      "regex": "/^\\d{9}$/"
+      "regex": "/^\\d{8}$/"
     },
     "form": {
       "input": "cep"
@@ -404,10 +412,10 @@
   },
   "valor": {
     "format": "valor",
-    "type": "double",
-    "nome": "valor",
+    "type": "int",
+    "nome": "Valor",
     "allow": {
-      "regex": "/^(\\d{1,9})?([\\.,]\\d{1,9})?$/"
+      "regex": "/^\\d{1,10}$/"
     },
     "form": {
       "input": "valor"
