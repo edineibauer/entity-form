@@ -182,7 +182,7 @@
     "default": 1,
     "allow": {
       "values": [1,2],
-      "names": ["selecione uma opção", "opção 1"]
+      "names": ["opção 1", "opção 2"]
     },
     "form": {
       "input": "select"
@@ -194,7 +194,7 @@
     "default": 1,
     "allow": {
       "values": [1,2],
-      "names": ["selecione uma opção", "opção 1"]
+      "names": ["opção 1", "opção 2"]
     },
     "form": {
       "input": "radio"
