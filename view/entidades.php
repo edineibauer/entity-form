@@ -76,6 +76,7 @@
                         <option value="" disabled selected>Input Genérica</option>
                         <option value="text">Texto</option>
                         <option value="textarea">Área de Texto</option>
+                        <option value="html">Área de HTML</option>
                         <option value="int">Inteiro</option>
                         <option value="float">Float</option>
                         <option value="boolean">Boleano</option>
@@ -85,6 +86,7 @@
                         <option value="range">Range</option>
                         <option value="color">Cor</option>
                         <option value="source">Arquivo</option>
+                        <option value="sources">Arquivos Multiplos</option>
                     </select>
                 </div>
                 <div class="col s12 m4 padding-small">
