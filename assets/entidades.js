@@ -151,7 +151,7 @@ function saveAttrInputs() {
     dicionarios[entity.name][entity.edit]['allow']['values'] = [];
     dicionarios[entity.name][entity.edit]['allow']['names'] = [];
 
-    if (dicionarios[entity.name][entity.edit]['format'] === "source")
+    if (dicionarios[entity.name][entity.edit]['format'] === "source" || dicionarios[entity.name][entity.edit]['format'] === "sources")
         checkSaveSource();
     else
         checkSaveAllow();
@@ -242,7 +242,7 @@ function checkValuesEspAttr(name, value) {
 }
 
 function setAllow(name, value) {
-    if (name === "values" && entity.edit !== null && dicionarios[entity.name][entity.edit]['format'] === "source") {
+    if (name === "values" && entity.edit !== null && (dicionarios[entity.name][entity.edit]['format'] === "source" || dicionarios[entity.name][entity.edit]['format'] === "sources")) {
         $.each(value, function (i, e) {
             $.each(data, function (name, dados) {
                 if (dados.indexOf(e) > -1 && !$("#" + name).prop("checked")) {
@@ -268,7 +268,7 @@ function setFormat(val) {
     $(".selectInput").css("color", "#CCCCCC").val("");
     getSelectInput(val).css("color", "#333333").val(val);
 
-    if (val === "source") {
+    if (val === "source" || val === "sources") {
         $("#format-source").removeClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").addClass("hide");
     } else {
@@ -286,7 +286,7 @@ function setFormat(val) {
 }
 
 function getSelectInput(val) {
-    if (["text", "textarea", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source"].indexOf(val) > -1)
+    if (["text", "textarea", "html", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source", "sources"].indexOf(val) > -1)
         return $("#funcaoPrimary");
     else if (["extend", "extend_mult", "list", "list_mult"].indexOf(val) > -1)
         return $("#funcaoRelation");
