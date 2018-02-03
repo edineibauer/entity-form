@@ -310,7 +310,7 @@
     "nome": "Arquivos",
     "key": "sources",
     "form": {
-      "input": "file"
+      "input": "files"
     }
   },
   "email": {
