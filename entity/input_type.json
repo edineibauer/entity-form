@@ -296,9 +296,8 @@
   },
   "source": {
     "format": "source",
-    "type": "varchar",
+    "type": "json",
     "nome": "Imagem",
-    "size": 254,
     "key": "source",
     "form": {
       "input": "file"
