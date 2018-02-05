@@ -121,7 +121,7 @@ class SaveEntity
                 $data[$dados['key']] = $i;
 
             if ($dados['key'] === "source" || $dados['key'] === "sources")
-                $data[$dados['key']] = [$this->checkSource($dados['allow']['values']) => $i];
+                $data['source'] = [$this->checkSource($dados['allow']['values']) => $i];
 
             if ($dados['default'] === false)
                 $data['required'][] = $i;
