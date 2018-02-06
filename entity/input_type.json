@@ -185,7 +185,8 @@
     "size": 127,
     "key": "link",
     "unique": true,
-    "default": false
+    "default": false,
+    "form": false
   },
   "select": {
     "format": "select",
@@ -296,6 +297,30 @@
     "type": "json",
     "nome": "Imagem",
     "key": "source",
+    "allow": {
+      "values": [
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "bmp",
+        "tif",
+        "tiff",
+        "psd",
+        "svg"
+      ],
+      "names": [
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "bmp",
+        "tif",
+        "tiff",
+        "psd",
+        "svg"
+      ]
+    },
     "form": {
       "input": "file"
     }
@@ -305,6 +330,30 @@
     "type": "json",
     "nome": "Arquivos",
     "key": "sources",
+    "allow": {
+      "values": [
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "bmp",
+        "tif",
+        "tiff",
+        "psd",
+        "svg"
+      ],
+      "names": [
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "bmp",
+        "tif",
+        "tiff",
+        "psd",
+        "svg"
+      ]
+    },
     "form": {
       "input": "files"
     }
