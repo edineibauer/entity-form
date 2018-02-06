@@ -15,13 +15,13 @@
         <li class="col s12" id="entity-space">
         </li>
         <div class="col s12 hide" id="tpl-entity">
-            <div class="col s7 padding-small">{{$}}</div>
+            <div class="col s7 padding-small">__$__</div>
             <div class="padding-small col s5 right-align">
-                <a class="pointer right padding-tiny btn-flat" onclick="removeEntity('{{$}}')">
+                <a class="pointer right padding-tiny btn-flat" onclick="removeEntity('__$__')">
                     <i class="material-icons white-text font-size12">delete</i>
                 </a>
                 <a class="pointer right padding-tiny btn-flat" style="margin-right: 5px;"
-                   onclick="entityEdit('{{$}}')">
+                   onclick="entityEdit('__$__')">
                     <i class="material-icons white-text font-size12">edit</i>
                 </a>
             </div>
@@ -56,11 +56,11 @@
         <ul class="row" id="entityAttr"></ul>
 
         <li class="col s12 hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;">
-            {{$1}}
-            <a class="waves-effect waves-red btn-flat pointer right" onclick="deleteAttr({{$0}})"><i
+            __$1__
+            <a class="waves-effect waves-red btn-flat pointer right" onclick="deleteAttr(__$0__)"><i
                         class="material-icons right">delete</i></a>
             <a class="waves-effect waves-red btn-flat pointer right" style="margin-right: 10px;"
-               onclick="editAttr({{$0}})">
+               onclick="editAttr(__$0__)">
                 <i class="material-icons right">edit</i></a>
         </li>
     </div>
