@@ -76,14 +76,14 @@
                         <option value="" disabled selected>Input Genérica</option>
                         <option value="text">Texto</option>
                         <option value="textarea">Área de Texto</option>
-                        <option value="html">Área de HTML</option>
+<!--                        <option value="html">Área de HTML</option>-->
                         <option value="int">Inteiro</option>
-                        <option value="float">Float</option>
+<!--                        <option value="float">Float</option>-->
                         <option value="boolean">Boleano</option>
                         <option value="select">Select</option>
                         <option value="radio">Radio</option>
                         <option value="checkbox">CheckBox</option>
-                        <option value="range">Range</option>
+<!--                        <option value="range">Range</option>-->
                         <option value="color">Cor</option>
                         <option value="source">Arquivo</option>
                         <option value="sources">Arquivos Multiplos</option>
