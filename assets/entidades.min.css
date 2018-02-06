@@ -1,0 +1,1 @@
+#main,#nav-entity,#nav-menu{position:fixed;top:0;height:100%}#nav-entity{left:0;width:250px;background:#31A6F5;z-index:3}#nav-menu{left:250px;width:300px;z-index:2;background:#FBFBFB}#nav-menu header{background:#EEE}#main{overflow-y:scroll;overflow-x:hidden;left:0;padding:20px 20px 20px 570px;width:100%;z-index:1}
