@@ -34,7 +34,7 @@ function readDicionarios() {
         $("#entity-space, #relation").html("");
 
         $.each(dicionarios, function (i, e) {
-            cloneTo("#tpl-entity", "#entity-space", i, true);
+            copy("#tpl-entity", "#entity-space", i, true);
             $("#relation").append("<option value='" + i + "'>" + i + "</option>");
         });
     });
@@ -64,7 +64,7 @@ function showEntity() {
 
     $("#entityAttr").html("");
     $.each(dicionarios[entity.name], function (i, column) {
-        cloneTo("#tpl-attrEntity", "#entityAttr", [i, column.column], true);
+        copy("#tpl-attrEntity", "#entityAttr", [i, column.column], true);
     });
 }
 
@@ -257,7 +257,7 @@ function setAllow(name, value) {
         var copy = $("#spaceValueAllow").html() === "";
         var total = value.length - 1;
         $.each(value, function (i, e) {
-            if (copy) cloneTo('#tplValueAllow', '#spaceValueAllow', '', 'append');
+            if (copy) copy('#tplValueAllow', '#spaceValueAllow', '', 'append');
             var $allow = (copy ? $("#spaceValueAllow").find(".allow:last-child") : $("#spaceValueAllow").find(".allow:eq(" + i + ")"));
             $allow.find("." + name).val(e);
         });
