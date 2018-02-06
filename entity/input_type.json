@@ -271,9 +271,6 @@
     "format": "extend_mult",
     "type": "int",
     "key": "extend_mult",
-    "unique": true,
-    "default": false,
-    "update": false,
     "form": {
       "input": "extend_mult"
     }
