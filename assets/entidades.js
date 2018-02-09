@@ -254,10 +254,10 @@ function setAllow(name, value) {
         });
 
     } else {
-        var copys = $("#spaceValueAllow").html() === "";
+        var copia = $("#spaceValueAllow").html() === "";
         $.each(value, function (i, e) {
-            if (copys) copy('#tplValueAllow', '#spaceValueAllow', '', 'append');
-            var $allow = (copys ? $("#spaceValueAllow").find(".allow:last-child") : $("#spaceValueAllow").find(".allow:eq(" + i + ")"));
+            if (copia) copy('#tplValueAllow', '#spaceValueAllow', '', 'append');
+            var $allow = (copia ? $("#spaceValueAllow").find(".allow:last-child") : $("#spaceValueAllow").find(".allow:eq(" + i + ")"));
             $allow.find("." + name).val(e);
         });
     }

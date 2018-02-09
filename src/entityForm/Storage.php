@@ -44,7 +44,7 @@ abstract class Storage
     protected function prepareSqlColumn($dados)
     {
         return "`{$dados['column']}` {$dados['type']} "
-            . (!empty($dados['size']) ? "({$dados['size']}) " : " ")
+            . (!empty($dados['size']) ? "({$dados['size']}) " : ($dados['type'] === "varchar" ? "(254) " : " "))
             . ($dados['default'] === false ? "NOT NULL " : "")
             . ($dados['default'] !== false && !empty($dados['default']) ? $this->prepareDefault($dados['default']) : ($dados['default'] !== false ? "DEFAULT NULL" : ""));
     }
@@ -64,5 +64,7 @@ abstract class Storage
     {
         $exe = new SqlCommand();
         $exe->exeCommand($sql);
+        if($exe->getErro())
+            var_dump($exe->getErro());
     }
 }
