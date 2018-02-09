@@ -293,7 +293,7 @@
                     <span class="left padding-left">Valores Permitidos &nbsp;&nbsp;</span>
                 </span>
                 <span class="btn-floating left color-green" id="allowBtnAdd"
-                      onclick="cloneTo('#tplValueAllow', '#spaceValueAllow');$('#spaceValueAllow').find('.allow:first-child').find('.values').focus()">
+                      onclick="copy('#tplValueAllow', '#spaceValueAllow');$('#spaceValueAllow').find('.allow:first-child').find('.values').focus()">
                     <i class="material-icons">add</i>
                 </span>
             </header>
