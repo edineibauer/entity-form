@@ -3,6 +3,7 @@
 namespace EntityForm;
 
 use Helpers\Helper;
+use LinkControl\EntityCreateEntityDatabase;
 
 class SaveEntity
 {
@@ -43,7 +44,7 @@ class SaveEntity
             $this->createEntityJson($this->data);
             $this->createEntityJson($this->generateInfo(), "info");
 
-            new SaveStorage($this->entity, $data);
+            new EntityCreateEntityDatabase($this->entity, $data);
 
         } catch (\Exception $e) {
             echo $e->getMessage() . " #linha {$e->getLine()}";
@@ -160,7 +161,5 @@ class SaveEntity
         } else {
             return $type[0];
         }
-
-        return null;
     }
 }
