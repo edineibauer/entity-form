@@ -1,21 +1,4 @@
 {
   "title": "Gerenciamento de Entidades",
-  "level": 5,
-  "js": [
-    "jquery",
-    "resizeSensor",
-    "panel"
-  ],
-  "css": [
-    "w3",
-    "font",
-    "color",
-    "panel"
-  ],
-  "font": [
-    "roboto"
-  ],
-  "icon": [
-    "material"
-  ]
+  "setor": 1
 }
