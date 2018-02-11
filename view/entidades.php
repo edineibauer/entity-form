@@ -4,7 +4,7 @@
             <div class="col s7 upper padding-medium">
                 Entidades
             </div>
-            <div class="col s5 right-align">
+            <div class="col s5 align-right">
                 <a class="btn color-white btn-floating right" id="newEntityBtn" onclick="entityEdit()">
                     <i class="material-icons">add</i>
                 </a>
@@ -16,13 +16,13 @@
         </li>
         <div class="col s12 hide" id="tpl-entity">
             <div class="col s7 padding-small">__$__</div>
-            <div class="padding-small col s5 right-align">
+            <div class="padding-small col s5 align-right">
                 <a class="pointer right padding-tiny btn-flat" onclick="removeEntity('__$__')">
-                    <i class="material-icons white-text font-size12">delete</i>
+                    <i class="material-icons white-text font-medium">delete</i>
                 </a>
                 <a class="pointer right padding-tiny btn-flat" style="margin-right: 5px;"
                    onclick="entityEdit('__$__')">
-                    <i class="material-icons white-text font-size12">edit</i>
+                    <i class="material-icons white-text font-medium">edit</i>
                 </a>
             </div>
         </div>
@@ -49,7 +49,7 @@
         <div class="row">
             <label class="col s12">
                 <span>Nome da Entidade</span>
-                <input id="entityName" type="text" placeholder="entidade..." class="font-size17">
+                <input id="entityName" type="text" placeholder="entidade..." class="font-large">
             </label>
         </div>
         <div class="col s12"><br></div>
@@ -278,7 +278,7 @@
                 <div class="col s12">
                     <label class="input-field col s12">
                         <span>Expressão Regular para Validação</span>
-                        <input id="regex" type="text" class="input font-size15">
+                        <input id="regex" type="text" class="input font-medium">
                     </label>
                 </div>
 
@@ -425,7 +425,7 @@
 
             <div class="col s12" id="spaceValueAllow"></div>
 
-            <div class="col s12 font-size13 hide allow" id="tplValueAllow">
+            <div class="col s12 font-medium hide allow" id="tplValueAllow">
                 <label class="input-field col s12 m4 padding-small">
                     <span>Valor</span>
                     <input class="values" type="number" min="1" max="99" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 49 && event.charCode <= 57">
