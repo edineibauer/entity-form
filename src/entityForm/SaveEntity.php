@@ -33,6 +33,12 @@ class SaveEntity
     {
         $this->entity = $entity;
         $data = json_decode(file_get_contents(PATH_HOME . "entity/cache/{$this->entity}.json"), true);
+        $this->id = 1;
+        foreach ($data as $i => $datum) {
+            if($i > $this->id)
+                $this->id = (int) $i;
+        }
+        $this->id ++;
         $this->createEntityJson($this->generateInfo($data), "info");
 
         new EntityCreateEntityDatabase($this->entity, []);
