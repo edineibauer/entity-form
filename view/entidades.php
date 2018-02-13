@@ -33,7 +33,8 @@
     <header class="row">
         <div class="panel">
             <div class="col s12 padding-tiny">
-                <button class="btn color-blue left" type="submit" id="saveEntityBtn" name="action" onclick="saveEntity()">
+                <button class="btn color-blue left" type="submit" id="saveEntityBtn" name="action"
+                        onclick="saveEntity()">
                     salvar
                     <i class="material-icons right padding-left">check</i>
                 </button>
@@ -53,6 +54,17 @@
             </label>
         </div>
         <div class="col s12"><br></div>
+
+        <div class="row hide" id="importForm"><hr><br>
+            <span class="row">
+                <label for="import">Importar Entidade</label>
+                <input type="file" name="import" id="import"/>
+            </span>
+            <button class="col s12 btn-large color-hover-cyan" onclick="sendImport()">
+                <i class="material-icons padding-right left">send</i><span class="left">Enviar</span>
+            </button>
+        </div>
+
         <ul class="row" id="entityAttr"></ul>
 
         <li class="col s12 hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;">
@@ -76,14 +88,14 @@
                         <option value="" disabled selected>Input Genérica</option>
                         <option value="text">Texto</option>
                         <option value="textarea">Área de Texto</option>
-<!--                        <option value="html">Área de HTML</option>-->
+                        <!--                        <option value="html">Área de HTML</option>-->
                         <option value="int">Inteiro</option>
-<!--                        <option value="float">Float</option>-->
+                        <!--                        <option value="float">Float</option>-->
                         <option value="boolean">Boleano</option>
                         <option value="select">Select</option>
                         <option value="radio">Radio</option>
                         <option value="checkbox">CheckBox</option>
-<!--                        <option value="range">Range</option>-->
+                        <!--                        <option value="range">Range</option>-->
                         <option value="color">Cor</option>
                         <option value="source">Arquivo</option>
                         <option value="sources">Arquivos Multiplos</option>
@@ -195,7 +207,7 @@
                 </label>
             </header>
 
-            <input type="hidden" id="input" class="input" />
+            <input type="hidden" id="input" class="input"/>
 
             <div class="row hide form_body">
                 <div class="col s4 padding-small form_body">
@@ -428,7 +440,8 @@
             <div class="col s12 font-medium hide allow" id="tplValueAllow">
                 <label class="input-field col s12 m4 padding-small">
                     <span>Valor</span>
-                    <input class="values" type="number" min="1" max="99" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 49 && event.charCode <= 57">
+                    <input class="values" type="number" min="1" max="99"
+                           onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 49 && event.charCode <= 57">
                 </label>
 
                 <label class="input-field col s12 m8 padding-small">

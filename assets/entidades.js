@@ -56,6 +56,9 @@ function entityEdit(id) {
             entity.name = id;
 
         showEntity();
+    } else {
+        showImport();
+        $("#entityName").focus();
     }
 }
 
@@ -66,6 +69,15 @@ function showEntity() {
     $.each(dicionarios[entity.name], function (i, column) {
         copy("#tpl-attrEntity", "#entityAttr", [i, column.column], true);
     });
+
+    showImport();
+}
+
+function showImport() {
+    if($("#entityAttr").html() === "")
+        $("#importForm").removeClass("hide");
+    else
+        $("#importForm").addClass("hide");
 }
 
 function saveEntity(silent) {
@@ -329,6 +341,36 @@ function removeEntity(entity) {
                 readDicionarios();
             }
         })
+    }
+}
+
+function sendImport() {
+    if($("#import").val() !== "") {
+        var form_data = new FormData();
+        form_data.append('file', $('#import').prop('files')[0]);
+        $.ajax({
+            url: HOME + 'entidadesImport',
+            dataType: 'text',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            type: 'post',
+            success: function (data) {
+                if (data) {
+                    if(data === "existe") {
+                        toast("Entidade já Existe", "warning", 2500);
+                    } else {
+                        toast("Rejeitado! Chave Estrangeira Ausente", "warning", 4000);
+                        post('entity-form', 'delete/import', {entity: $('#import').val()}, function (g) {
+                        });
+                    }
+                    $('#import').val("");
+                } else {
+                    location.reload();
+                }
+            }
+        });
     }
 }
 

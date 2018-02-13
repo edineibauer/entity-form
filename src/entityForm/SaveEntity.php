@@ -8,7 +8,6 @@ use LinkControl\EntityCreateEntityDatabase;
 class SaveEntity
 {
     private $entity;
-    private $data;
     private $id;
 
     /**
@@ -18,16 +17,28 @@ class SaveEntity
      * @param array $data
      * @param int $id
      */
-    public function __construct(string $entity = null, $data = null, int $id)
+    public function __construct(string $entity = null, $data = null, int $id = 0)
     {
-        $this->entity = $entity;
-        $this->data = $data;
-        $this->id = $id;
+        if ($entity) {
+            $this->entity = $entity;
+            if ($id)
+                $this->id = $id;
 
-        $this->start();
+            if ($data)
+                $this->start($data);
+        }
     }
 
-    private function start()
+    public function importMetadados(string $entity)
+    {
+        $this->entity = $entity;
+        $data = json_decode(file_get_contents(PATH_HOME . "entity/cache/{$this->entity}.json"), true);
+        $this->createEntityJson($this->generateInfo($data), "info");
+
+        new EntityCreateEntityDatabase($this->entity, []);
+    }
+
+    private function start($metadados = null)
     {
         try {
             $data['dicionario'] = Metadados::getDicionario($this->entity);
@@ -40,9 +51,9 @@ class SaveEntity
                 Helper::createFolderIfNoExist(PATH_HOME . "entity/cache/info");
             }
 
-            $this->data["0"] = $this->generatePrimary();
-            $this->createEntityJson($this->data);
-            $this->createEntityJson($this->generateInfo(), "info");
+            $metadados["0"] = $this->generatePrimary();
+            $this->createEntityJson($metadados);
+            $this->createEntityJson($this->generateInfo($metadados), "info");
 
             new EntityCreateEntityDatabase($this->entity, $data);
 
@@ -94,9 +105,10 @@ class SaveEntity
     }
 
     /**
+     * @param array $metadados
      * @return array
      */
-    private function generateInfo(): array
+    private function generateInfo(array $metadados): array
     {
         $data = [
             "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
@@ -114,7 +126,7 @@ class SaveEntity
             ]
         ];
 
-        foreach ($this->data as $i => $dados) {
+        foreach ($metadados as $i => $dados) {
             if (in_array($dados['key'], ["unique", "extend", "extend_mult", "list", "list_mult"]))
                 $data[$dados['key']][] = $i;
 
