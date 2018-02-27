@@ -1,0 +1,22 @@
+[
+  "title",
+  "email",
+  "cep",
+  "tel",
+  "cpf",
+  "cnpj",
+  "valor",
+  "text",
+  "textarea",
+  "url",
+  "ie",
+  "rg",
+  "time",
+  "week",
+  "month",
+  "year",
+  "date",
+  "datetime",
+  "status",
+  "source"
+]

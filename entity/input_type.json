@@ -24,7 +24,9 @@
       "cols": 12,
       "colm": null,
       "coll": null
-    }
+    },
+    "select": [],
+    "filter": []
   },
   "text": {
     "size": 127

@@ -74,7 +74,7 @@ function showEntity() {
 }
 
 function showImport() {
-    if($("#entityAttr").html() === "")
+    if ($("#entityAttr").html() === "")
         $("#importForm").removeClass("hide");
     else
         $("#importForm").addClass("hide");
@@ -98,9 +98,9 @@ function saveEntity(silent) {
 function resetAttr(id) {
     entity.edit = typeof(id) !== "undefined" ? id : null;
     $(".selectInput").css("color", "#CCCCCC").val("");
-    $("#format-source").addClass("hide");
+    $("#format-source, #requireListExtend, #requireListFilter").addClass("hide");
     $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
-    $("#spaceValueAllow").html("");
+    $("#spaceValueAllow, #requireListExtendDiv, #list-filter").html("");
     $(".file-format").each(function () {
         $(this).prop("checked", false);
         $("." + $(this).attr("id") + "-format").prop("checked", false);
@@ -163,10 +163,37 @@ function saveAttrInputs() {
     dicionarios[entity.name][entity.edit]['allow']['values'] = [];
     dicionarios[entity.name][entity.edit]['allow']['names'] = [];
 
+    checkSaveFilter();
+    checkSaveSelect();
+
     if (dicionarios[entity.name][entity.edit]['format'] === "source" || dicionarios[entity.name][entity.edit]['format'] === "sources")
         checkSaveSource();
     else
         checkSaveAllow();
+}
+
+function checkSaveFilter() {
+    if ($("#list-filter").html() !== "") {
+        $("#list-filter").find(".filterTpl").each(function () {
+            var $this = $(this);
+            var filter = $this.find(".filter").val();
+            var filter_operator = $this.find(".filter_operator").val();
+            var filter_value = $this.find(".filter_value").val();
+
+            if (filter !== "" && filter_operator !== "" && filter_value !== "") {
+                dicionarios[entity.name][entity.edit]['filter'].push(filter + "," + filter_operator + "," + filter_value);
+            }
+        });
+    }
+}
+
+function checkSaveSelect() {
+    if ($("#requireListExtendDiv").html() !== "") {
+        $("#requireListExtendDiv").find("input").each(function () {
+            if ($(this).prop("checked"))
+                dicionarios[entity.name][entity.edit]['select'].push($(this).attr("id"));
+        });
+    }
 }
 
 function checkSaveSource() {
@@ -232,6 +259,12 @@ function applyValueAttr(name, value) {
 
     if (name === "values" || name === "names") {
         setAllow(name, value);
+    } else if (name === "filter") {
+        $.each(value, function (i, e) {
+            addFilter(e);
+        });
+    } else if (name === "select") {
+        checkEntityMultipleFields(value);
     } else {
         if ($input.attr("type") === "checkbox" && ((value !== false && !$input.prop("checked")) || (value === false && $input.prop("checked"))))
             $input.trigger("click");
@@ -311,11 +344,18 @@ function checkRequiresFields() {
 }
 
 function checkFieldsOpenOrClose(nome) {
-    if(allowName(nome)) {
+    if (allowName(nome)) {
         if (checkRequiresFields())
             $(".requireName").removeClass("hide");
         else
             $(".requireName").addClass("hide");
+
+        var type = getType();
+
+        if (type === "list" || type === "list_mult")
+            $("#requireListFilter").removeClass("hide");
+        else
+            $("#requireListFilter").addClass("hide");
     }
 }
 
@@ -345,7 +385,7 @@ function removeEntity(entity) {
 }
 
 function sendImport() {
-    if($("#import").val() !== "") {
+    if ($("#import").val() !== "") {
         var form_data = new FormData();
         form_data.append('file', $('#import').prop('files')[0]);
         $.ajax({
@@ -358,7 +398,7 @@ function sendImport() {
             type: 'post',
             success: function (data) {
                 if (data) {
-                    if(data === "existe") {
+                    if (data === "existe") {
                         toast("Entidade já Existe", "warning", 2500);
                     } else {
                         toast("Rejeitado! Chave Estrangeira Ausente", "warning", 4000);
@@ -372,6 +412,51 @@ function sendImport() {
             }
         });
     }
+}
+
+function addFilter(value) {
+    var field = "";
+    var operator = "";
+    var valor = "";
+    if (typeof (value) !== "undefined") {
+        var e = value.split(",");
+        field = e[0];
+        operator = e[1];
+        valor = e[2];
+    }
+    copy("#tpl-list-filter", "#list-filter", {0: operator, 1: valor}, "append");
+    var id = Math.floor(Math.random() * 1000000);
+    $(".filter").last().attr("id", id);
+    $("#" + id).html("");
+    $.each(dicionarios[$("#relation").val()], function (i, e) {
+        copy("#selectOneFilterOption", "#" + id, {
+            0: e.column,
+            1: e.nome,
+            2: (field === e.column ? "\" selected=\"selected" : "")
+        }, "append");
+    });
+}
+
+function checkFilterToApply(value) {
+    if ($("#funcaoRelation").val() === "list" || "list_mult" === $("#funcaoRelation").val()) {
+        $("#requireListFilter").removeClass("hide");
+        $("#list-filter").html("");
+        addFilter();
+    } else {
+        $("#requireListFilter").addClass("hide");
+    }
+}
+
+function checkEntityMultipleFields(values) {
+    $("#requireListExtend").addClass("hide");
+    $("#requireListExtendDiv").html("");
+    $.each(dicionarios[$("#relation").val()], function (i, e) {
+        if (e.key === "list_mult" || e.key === "extend_mult") {
+            var checked = typeof (values) !== "undefined" && $.inArray(e.column, values) > -1 ? '" checked="checked' : '';
+            copy("#selectOneListOption", "#requireListExtendDiv", {0: e.column, 1: e.nome, 2: checked}, "append");
+            $("#requireListExtend").removeClass("hide");
+        }
+    });
 }
 
 /*
@@ -409,6 +494,8 @@ $("#entityName").on("keyup change focus", function () {
 
 $("#relation").change(function () {
     checkFieldsOpenOrClose();
+    checkEntityMultipleFields();
+    checkFilterToApply();
 });
 
 $(".selectInput").change(function () {
