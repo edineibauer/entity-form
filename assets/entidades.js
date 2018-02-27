@@ -449,7 +449,7 @@ function checkEntityMultipleFields(values) {
     $("#requireListExtend").addClass("hide");
     $("#requireListExtendDiv").html("");
     $.each(dicionarios[$("#relation").val()], function (i, e) {
-        if (e.key === "list_mult" || e.key === "extend_mult") {
+        if (e.key === "select_mult" || e.key === "list_mult" || e.key === "extend_mult") {
             var checked = typeof (values) !== "undefined" && $.inArray(e.column, values) > -1 ? '" checked="checked' : '';
             copy("#selectOneListOption", "#requireListExtendDiv", {0: e.column, 1: e.nome, 2: checked}, "append");
             $("#requireListExtend").removeClass("hide");
