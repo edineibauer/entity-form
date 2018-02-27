@@ -319,7 +319,7 @@ function setFormat(val) {
         $("#format-source").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
-        if (["extend", "extend_mult", "list", "list_mult"].indexOf(val) > -1)
+        if (["extend", "extend_mult", "list", "list_mult", "select", "select_mult"].indexOf(val) > -1)
             $("#relation_container").removeClass("hide");
         else
             $("#relation_container").addClass("hide");
@@ -332,7 +332,7 @@ function setFormat(val) {
 function getSelectInput(val) {
     if (["text", "textarea", "html", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source", "sources"].indexOf(val) > -1)
         return $("#funcaoPrimary");
-    else if (["extend", "extend_mult", "list", "list_mult"].indexOf(val) > -1)
+    else if (["extend", "extend_mult", "list", "list_mult", "select", "select_mult"].indexOf(val) > -1)
         return $("#funcaoRelation");
     else
         return $("#funcaoIdentifier");
@@ -340,7 +340,7 @@ function getSelectInput(val) {
 
 function checkRequiresFields() {
     var type = getType();
-    return (type !== "" && $("#nome").val().length > 1 && $("#nome").val() !== "id" && (["extend", "extend_mult", "list", "list_mult"].indexOf(type) < 0 || $("#relation").val() !== null));
+    return (type !== "" && $("#nome").val().length > 1 && $("#nome").val() !== "id" && (["extend", "extend_mult", "list", "list_mult", "select", "select_mult"].indexOf(type) < 0 || $("#relation").val() !== null));
 }
 
 function checkFieldsOpenOrClose(nome) {
@@ -350,9 +350,7 @@ function checkFieldsOpenOrClose(nome) {
         else
             $(".requireName").addClass("hide");
 
-        var type = getType();
-
-        if (type === "list" || type === "list_mult")
+        if (["list", "list_mult" ,"select" ,"select_mult"].indexOf(getType()) > -1)
             $("#requireListFilter").removeClass("hide");
         else
             $("#requireListFilter").addClass("hide");
@@ -437,8 +435,8 @@ function addFilter(value) {
     });
 }
 
-function checkFilterToApply(value) {
-    if ($("#funcaoRelation").val() === "list" || "list_mult" === $("#funcaoRelation").val()) {
+function checkFilterToApply() {
+    if (["list", "list_mult", "select", "select_mult"].indexOf($("#funcaoRelation").val()) > -1) {
         $("#requireListFilter").removeClass("hide");
         $("#list-filter").html("");
         addFilter();
