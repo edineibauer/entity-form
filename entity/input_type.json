@@ -286,12 +286,12 @@
       "input": "list"
     }
   },
-  "select": {
-    "format": "select",
+  "selecao": {
+    "format": "selecao",
     "type": "int",
-    "key": "select",
+    "key": "selecao",
     "form": {
-      "input": "select"
+      "input": "selecao"
     }
   },
   "list_mult": {
@@ -302,12 +302,12 @@
       "input": "list_mult"
     }
   },
-  "select_mult": {
-    "format": "select_mult",
+  "selecao_mult": {
+    "format": "selecao_mult",
     "type": "int",
-    "key": "select_mult",
+    "key": "selecao_mult",
     "form": {
-      "input": "select_mult"
+      "input": "selecao_mult"
     }
   },
   "source": {

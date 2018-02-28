@@ -134,8 +134,8 @@
                         <option value="extend_mult">Extensão Multipla</option>
                         <option value="list">Lista</option>
                         <option value="list_mult">Lista Multipla</option>
-                        <option value="select">Seleção</option>
-                        <option value="select_mult">Seleção Multipla</option>
+                        <option value="selecao">Seleção</option>
+                        <option value="selecao_mult">Seleção Multipla</option>
                     </select>
                 </div>
             </div>
