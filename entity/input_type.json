@@ -286,12 +286,28 @@
       "input": "list"
     }
   },
+  "select": {
+    "format": "select",
+    "type": "int",
+    "key": "select",
+    "form": {
+      "input": "select"
+    }
+  },
   "list_mult": {
     "format": "list_mult",
     "type": "int",
     "key": "list_mult",
     "form": {
       "input": "list_mult"
+    }
+  },
+  "select_mult": {
+    "format": "select_mult",
+    "type": "int",
+    "key": "select_mult",
+    "form": {
+      "input": "select_mult"
     }
   },
   "source": {
