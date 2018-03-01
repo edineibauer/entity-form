@@ -118,7 +118,7 @@ class SaveEntity
     {
         $data = [
             "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
-            "required" => null, "unique" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null,
+            "required" => null, "unique" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null,
             "source" => [
                 "image" => null,
                 "audio" => null,
@@ -133,7 +133,7 @@ class SaveEntity
         ];
 
         foreach ($metadados as $i => $dados) {
-            if (in_array($dados['key'], ["unique", "extend", "extend_mult", "list", "list_mult"]))
+            if (in_array($dados['key'], ["unique", "extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"]))
                 $data[$dados['key']][] = $i;
 
             if (in_array($dados['key'], ["title", "link", "status", "date", "datetime", "valor", "email", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
