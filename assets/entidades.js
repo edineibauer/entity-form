@@ -177,12 +177,12 @@ function checkSaveFilter() {
         $("#list-filter").find(".filterTpl").each(function () {
             var $this = $(this);
             var filter = $this.find(".filter").val();
+            var filter_column = $this.find(".filter_column").length > 0 ? $this.find(".filter_column").val() : null;
             var filter_operator = $this.find(".filter_operator").val();
             var filter_value = $this.find(".filter_value").val();
 
-            if (filter !== "" && filter_operator !== "" && filter_value !== "") {
-                dicionarios[entity.name][entity.edit]['filter'].push(filter + "," + filter_operator + "," + filter_value);
-            }
+            if (filter !== "" && filter_operator !== "" && filter_value !== "")
+                dicionarios[entity.name][entity.edit]['filter'].push(filter + "," + filter_operator + "," + filter_value + "," + filter_column);
         });
     }
 }
@@ -421,18 +421,30 @@ function addFilter(value) {
         field = e[0];
         operator = e[1];
         valor = e[2];
+        column = e[3];
     }
+
+    //Copia Cria o Filter
     copy("#tpl-list-filter", "#list-filter", {0: operator, 1: valor}, "append");
     var id = Math.floor(Math.random() * 1000000);
-    $(".filter").last().attr("id", id);
-    $("#" + id).html("");
+    var $filter = $(".filter").last().attr("id", id).html("");
+    var relation = "null";
+
+    //Adiciona as opções de entidade
     $.each(dicionarios[$("#relation").val()], function (i, e) {
-        copy("#selectOneFilterOption", "#" + id, {
+        copy("#optionTpl", "#" + id, {
             0: e.column,
             1: e.nome,
             2: (field === e.column ? "\" selected=\"selected" : "")
         }, "append");
+
+        if(field === e.column && ["list", "list_mult", "selecao", "selecao_mult", "extend", "extend_mult"].indexOf(e.key) > -1)
+            relation = e.relation
     });
+
+    //Adiciona as opções de coluna da entidade
+    if(column !== "null" && relation !== "null")
+        addColumnFilter($filter, relation, column);
 }
 
 function checkFilterToApply() {
@@ -580,6 +592,32 @@ $("#colm").change(function () {
         $cols.find("option[value=" + $(this).val() + "]").attr("selected", "selected");
     }
 });
+
+$("#requireListFilter").off("change", ".filter").on("change", ".filter", function () {
+    var $this = $(this);
+    var dic = null;
+    var column = $this.val();
+    var entity = $("#relation").val();
+
+    $this.removeClass("m3").addClass("m6");
+    $.each(dicionarios[entity], function (i, e) {
+        if(e.column === column) {
+            if(["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(e.key) > -1)
+                addColumnFilter($this, e.relation, "");
+            return false;
+        }
+    });
+
+});
+
+function addColumnFilter($this, entity, select) {
+    $this.removeClass("m6").addClass("m3");
+    var $column = $('<select class="filter_column col s12 m3"></select>').insertAfter($this);
+    $.each(dicionarios[entity], function (id, data) {
+        if(["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(data.key) < 0)
+            $column.append("<option value='" + data.column + "' " + (select === data.column ? "selected='selected'" : "") + ">" + data.nome + "</option>");
+    });
+}
 
 function getDefaultsInfo() {
     var type = getType();

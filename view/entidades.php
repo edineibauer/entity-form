@@ -200,8 +200,8 @@
         </div>
 
         <div id="tpl-list-filter" class="hide col s12 filterTpl">
-            <select class="filter col s12 m4 l5"></select>
-            <select class="filter_operator col s12 m3 l2">
+            <select class="filter col s12 m6"></select>
+            <select class="filter_operator col s12 m2">
                 <option value="__$0__" selected>__$0__</option>
                 <option value="=">=</option>
                 <option value="!=">!=</option>
@@ -212,12 +212,15 @@
                 <option value="%%">%%</option>
                 <option value="%=">%=</option>
                 <option value="=%">=%</option>
+                <option value="!%%">!%%</option>
+                <option value="!%=">!%=</option>
+                <option value="!=%">!=%</option>
                 <option value='in'>in "1,2"</option>
                 <option value='!in'>! in "1,2"</option>
             </select>
-            <input type="text" class="filter_value col s12 m5" style="padding-top: 13px;" value="__$1__">
+            <input type="text" class="filter_value col s12 m4" style="padding-top: 13px;" value="__$1__">
         </div>
-        <option id="selectOneFilterOption" value="__$0____$2__">__$1__</option>
+        <option id="optionTpl" value="__$0____$2__">__$1__</option>
 
         <div class="hide card padding-medium" id="requireListFilter">
             <header class="row padding-small">
