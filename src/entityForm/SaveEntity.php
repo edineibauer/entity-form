@@ -136,7 +136,7 @@ class SaveEntity
             if (in_array($dados['key'], ["unique", "extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"]))
                 $data[$dados['key']][] = $i;
 
-            if (in_array($dados['key'], ["title", "link", "status", "date", "datetime", "valor", "email", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
+            if (in_array($dados['format'], ["title", "link", "status", "date", "datetime", "valor", "email", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
                 $data[$dados['key']] = $i;
 
             if ($dados['key'] === "source" || $dados['key'] === "sources")
