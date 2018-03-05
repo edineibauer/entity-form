@@ -137,7 +137,7 @@ class SaveEntity
                 $data[$dados['key']][] = $i;
 
             if (in_array($dados['format'], ["title", "link", "status", "date", "datetime", "valor", "email", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
-                $data[$dados['key']] = $i;
+                $data[$dados['format']] = $i;
 
             if ($dados['key'] === "source" || $dados['key'] === "sources")
                 $data['source'] = [$this->checkSource($dados['allow']['values']) => $i];
