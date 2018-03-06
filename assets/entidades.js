@@ -263,7 +263,7 @@ function applyValueAttr(name, value) {
         $.each(value, function (i, e) {
             addFilter(e);
         });
-    } else if (name === "selecao") {
+    } else if (name === "select") {
         checkEntityMultipleFields(value);
     } else {
         if ($input.attr("type") === "checkbox" && ((value !== false && !$input.prop("checked")) || (value === false && $input.prop("checked"))))
@@ -350,7 +350,7 @@ function checkFieldsOpenOrClose(nome) {
         else
             $(".requireName").addClass("hide");
 
-        if (["list", "list_mult" ,"selecao" ,"selecao_mult"].indexOf(getType()) > -1)
+        if (["list", "list_mult", "selecao", "selecao_mult"].indexOf(getType()) > -1)
             $("#requireListFilter").removeClass("hide");
         else
             $("#requireListFilter").addClass("hide");
@@ -416,6 +416,7 @@ function addFilter(value) {
     var field = "";
     var operator = "";
     var valor = "";
+    var column = "null";
     if (typeof (value) !== "undefined") {
         var e = value.split(",");
         field = e[0];
@@ -438,12 +439,12 @@ function addFilter(value) {
             2: (field === e.column ? "\" selected=\"selected" : "")
         }, "append");
 
-        if(field === e.column && ["list", "list_mult", "selecao", "selecao_mult", "extend", "extend_mult"].indexOf(e.key) > -1)
+        if (field === e.column && ["list", "list_mult", "selecao", "selecao_mult", "extend", "extend_mult"].indexOf(e.key) > -1)
             relation = e.relation
     });
 
     //Adiciona as opções de coluna da entidade
-    if(column !== "null" && relation !== "null")
+    if (column !== "null" && relation !== "null")
         addColumnFilter($filter, relation, column);
 }
 
@@ -599,10 +600,10 @@ $("#requireListFilter").off("change", ".filter").on("change", ".filter", functio
     var column = $this.val();
     var entity = $("#relation").val();
 
-    $this.removeClass("m3").addClass("m6");
+    $this.removeClass("m3").addClass("m6").siblings(".filter_column").remove();
     $.each(dicionarios[entity], function (i, e) {
-        if(e.column === column) {
-            if(["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(e.key) > -1)
+        if (e.column === column) {
+            if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(e.key) > -1)
                 addColumnFilter($this, e.relation, "");
             return false;
         }
@@ -614,7 +615,7 @@ function addColumnFilter($this, entity, select) {
     $this.removeClass("m6").addClass("m3");
     var $column = $('<select class="filter_column col s12 m3"></select>').insertAfter($this);
     $.each(dicionarios[entity], function (id, data) {
-        if(["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(data.key) < 0)
+        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(data.key) < 0)
             $column.append("<option value='" + data.column + "' " + (select === data.column ? "selected='selected'" : "") + ">" + data.nome + "</option>");
     });
 }
