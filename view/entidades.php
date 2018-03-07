@@ -220,7 +220,7 @@
             </select>
             <input type="text" class="filter_value col s12 m4" style="padding-top: 13px;" value="__$1__">
         </div>
-        <option id="optionTpl" value="__$0____$2__">__$1__</option>
+        <option id="optionTpl" class="hide" value="__$0____$2__">__$1__</option>
 
         <div class="hide card padding-medium" id="requireListFilter">
             <header class="row padding-small">
