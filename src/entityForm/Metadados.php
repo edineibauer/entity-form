@@ -27,9 +27,10 @@ class Metadados
 
     /**
      * @param string $entity
+     * @param mixed $mod
      * @return mixed
      */
-    public static function getRelevant(string $entity)
+    public static function getRelevant(string $entity, $mod = null)
     {
         if (file_exists(PATH_HOME . "entity/relevant/{$entity}.json"))
             $relevant = json_decode(file_get_contents(PATH_HOME . PATH_HOME . "entity/relevant/{$entity}.json"), true);
@@ -40,7 +41,7 @@ class Metadados
         $info = self::getInfo($entity);
         foreach ($relevant as $r) {
             if(isset($info[$r]) && !empty($info[$r]))
-                return $info[$r];
+                return $mod ? [$info[$r], $r] : $info[$r];
         }
 
         return null;
