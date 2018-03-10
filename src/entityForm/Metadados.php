@@ -32,19 +32,26 @@ class Metadados
      */
     public static function getRelevant(string $entity, $mod = null)
     {
-        if (file_exists(PATH_HOME . "entity/relevant/{$entity}.json"))
-            $relevant = json_decode(file_get_contents(PATH_HOME . PATH_HOME . "entity/relevant/{$entity}.json"), true);
-        else
-            $relevant = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/relevant.json"), true);
-
         $id = null;
         $info = self::getInfo($entity);
-        foreach ($relevant as $r) {
+        foreach (self::getRelevantAll($entity) as $r) {
             if(isset($info[$r]) && !empty($info[$r]))
                 return $mod ? [$info[$r], $r] : $info[$r];
         }
 
         return null;
+    }
+
+    /**
+     * @param string $entity
+     * @return mixed
+     */
+    public static function getRelevantAll(string $entity)
+    {
+        if (file_exists(PATH_HOME . "entity/relevant/{$entity}.json"))
+            return json_decode(file_get_contents(PATH_HOME . PATH_HOME . "entity/relevant/{$entity}.json"), true);
+        else
+            return json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/relevant.json"), true);
     }
 
     /**
