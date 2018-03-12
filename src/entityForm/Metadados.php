@@ -39,7 +39,7 @@ class Metadados
                 return $mod ? [$info[$r], $r] : $info[$r];
         }
 
-        return null;
+        return 0;
     }
 
     /**
