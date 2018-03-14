@@ -17,5 +17,6 @@
   "year",
   "date",
   "datetime",
-  "status"
+  "status",
+  "none"
 ]
