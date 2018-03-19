@@ -57,7 +57,7 @@
       "regex": "/^\\d{1,10}$/"
     },
     "form": {
-      "input": "decimal"
+      "input": "int"
     }
   },
   "float": {
@@ -67,7 +67,7 @@
       "regex": "/^\\d{1,7}(.,)?(\\d{5})?$/"
     },
     "form": {
-      "input": "decimal"
+      "input": "float"
     }
   },
   "boolean": {
