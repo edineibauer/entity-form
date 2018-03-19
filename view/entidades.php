@@ -88,9 +88,9 @@
                         <option value="" disabled selected>Input Genérica</option>
                         <option value="text">Texto</option>
                         <option value="textarea">Área de Texto</option>
-                        <!--                        <option value="html">Área de HTML</option>-->
+                        <option value="html">Área de HTML</option>
                         <option value="int">Inteiro</option>
-                        <!--                        <option value="float">Float</option>-->
+                        <option value="float">Float</option>
                         <option value="boolean">Boleano</option>
                         <option value="select">Select</option>
                         <option value="radio">Radio</option>
@@ -136,6 +136,7 @@
                         <option value="list_mult">Lista Multipla</option>
                         <option value="selecao">Seleção</option>
                         <option value="selecao_mult">Seleção Multipla</option>
+                        <option value="publisher">Autor</option>
                     </select>
                 </div>
             </div>

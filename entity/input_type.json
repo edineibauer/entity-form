@@ -310,6 +310,12 @@
       "input": "selecao_mult"
     }
   },
+  "publisher": {
+    "format": "publisher",
+    "type": "publisher",
+    "key": "publisher",
+    "form": false
+  },
   "source": {
     "format": "source",
     "type": "json",
