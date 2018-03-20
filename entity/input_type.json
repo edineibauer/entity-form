@@ -63,9 +63,6 @@
   "float": {
     "format": "float",
     "type": "float",
-    "allow": {
-      "regex": "/^\\d{1,7}(.,)?(\\d{5})?$/"
-    },
     "form": {
       "input": "float"
     }
