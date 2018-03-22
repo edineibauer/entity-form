@@ -106,7 +106,9 @@ class SaveEntity
                 "coll" => "",
                 "class" => "",
                 "style" => ""
-            ]
+            ],
+            "select" => [],
+            "filter" => []
         ];
     }
 
@@ -140,7 +142,7 @@ class SaveEntity
                 $data[$dados['format']] = $i;
 
             if ($dados['key'] === "source" || $dados['key'] === "sources")
-                $data['source'] = [$this->checkSource($dados['allow']['values']) => $i];
+                $data['source'][$this->checkSource($dados['allow']['values'])][] = $i;
 
             if ($dados['default'] === false)
                 $data['required'][] = $i;
