@@ -120,7 +120,7 @@ class SaveEntity
     {
         $data = [
             "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
-            "required" => null, "unique" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null,
+            "required" => null, "unique" => null, "publisher" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null,
             "source" => [
                 "image" => null,
                 "audio" => null,
@@ -140,6 +140,9 @@ class SaveEntity
 
             if (in_array($dados['format'], ["title", "link", "status", "date", "datetime", "valor", "email", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
                 $data[$dados['format']] = $i;
+
+            if($dados['key'] === "publisher")
+                $data["publisher"] = $i;
 
             if ($dados['key'] === "source" || $dados['key'] === "sources")
                 $data['source'][$this->checkSource($dados['allow']['values'])][] = $i;

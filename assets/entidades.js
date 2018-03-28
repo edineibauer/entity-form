@@ -332,7 +332,7 @@ function setFormat(val) {
 function getSelectInput(val) {
     if (["text", "textarea", "html", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source", "sources"].indexOf(val) > -1)
         return $("#funcaoPrimary");
-    else if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(val) > -1)
+    else if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "publisher"].indexOf(val) > -1)
         return $("#funcaoRelation");
     else
         return $("#funcaoIdentifier");
@@ -645,7 +645,8 @@ function assignObject(ob1, ob2) {
 function getType() {
     var result = "";
     $(".selectInput").each(function () {
-        if ($(this).val() !== null) result = $(this).val();
+        if ($(this).val() !== null)
+            result = $(this).val();
     });
     return result;
 }
