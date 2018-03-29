@@ -309,8 +309,9 @@
   },
   "publisher": {
     "format": "publisher",
-    "type": "publisher",
+    "type": "int",
     "key": "publisher",
+    "update": false,
     "form": false
   },
   "source": {
