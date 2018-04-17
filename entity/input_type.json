@@ -269,7 +269,7 @@
   },
   "extend_mult": {
     "format": "extend_mult",
-    "type": "int",
+    "type": "json",
     "key": "extend_mult",
     "form": {
       "input": "extend_mult"
@@ -293,7 +293,7 @@
   },
   "list_mult": {
     "format": "list_mult",
-    "type": "int",
+    "type": "json",
     "key": "list_mult",
     "form": {
       "input": "list_mult"
@@ -301,7 +301,7 @@
   },
   "selecao_mult": {
     "format": "selecao_mult",
-    "type": "int",
+    "type": "json",
     "key": "selecao_mult",
     "form": {
       "input": "selecao_mult"
