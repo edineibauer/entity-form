@@ -2,7 +2,10 @@
 
 namespace EntityForm;
 
+use ConnCrud\Create;
+use ConnCrud\Delete;
 use ConnCrud\Read;
+use ConnCrud\Update;
 
 class Dicionario
 {
@@ -42,7 +45,7 @@ class Dicionario
             $this->setDataArray($data);
         }
 
-        Validate::data($this);
+        Validate::dicionario($this);
     }
 
     /**
@@ -200,6 +203,73 @@ class Dicionario
         }
 
         return $result;
+    }
+
+    public function save()
+    {
+        if (!empty($this->search(0)->getValue()))
+            $this->updateTableData();
+        else
+            $this->createTableData();
+
+        if (!empty($this->search(0)->getValue()))
+            $this->createRelationalData();
+    }
+
+    private function updateTableData()
+    {
+        $id = $this->search(0)->getValue();
+        if (Validate::update($this->entity, $id)) {
+            $up = new Update();
+            $dados = $this->getData();
+            foreach ($this->dicionario as $meta) {
+                if($meta->getError())
+                    unset($dados[$meta->getColumn()]);
+            }
+
+            $up->exeUpdate($this->entity, $dados, "WHERE id = :id", "id={$id}");
+            if($up->getErro())
+                $this->search(0)->setError($up->getErro());
+        } else {
+            $this->search(0)->setValue(null);
+        }
+    }
+
+    private function createTableData()
+    {
+        if (!$this->getError()) {
+            $create = new Create();
+            $dados = $this->getData();
+            unset($dados['id']);
+            $create->exeCreate($this->entity, $dados);
+            if($create->getErro())
+                $this->search(0)->setError($create->getErro());
+            elseif ($create->getResult())
+                $this->search(0)->setValue((int)$create->getResult());
+        }
+    }
+
+
+    private function createRelationalData()
+    {
+        $create = new Create();
+        $del = new Delete();
+        $id = $this->search(0)->getValue();
+        if (!empty($this->getAssociationMult())) {
+            foreach ($this->getAssociationMult() as $meta) {
+                if (!empty($meta->getValue())) {
+                    $entityRelation = PRE . $this->entity . "_" . $meta->getRelation() . "_" . $meta->getColumn();
+                    $del->exeDelete($entityRelation, "WHERE {$this->entity}_id = :eid", "eid={$id}");
+                    $listId = [];
+                    foreach (json_decode($meta->getValue(), true) as $idRelation) {
+                        if (!in_array($idRelation, $listId)) {
+                            $listId[] = $idRelation;
+                            $create->exeCreate($entityRelation, [$this->entity . "_id" => $id, $meta->getRelation() . "_id" => $idRelation]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

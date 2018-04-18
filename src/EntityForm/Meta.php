@@ -2,9 +2,6 @@
 
 namespace EntityForm;
 
-
-use ConnCrud\Read;
-use ConnCrud\Update;
 use Entity\Entity;
 use Helpers\Check;
 
@@ -85,7 +82,8 @@ class Meta
      */
     public function setError($error)
     {
-        $this->error = $error;
+        if (!$this->error || !$error)
+            $this->error = $error;
     }
 
     /**
@@ -195,19 +193,23 @@ class Meta
 
     /**
      * @param mixed $value
+     * @param bool $validate
      */
-    public function setValue($value)
+    public function setValue($value, bool $validate = true)
     {
-        if (in_array($this->key, ["list", "list_mult", "selecao", "selecao_mult", "extend_mult"]))
+        if (in_array($this->key, ["list_mult", "selecao_mult", "extend_mult"]))
             $this->checkValueExtendList($value);
-        elseif ($this->key === "extend")
+        elseif (in_array($this->key, ["extend", "list", "selecao"]))
             $this->checkValueExtend($value);
         elseif ($this->key === "publisher" && !empty($_SESSION['userlogin']))
-            $this->value = $_SESSION['userlogin']['id'];
+            $this->value = $value ?? $_SESSION['userlogin']['id'];
         elseif ($this->key === "publisher")
             $this->error = "Precisa estar Logado";
         else
             $this->value = $value;
+
+        if ($validate)
+            Validate::meta($this);
     }
 
     /**
@@ -378,12 +380,15 @@ class Meta
 
     /**
      * @param mixed $dados
+     * @return Meta
      */
-    public function setDados($dados = null)
+    public function setDados($dados = null): Meta
     {
         $this->clearMeta();
         if ($dados)
             $this->applyDados($dados);
+
+        return $this;
     }
 
     private function clearMeta()
@@ -472,8 +477,10 @@ class Meta
      */
     private function checkValueExtend($value)
     {
-        if (!empty($value) && (is_int($value) || is_array($value)))
+        if (!empty($value) && (is_int($value) || (is_array($value) && !isset($value[0]))))
             $this->value = (is_int($value) ? $value : $this->getIdFromDataExtend($value));
+        elseif (!empty($value))
+            $this->error = "valor não esperado";
     }
 
     /**
@@ -482,25 +489,14 @@ class Meta
     private function checkValueExtendList($value)
     {
         if (!empty($value)) {
-            if (in_array($this->key, ['list_mult', 'selecao_mult', 'extend_mult'])) {
-                if (Check::isJson($value))
-                    $this->checkValueExtendMult(json_decode($value, true));
-                elseif (is_array($value))
-                    $this->checkValueExtendMult($value);
-                elseif (is_int($value))
-                    $this->value = json_encode([0 => $value]);
-                else
-                    $this->error = "valor não esperado para um campo do tipo {$this->key}";
-
-            } else {
-
-                if (is_array($value) && !isset($value[0]))
-                    $this->value = $this->getIdFromDataExtend($value);
-                elseif (is_int($value))
-                    $this->value = $value;
-                else
-                    $this->error = "valor não esperado para um campo do tipo {$this->key}";
-            }
+            if (Check::isJson($value))
+                $this->checkValueExtendMult(json_decode($value, true));
+            elseif (is_array($value))
+                $this->checkValueExtendMult($value);
+            elseif (is_int($value))
+                $this->value = json_encode([0 => $value]);
+            else
+                $this->error = "valor não esperado para um campo do tipo {$this->key}";
         }
     }
 
@@ -536,29 +532,12 @@ class Meta
      */
     private function getIdFromDataExtend(array $data)
     {
-        if (isset($data[0]))
+        $return = Entity::add($this->relation, $data);
+        if (!is_numeric($return)) {
+            $this->error = $return[$this->relation];
             return null;
-
-        $d = new Dicionario($this->relation);
-        $d->setData($data);
-        $id = $d->search(0)->getValue();
-
-        if (!empty($id)) {
-            if (Validate::update($d)) {
-                $up = new Update();
-                $up->exeUpdate($d->getEntity(), $d->getData(), "WHERE id = :id", "id={$id}");
-                return $id;
-            } else {
-                $read = new Read();
-                $read->exeRead($d->getEntity(), "WHERE id = :id", "id={$id}");
-                return $read->getResult() ? $id : null;
-            }
-        } else {
-            $return = Entity::add($d->getEntity(), $d->getData());
-            if (!is_numeric($return))
-                $this->error = $return[$this->relation];
-
-            return is_numeric($return) ? $return : null;
         }
+
+        return $return;
     }
 }

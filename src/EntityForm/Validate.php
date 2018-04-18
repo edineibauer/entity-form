@@ -3,99 +3,72 @@
 namespace EntityForm;
 
 use ConnCrud\Read;
+use Entity\Entity;
 use Helpers\Check;
 
 class Validate
 {
 
     /**
-     * @param Dicionario $d
+     * Valida valor a ser inserido na meta
+     *
+     * @param Meta $m
      */
-    public static function data(Dicionario $d)
+    public static function meta(Meta $m)
     {
-        foreach ($d->getDicionario() as $meta)
-            if ($meta->getKey() !== "extend")
-                self::validateData($d, $meta);
+        if ($m->getColumn() !== "id") {
+            self::checkDefaultSet($m);
+            if (!empty($m->getValue())) {
+                self::convertValues($m);
+                self::checkType($m);
+                self::checkSize($m);
+                self::checkRegular($m);
+                self::checkValidate($m);
+                self::checkValues($m);
+            }
+        }
     }
 
     /**
      * @param Dicionario $d
+     */
+    public static function dicionario(Dicionario $d)
+    {
+        if (Entity::checkPermission($d->getEntity(), $d->search(0)->getValue())) {
+            foreach ($d->getDicionario() as $m) {
+                if ($m->getColumn() !== "id") {
+                    self::checkLink($d, $m);
+                    self::checkUnique($d, $m);
+
+                    if ($m->getKey() === "link" && $m->getError()) {
+                        $d->search($d->getRelevant())->setError($m->getError());
+                        $m->setError(null);
+                        $m->setValue(null, false);
+                    }
+
+                    if ($m->getError())
+                        $m->setValue(null, false);
+                }
+            }
+        } else {
+            $d->search(0)->setError("Permissão Negada");
+        }
+    }
+
+    /**
+     * @param string $entity
+     * @param mixed $id
      * @return mixed
      */
-    public static function update(Dicionario $d)
+    public static function update(string $entity, $id = null)
     {
-        $id = $d->search(0)->getValue();
         if (empty($id))
             return false;
 
         $read = new Read();
-        $read->exeRead($d->getEntity(), "WHERE id = :id", "id={$id}");
-        if (!$read->getResult())
-            return false;
-        else
-            $dados = $read->getResult()[0];
-
-        foreach ($d->getDicionario() as $meta) {
-            if (!in_array($meta->getKey(), ["extend_mult", "list_mult", "selecao_mult"]) && $meta->getError())
-                $meta->setValue($dados[$meta->getColumn()] ?? "");
-        }
-
-        return true;
+        $read->exeRead($entity, "WHERE id = :id", "id={$id}");
+        return $read->getResult() ? true : false;
     }
-
-    /**
-     * @param Dicionario $d
-     * @param Meta $m
-     * @return mixed
-     */
-    private static function validateData(Dicionario $d, Meta $m)
-    {
-        $m->setError(null);
-        if ($m->getColumn() !== "id") {
-            self::checkLink($d, $m);
-            self::checkDefaultSet($m);
-            self::checkType($m);
-            self::checkSize($m);
-            self::checkUnique($d, $m);
-            self::checkRegular($m);
-            self::checkValidate($m);
-            self::checkValues($m);
-
-            if ($m->getKey() === "link" && $m->getError()) {
-                $d->search($d->getRelevant())->setError($m->getError());
-                $m->setError("");
-            }
-
-            if ($m->getError())
-                $m->setValue("");
-        }
-
-        return $m->getError();
-    }
-
-    /**
-     * Impede criação ou alterações de perfis para um nível superior
-     * @param Dicionario $dicionario
-     * @return array
-     */
-    /*private static function checkNivelUser(Dicionario $dicionario)
-    {
-        if (empty($_SESSION['userlogin']))
-            return $data;
-
-        if ($entity === "login") {
-            if (!empty($data['id']) && $data['id'] == $_SESSION['userlogin']['id']) {
-                unset($data['setor'], $data['nivel'], $data['status']);
-            } else {
-                if ($data['setor'] < $_SESSION['userlogin']['setor'])
-                    $data['setor'] = $_SESSION['userlogin']['setor'];
-                if ($data['setor'] == $_SESSION['userlogin']['setor'] && $data['nivel'] < $_SESSION['userlogin']['nivel'])
-                    $data['nivel'] = $_SESSION['userlogin']['nivel'];
-            }
-        }
-
-        return $data;
-    }*/
 
     /**
      * Verifica se o campo é do tipo link, se for, linka o valor ao título
@@ -108,8 +81,6 @@ class Validate
         if ($m->getKey() === "link") {
             if (!empty($d->search($d->getRelevant())->getValue()))
                 $m->setValue(Check::name($d->search($d->getRelevant())->getValue()));
-            else
-                $m->setValue(Check::name($m->getValue()));
         }
     }
 
@@ -120,18 +91,32 @@ class Validate
      */
     protected static function checkDefaultSet(Meta $m)
     {
-        if ($m->getType() === "json" && is_array($m->getValue()))
-            $m->setValue(json_encode($m->getValue()));
-
-        elseif ($m->getFormat() === "password")
-            $m->setValue(Check::password($m->getValue()));
+        if ($m->getValue() === "")
+            $m->setValue(null, false);
 
         if (empty($m->getValue())) {
             if ($m->getDefault() === false)
                 $m->setError("Preencha este Campo");
-            else
-                $m->setValue($m->getDefault());
+            elseif (!empty($m->getDefault()))
+                $m->setValue($m->getDefault(), false);
         }
+    }
+
+    /**
+     * Verifica se o tipo do campo é o desejado
+     *
+     * @param Meta $m
+     */
+    private static function convertValues(Meta $m)
+    {
+        if ($m->getFormat() === "password")
+            $m->setValue(Check::password($m->getValue()), false);
+
+        if ($m->getFormat() === "json" && is_array($m->getValue()))
+            $m->setValue(json_encode($m->getValue()), false);
+
+        if ($m->getKey() === "link")
+            $m->setValue(Check::name($m->getValue()), false);
     }
 
     /**
@@ -141,43 +126,40 @@ class Validate
      */
     private static function checkType(Meta $m)
     {
-        if (!empty($m->getValue())) {
-            if (in_array($m->getType(), ["tinyint", "smallint", "mediumint", "int", "bigint"])) {
-                if (!is_numeric($m->getValue()))
-                    $m->setError("número inválido");
+        if (in_array($m->getType(), ["tinyint", "smallint", "mediumint", "int", "bigint"])) {
+            if (!is_numeric($m->getValue()))
+                $m->setError("número inválido");
 
-            } elseif ($m->getType() === "decimal") {
-                $size = (!empty($m->getSize()) ? explode(',', str_replace(array('(', ')'), '', $m->getSize())) : array(10, 30));
-                $val = explode('.', str_replace(',', '.', $m->getValue()));
-                if (strlen($val[1]) > $size[1])
-                    $m->setError("valor das casas decimais excedido. Max {$size[1]}");
-                elseif (strlen($val[0]) > $size[0])
-                    $m->setError("valor inteiro do valor decimal excedido. Max {$size[0]}");
+        } elseif ($m->getType() === "decimal") {
+            $size = (!empty($m->getSize()) ? explode(',', str_replace(array('(', ')'), '', $m->getSize())) : array(10, 30));
+            $val = explode('.', str_replace(',', '.', $m->getValue()));
+            if (strlen($val[1]) > $size[1])
+                $m->setError("valor das casas decimais excedido. Max {$size[1]}");
+            elseif (strlen($val[0]) > $size[0])
+                $m->setError("valor inteiro do valor decimal excedido. Max {$size[0]}");
 
-            } elseif (in_array($m->getType(), array("double", "real", "float"))) {
-                if (!is_numeric($m->getValue()))
-                    $m->setError("valor não é um número");
+        } elseif (in_array($m->getType(), array("double", "real", "float"))) {
+            if (!is_numeric($m->getValue()))
+                $m->setError("valor não é um número");
 
-            } elseif (in_array($m->getType(), array("bit", "boolean", "serial"))) {
-                if (!is_bool($m->getValue()))
-                    $m->setError("valor boleano inválido. (true ou false)");
+        } elseif (in_array($m->getType(), array("bit", "boolean", "serial"))) {
+            if (!is_bool($m->getValue()))
+                $m->setError("valor boleano inválido. (true ou false)");
 
-            } elseif (in_array($m->getType(), array("datetime", "timestamp"))) {
-                if (!preg_match('/\d{4}-\d{2}-\d{2}[T\s]+\d{2}:\d{2}/i', $m->getValue()))
-                    $m->setError("formato de data inválido ex válido:(2017-08-23 21:58:00)");
+        } elseif (in_array($m->getType(), array("datetime", "timestamp"))) {
+            if (!preg_match('/\d{4}-\d{2}-\d{2}[T\s]+\d{2}:\d{2}/i', $m->getValue()))
+                $m->setError("formato de data inválido ex válido:(2017-08-23 21:58:00)");
 
-            } elseif ($m->getType() === "date") {
-                if (!preg_match('/\d{4}-\d{2}-\d{2}/i', $m->getValue()))
-                    $m->setError("formato de data inválido ex válido:(2017-08-23)");
+        } elseif ($m->getType() === "date") {
+            if (!preg_match('/\d{4}-\d{2}-\d{2}/i', $m->getValue()))
+                $m->setError("formato de data inválido ex válido:(2017-08-23)");
 
-            } elseif ($m->getType() === "time") {
-                if (!preg_match('/\d{2}:\d{2}/i', $m->getValue()))
-                    $m->setError("formato de tempo inválido ex válido:(21:58)");
+        } elseif ($m->getType() === "time") {
+            if (!preg_match('/\d{2}:\d{2}/i', $m->getValue()))
+                $m->setError("formato de tempo inválido ex válido:(21:58)");
 
-            } elseif ($m->getType() === "json") {
-                if (!Check::isJson($m->getValue()))
-                    $m->setError("formato json inválido");
-            }
+        } elseif ($m->getType() === "json" && !Check::isJson($m->getValue())) {
+            $m->setError("formato json inválido");
         }
     }
 
@@ -257,7 +239,7 @@ class Validate
      */
     private static function checkRegular(Meta $m)
     {
-        if (!empty($m->getAllow()['regex']) && !empty($m->getValue()) && is_string($m->getValue()) && !preg_match($m->getAllow()['regex'], $m->getValue()))
+        if (!empty($m->getAllow()['regex']) && is_string($m->getValue()) && !preg_match($m->getAllow()['regex'], $m->getValue()))
             $m->setError("formato não permitido.");
     }
 
@@ -268,7 +250,7 @@ class Validate
      */
     private static function checkValidate(Meta $m)
     {
-        if (!empty($m->getAllow()['validate']) && !empty($m->getValue())) {
+        if (!empty($m->getAllow()['validate'])) {
             if ($m->getAllow()['validate'] === "email" && !Check::email($m->getValue()))
                 $m->setError("email inválido.");
 
