@@ -20,6 +20,7 @@ class Validate
             self::checkDefaultSet($m);
             if (!empty($m->getValue())) {
                 self::convertValues($m);
+                self::checkSelecaoUnique($m);
                 self::checkType($m);
                 self::checkSize($m);
                 self::checkRegular($m);
@@ -68,6 +69,20 @@ class Validate
         $read = new Read();
         $read->exeRead($entity, "WHERE id = :id", "id={$id}");
         return $read->getResult() ? true : false;
+    }
+
+    /**
+     * Valida informações submetidas por um campo multiplo selecionado de um campo relacional
+     * ex: selecione uma pessoa, agora selecione um dos endereços dessa pessoa, este endereço selecionado é validado.
+     *
+     * @param Meta $m
+     */
+    private static function checkSelecaoUnique(Meta $m)
+    {
+        if (!empty($m->getSelect())) {
+//            foreach ($m->getSelect() as $select)
+//                $dataValidada[$select . "__" . $m->getColumn()] = (is_numeric($dados[$select . "__" . $m->getColumn()]) && $dados[$select . "__" . $m->getColumn()] > 0 ? (int)$dados[$select . "__" . $m->getColumn()] : null);
+        }
     }
 
     /**
