@@ -23,6 +23,7 @@ class Dicionario
         $this->dicionario = Metadados::getDicionario($this->entity, true);
         foreach ($this->dicionario as $i => $item)
             $this->dicionario[$i] = new Meta($item, $i);
+        $this->checkSelectUnique();
         $this->info = Metadados::getInfo($this->entity);
         $this->relevant = Metadados::getRelevantAll($this->entity);
     }
@@ -32,7 +33,10 @@ class Dicionario
      */
     public function setData($data)
     {
-        if (is_int($data)) {
+        if (is_array($data) && !isset($data[0])) {
+            $this->setDataArray($data);
+
+        } elseif (is_numeric($data)) {
             $read = new Read();
             $read->exeRead(PRE . $this->entity, "WHERE id = :id", "id={$data}");
             if ($read->getResult())
@@ -41,8 +45,6 @@ class Dicionario
         } elseif (is_object($data) && get_class($data) === "EntityForm\Meta") {
             $this->dicionario[$data->getIndice()] = $data;
 
-        } elseif (is_array($data) && !isset($data[0])) {
-            $this->setDataArray($data);
         }
 
         Validate::dicionario($this);
@@ -216,6 +218,10 @@ class Dicionario
             $this->createRelationalData();
     }
 
+    /**
+     * @param Dicionario $d
+     * @return mixed
+     */
     private function updateTableData()
     {
         $id = $this->search(0)->getValue();
@@ -223,18 +229,22 @@ class Dicionario
             $up = new Update();
             $dados = $this->getData();
             foreach ($this->dicionario as $meta) {
-                if($meta->getError())
+                if ($meta->getError())
                     unset($dados[$meta->getColumn()]);
             }
 
             $up->exeUpdate($this->entity, $dados, "WHERE id = :id", "id={$id}");
-            if($up->getErro())
+            if ($up->getErro())
                 $this->search(0)->setError($up->getErro());
         } else {
             $this->search(0)->setValue(null);
         }
     }
 
+    /**
+     * @param Dicionario $d
+     * @return mixed
+     */
     private function createTableData()
     {
         if (!$this->getError()) {
@@ -242,7 +252,7 @@ class Dicionario
             $dados = $this->getData();
             unset($dados['id']);
             $create->exeCreate($this->entity, $dados);
-            if($create->getErro())
+            if ($create->getErro())
                 $this->search(0)->setError($create->getErro());
             elseif ($create->getResult())
                 $this->search(0)->setValue((int)$create->getResult());
@@ -250,6 +260,9 @@ class Dicionario
     }
 
 
+    /**
+     * @param Dicionario $d
+     */
     private function createRelationalData()
     {
         $create = new Create();
@@ -278,7 +291,7 @@ class Dicionario
     private function setDataArray(array $data)
     {
         foreach ($data as $column => $value) {
-            if (is_int($column) && isset($this->dicionario[$column]))
+            if (is_numeric($column) && isset($this->dicionario[$column]))
                 $this->dicionario[$column]->setValue($value);
             elseif (isset($this->dicionario[$field = $this->searchValue($column)]))
                 $this->dicionario[$field]->setValue($value);
@@ -296,5 +309,18 @@ class Dicionario
             return $value->get($field) === $search;
         }));
         return (!empty($results) ? $results[0] : null);
+    }
+
+    private function checkSelectUnique()
+    {
+        $type = json_decode(file_get_contents(DEV && DOMINIO === "entityForm" && file_exists(PATH_HOME . "entity/input_type.json") ? PATH_HOME . "entity/input_type.json" : (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/input_type.json") ? PATH_HOME . "vendor/conn/entity-form/entity/input_type.json" : null)), true);
+        foreach ($this->dicionario as $meta) {
+            if (!empty($meta->getSelect())) {
+                foreach ($meta->getSelect() as $select) {
+                    $d = new Dicionario($meta->getRelation());
+                    $this->dicionario[] = new Meta(array_merge($type['default'], $type['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]));
+                }
+            }
+        }
     }
 }

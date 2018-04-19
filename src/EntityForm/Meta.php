@@ -2,6 +2,9 @@
 
 namespace EntityForm;
 
+
+use ConnCrud\Read;
+use ConnCrud\Update;
 use Entity\Entity;
 use Helpers\Check;
 
@@ -27,13 +30,33 @@ class Meta
 
     /**
      * @param mixed $dados
-     * @param mixed $id
      */
     public function __construct($dados = null, $id = null)
     {
         $this->setDados($dados);
         if ($id !== null)
             $this->setIndice($id);
+    }
+
+    /**
+     * @param mixed $value
+     * @param bool $validate
+     */
+    public function setValue($value, bool $validate = true)
+    {
+        if (in_array($this->key, ["list_mult", "selecao_mult", "extend_mult"]))
+            $this->checkValueExtendList($value);
+        elseif (in_array($this->key, ["extend", "list", "selecao"]))
+            $this->checkValueExtend($value);
+        elseif ($this->key === "publisher" && !empty($_SESSION['userlogin']))
+            $this->value = $value ?? $_SESSION['userlogin']['id'];
+        elseif ($this->key === "publisher")
+            $this->error = "Precisa estar Logado";
+        else
+            $this->value = $value;
+
+        if ($validate)
+            Validate::meta($this);
     }
 
     /**
@@ -192,27 +215,6 @@ class Meta
     }
 
     /**
-     * @param mixed $value
-     * @param bool $validate
-     */
-    public function setValue($value, bool $validate = true)
-    {
-        if (in_array($this->key, ["list_mult", "selecao_mult", "extend_mult"]))
-            $this->checkValueExtendList($value);
-        elseif (in_array($this->key, ["extend", "list", "selecao"]))
-            $this->checkValueExtend($value);
-        elseif ($this->key === "publisher" && !empty($_SESSION['userlogin']))
-            $this->value = $value ?? $_SESSION['userlogin']['id'];
-        elseif ($this->key === "publisher")
-            $this->error = "Precisa estar Logado";
-        else
-            $this->value = $value;
-
-        if ($validate)
-            Validate::meta($this);
-    }
-
-    /**
      * @return mixed
      */
     public function getAllow()
@@ -366,7 +368,7 @@ class Meta
             "form" => $this->form,
             "format" => $this->format,
             "key" => $this->key,
-            "indice" => $this->indice,
+            "key" => $this->indice,
             "nome" => $this->nome,
             "relation" => $this->relation,
             "select" => $this->select,
@@ -380,9 +382,8 @@ class Meta
 
     /**
      * @param mixed $dados
-     * @return Meta
      */
-    public function setDados($dados = null): Meta
+    public function setDados($dados = null)
     {
         $this->clearMeta();
         if ($dados)
@@ -477,10 +478,14 @@ class Meta
      */
     private function checkValueExtend($value)
     {
-        if (!empty($value) && (is_int($value) || (is_array($value) && !isset($value[0]))))
-            $this->value = (is_int($value) ? $value : $this->getIdFromDataExtend($value));
-        elseif (!empty($value))
-            $this->error = "valor não esperado";
+        if (!empty($value)) {
+            if (is_numeric($value))
+                $this->value = $this->checkIdExist($value);
+            elseif (is_array($value) && !isset($value[0]))
+                $this->value = $this->getIdFromDataExtend($value);
+            else
+                $this->error = "valor não esperado";
+        }
     }
 
     /**
@@ -493,37 +498,64 @@ class Meta
                 $this->checkValueExtendMult(json_decode($value, true));
             elseif (is_array($value))
                 $this->checkValueExtendMult($value);
-            elseif (is_int($value))
-                $this->value = json_encode([0 => $value]);
+            elseif (is_numeric($value))
+                $this->value = json_encode([0 => $this->checkIdExist($value)]);
             else
-                $this->error = "valor não esperado para um campo do tipo {$this->key}";
+                $this->error = "valor não esperado";
         }
     }
 
     /**
-     * @param mixed $value
+     * @param array $value
      */
-    private function checkValueExtendMult($value)
+    private function checkValueExtendMult(array $value)
     {
         if (isset($value[0])) {
             if (is_numeric($value[0])) {
-                $this->value = json_encode($value);
+                $this->value = $this->checkListIdExist($value);
             } elseif (is_array($value[0])) {
-                //dado extendido
+                //lista de dados extendido
                 foreach ($value as $item) {
                     if (!isset($item[0]))
                         $this->value[] = $this->getIdFromDataExtend($item);
                     else
-                        $this->error = "valor não esperado para um campo do tipo {$this->key}";
+                        $this->error = "lista de valores não esperado";
                 }
-                $this->value = json_encode($this->value);
+                $this->value = !empty($this->value) ? json_encode($this->value) : null;
             } else {
                 $this->error = "valor não esperado para um campo do tipo {$this->key}";
             }
         } else {
-            //dado extendido
             $this->value = json_encode([0 => $this->getIdFromDataExtend($value)]);
         }
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function checkIdExist(int $id)
+    {
+        $read = new Read();
+        $read->exeRead($this->relation, "WHERE id = :id", "id={$id}");
+        return $read->getResult() ? (int)$id : null;
+    }
+
+    /**
+     * @param array $listId
+     * @return mixed
+     */
+    private function checkListIdExist(array $listId)
+    {
+        $newList = [];
+        foreach ($listId as $id) {
+            if ($idn = $this->checkIdExist($id))
+                $newList[] = $idn;
+            else
+                $this->error = "um ou mais ids da lista não existe";
+        }
+
+        return !empty($newList) ? json_encode($newList) : null;
     }
 
     /**
@@ -538,6 +570,6 @@ class Meta
             return null;
         }
 
-        return $return;
+        return (int)$return;
     }
 }

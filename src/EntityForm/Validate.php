@@ -8,11 +8,12 @@ use Helpers\Check;
 
 class Validate
 {
-
     /**
      * Valida valor a ser inserido na meta
      *
      * @param Meta $m
+     * @param $value
+     * @return mixed
      */
     public static function meta(Meta $m)
     {
@@ -20,7 +21,6 @@ class Validate
             self::checkDefaultSet($m);
             if (!empty($m->getValue())) {
                 self::convertValues($m);
-                self::checkSelecaoUnique($m);
                 self::checkType($m);
                 self::checkSize($m);
                 self::checkRegular($m);
@@ -72,20 +72,6 @@ class Validate
     }
 
     /**
-     * Valida informações submetidas por um campo multiplo selecionado de um campo relacional
-     * ex: selecione uma pessoa, agora selecione um dos endereços dessa pessoa, este endereço selecionado é validado.
-     *
-     * @param Meta $m
-     */
-    private static function checkSelecaoUnique(Meta $m)
-    {
-        if (!empty($m->getSelect())) {
-//            foreach ($m->getSelect() as $select)
-//                $dataValidada[$select . "__" . $m->getColumn()] = (is_numeric($dados[$select . "__" . $m->getColumn()]) && $dados[$select . "__" . $m->getColumn()] > 0 ? (int)$dados[$select . "__" . $m->getColumn()] : null);
-        }
-    }
-
-    /**
      * Verifica se o campo é do tipo link, se for, linka o valor ao título
      *
      * @param Dicionario $d
@@ -103,6 +89,7 @@ class Validate
      * Verifica se precisa alterar de modo padrão a informação deste campo
      *
      * @param Meta $m
+     * @param mixed $value
      */
     protected static function checkDefaultSet(Meta $m)
     {

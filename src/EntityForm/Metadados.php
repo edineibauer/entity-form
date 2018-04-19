@@ -35,7 +35,7 @@ class Metadados
         $id = null;
         $info = self::getInfo($entity);
         foreach (self::getRelevantAll($entity) as $r) {
-            if(isset($info[$r]) && !empty($info[$r]))
+            if (isset($info[$r]) && !empty($info[$r]))
                 return $mod ? [$info[$r], $r] : $info[$r];
         }
 
