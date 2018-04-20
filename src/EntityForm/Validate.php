@@ -42,7 +42,7 @@ class Validate
                     self::checkUnique($d, $m);
 
                     if ($m->getKey() === "link" && $m->getError()) {
-                        $d->search($d->getRelevant())->setError($m->getError());
+                        $d->getRelevant()->setError($m->getError());
                         $m->setError(null);
                         $m->setValue(null, false);
                     }
@@ -80,8 +80,8 @@ class Validate
     private static function checkLink(Dicionario $d, Meta $m)
     {
         if ($m->getKey() === "link") {
-            if (!empty($d->search($d->getRelevant())->getValue()))
-                $m->setValue(Check::name($d->search($d->getRelevant())->getValue()));
+            if (!empty($d->getRelevant()->getValue()))
+                $m->setValue(Check::name($d->getRelevant()->getValue()));
         }
     }
 

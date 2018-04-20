@@ -26,6 +26,7 @@ class Dicionario
         $this->checkSelectUnique();
         $this->info = Metadados::getInfo($this->entity);
         $this->relevant = Metadados::getRelevantAll($this->entity);
+        $this->setRelevants();
     }
 
     /**
@@ -156,7 +157,7 @@ class Dicionario
 
     public function getRelevant()
     {
-        return $this->relevant[0];
+        return $this->relevant;
     }
 
     public function getListas()
@@ -176,7 +177,7 @@ class Dicionario
      * @param mixed $value
      * @return mixed
      */
-    public function search($attr, $value = null): Meta
+    public function search($attr, $value = null)
     {
         $result = null;
 
@@ -197,7 +198,7 @@ class Dicionario
 
             //busca específica
             foreach ($this->dicionario as $item) {
-                if ($item->getDado($attr) === $value) {
+                if ($item->get($attr) === $value) {
                     $result = $item;
                     break;
                 }
@@ -320,6 +321,16 @@ class Dicionario
                     $d = new Dicionario($meta->getRelation());
                     $this->dicionario[] = new Meta(array_merge($type['default'], $type['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]));
                 }
+            }
+        }
+    }
+
+    private function setRelevants()
+    {
+        foreach ($this->relevant as $item) {
+            if ($m = $this->search("format", $item)) {
+                $this->relevant = $m;
+                break;
             }
         }
     }
