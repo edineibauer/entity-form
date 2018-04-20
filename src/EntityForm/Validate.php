@@ -96,7 +96,7 @@ class Validate
         if ($m->getValue() === "")
             $m->setValue(null, false);
 
-        if (empty($m->getValue())) {
+        if ($m->getValue() === null) {
             if ($m->getDefault() === false)
                 $m->setError("Preencha este Campo");
             elseif (!empty($m->getDefault()))
