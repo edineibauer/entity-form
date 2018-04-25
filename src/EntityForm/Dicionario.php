@@ -45,7 +45,6 @@ class Dicionario
 
         } elseif (is_object($data) && get_class($data) === "EntityForm\Meta") {
             $this->dicionario[$data->getIndice()] = $data;
-
         }
 
         Validate::dicionario($this);
@@ -208,6 +207,21 @@ class Dicionario
         return $result;
     }
 
+    /**
+     * Deleta uma Meta do dicionário,
+     * aceita indice, column ou Meta como parâmentro
+     *
+     * @param mixed $column
+     */
+    public function removeMeta($meta) {
+        $indice = is_numeric($meta) ? ($this->dicionario[$meta] ?? null) : (is_object($meta) && get_class($meta) === "EntityForm\Meta" ? $this->searchValue($meta->getColumn()) : (is_string($meta) ? $this->searchValue($meta) : null));
+        if($indice)
+            unset($this->dicionario[$indice]);
+    }
+
+    /**
+     * Salva os dados do dicionário no banco de dados ou atualiza se for o caso
+     */
     public function save()
     {
         if (!empty($this->search(0)->getValue()))

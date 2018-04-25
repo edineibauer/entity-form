@@ -45,14 +45,42 @@ class Validate
                         $d->getRelevant()->setError($m->getError());
                         $m->setError(null);
                         $m->setValue(null, false);
+                    } elseif (in_array($m->getKey(), ["extend_mult", "list_mult", "selecao_mult"])) {
+                        self::readMultValues($d, $m);
                     }
 
                     if ($m->getError())
                         $m->setValue(null, false);
+
                 }
             }
+
+            foreach ($d->getDicionario() as $m)
+                self::checkDefaultPattern($d, $m);
+
         } else {
             $d->search(0)->setError("Permissão Negada");
+        }
+    }
+
+    /**
+     * Busca por valores multiplos
+     *
+     * @param Dicionario $d
+     * @param Meta $m
+     */
+    private static function readMultValues(Dicionario $d, Meta $m)
+    {
+        if ($id = $d->search(0)->getValue()) {
+            $read = new Read();
+            $read->exeRead(PRE . $d->getEntity() . "_" . $m->getRelation() . '_' . $m->getColumn(), "WHERE {$d->getEntity()}_id = :id", "id={$id}");
+            if ($read->getResult()) {
+                $data = [];
+                foreach ($read->getResult() as $item)
+                    $data[] = $item[$m->getRelation() . "_id"];
+
+                $m->setValue($data);
+            }
         }
     }
 
@@ -82,6 +110,108 @@ class Validate
         if ($m->getKey() === "link") {
             if (!empty($d->getRelevant()->getValue()))
                 $m->setValue(Check::name($d->getRelevant()->getValue()));
+        }
+    }
+
+    /**
+     * Verifica se o campo é do tipo link, se for, linka o valor ao título
+     *
+     * @param Dicionario $d
+     * @param Meta $m
+     */
+    private static function checkDefaultPattern(Dicionario $d, Meta $m)
+    {
+        if (preg_match('/{\$/', $m->getDefault())) {
+            $newDefault = "";
+            $error = false;
+            foreach (explode('{$', $m->getDefault()) as $i => $expressao) {
+                if ($i > 0) {
+                    $variable = explode('}', $expressao);
+                    $base = $variable[1];
+                    $variable = trim(strtolower($variable[0]));
+                    $mod = null;
+                    $param = null;
+                    if (preg_match('/\|/i', $variable)) {
+                        $mod = explode('|', $variable);
+                        $variable = $mod[0];
+                        $mod = $mod[1];
+                        if (preg_match('/\(/i', $mod) && preg_match('/\)/i', $mod)) {
+                            $param = explode('(', $mod);
+                            $mod = $param[0];
+                            $param = explode(')', $param[1])[0];
+                            if (preg_match('/,/i', $param))
+                                $param = explode(',', $param);
+                        }
+                    }
+
+                    if ($value = self::getValueFromVarible($d, $variable))
+                        $newDefault .= ($mod ? self::proccessFunction($value, $mod, $param) : $value) . $base;
+                    else
+                        $error = true;
+
+                } else {
+                    $newDefault .= $expressao;
+                }
+            }
+
+            if (!$error)
+                $m->setValue($newDefault);
+        }
+
+    }
+
+    private static function proccessFunction($value, $mod = null, $param = null)
+    {
+        switch ($mod) {
+            case 'str_pad':
+                return str_pad($value, !empty($param[0]) ? $param[0] : 2, !empty($param[1]) ? $param[1] : '0', !empty($param[2]) && $param[2] === "right" ? STR_PAD_RIGHT : STR_PAD_LEFT);
+                break;
+            default:
+                return $value;
+        }
+    }
+
+    /**
+     * @param Dicionario $d
+     * @param string $variable
+     * @return mixed
+     */
+    private static function getValueFromVarible(Dicionario $d, string $variable)
+    {
+        if (preg_match('/./i', $variable)) {
+            foreach ($variables = explode('.', $variable) as $i => $variable) {
+                if ($m = $d->search($variable)) {
+                    if ($m->getError()) {
+                        return null;
+                    } elseif ($i === count($variables) - 1) {
+                        return !empty($m->getAllow()['names']) ? $m->getAllow()['names'][array_search($m->getValue(), $m->getAllow()['values'])] : $m->getValue();
+                    } elseif (!empty($m->getRelation()) && !empty($m->getValue())) {
+                        $d = new Dicionario($m->getRelation());
+                        $d->setData($m->getValue());
+                    } else {
+                        return null;
+                    }
+                } elseif (!empty($m->getSelect()) && in_array($variable, $m->getSelect())) {
+                    if ($meta = $d->search($variable . "__" . $variables[$i - 1])) {
+                        if (!empty($meta->getValue()) && !empty($meta->getRelation())) {
+                            $d = new Dicionario($meta->getRelation());
+                            $d->setData($meta->getValue());
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            }
+
+        } else {
+            if ($m = $d->search($variable))
+                return $m->getValue();
+            else
+                return null;
         }
     }
 
