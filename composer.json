@@ -3,6 +3,8 @@
   "description": "Gerência as Entidades de um sistema. Controlando com uma interface de usuário vinculada ao banco.",
   "type": "library",
   "license": "MIT",
+  "prefer-stable" : true,
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Edinei J. Bauer",
