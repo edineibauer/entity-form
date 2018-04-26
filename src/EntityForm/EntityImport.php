@@ -1,6 +1,6 @@
 <?php
 
-namespace LinkControl;
+namespace EntityForm;
 
 use Helpers\Helper;
 

@@ -1,9 +1,8 @@
 <?php
 
-namespace LinkControl;
+namespace EntityForm;
 
 use ConnCrud\SqlCommand;
-use EntityForm\Metadados;
 
 class EntityUpdateEntityDatabase extends EntityDatabase
 {

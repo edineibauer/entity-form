@@ -1,8 +1,6 @@
 <?php
 
-namespace LinkControl;
-
-use EntityForm\Metadados;
+namespace EntityForm;
 
 class EntityCreateEntityDatabase extends EntityDatabase
 {
