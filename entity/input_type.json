@@ -26,7 +26,8 @@
       "coll": null
     },
     "select": [],
-    "filter": []
+    "filter": [],
+    "value": null
   },
   "text": {
     "size": 127
