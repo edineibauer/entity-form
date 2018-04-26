@@ -11,8 +11,8 @@
   ],
   "require": {
     "php": "^7.0",
-    "conn/config": "^1",
-    "conn/conn-crud": "^1"
+    "conn/config": "dev-master",
+    "conn/conn-crud": "dev-master"
   },
   "autoload": {
     "psr-0": {
