@@ -359,7 +359,7 @@ class Dicionario
             if (!empty($meta->getSelect())) {
                 foreach ($meta->getSelect() as $select) {
                     $d = new Dicionario($meta->getRelation());
-                    $this->dicionario[] = new Meta(array_merge($this->defaultMeta['default'], $this->defaultMeta['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]), $this->defaultMeta['default']);
+                    $this->dicionario[] = new Meta(array_replace_recursive($this->defaultMeta['default'], $this->defaultMeta['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]), $this->defaultMeta['default']);
                 }
             }
         }

@@ -58,7 +58,7 @@ abstract class EntityDatabase
         $dic = Metadados::getDicionario($data['relation']);
         foreach ($dic as $item) {
             if($item['column'] === $select){
-                $dicionario = array_merge($inputType['default'], $inputType['selecao']);
+                $dicionario = array_replace_recursive($inputType['default'], $inputType['selecao']);
                 $dicionario["nome"] = $select;
                 $dicionario["column"] = Check::name($select) . '__' . Check::name($data['column']);
                 $dicionario["relation"] = $item['relation'];

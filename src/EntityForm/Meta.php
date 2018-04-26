@@ -394,7 +394,7 @@ class Meta
             if (!$default)
                 $default = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true)['default'];
 
-            foreach (array_merge($default, $dados) as $dado => $value) {
+            foreach (array_replace_recursive($default, $dados) as $dado => $value) {
                 switch ($dado) {
                     case 'allow':
                         $this->setAllow($value);
