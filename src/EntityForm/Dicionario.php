@@ -10,6 +10,7 @@ use ConnCrud\Update;
 class Dicionario
 {
     private $entity;
+    private $defaultMeta;
     private $dicionario;
     private $info;
     private $relevant;
@@ -20,14 +21,10 @@ class Dicionario
     public function __construct(string $entity)
     {
         $this->entity = $entity;
-        $this->dicionario = Metadados::getDicionario($this->entity, true);
-        foreach ($this->dicionario as $i => $item)
-            $this->dicionario[$i] = new Meta($item, $i);
-        $this->checkSelectUnique();
-        $this->info = Metadados::getInfo($this->entity);
-        $this->relevant = Metadados::getRelevantAll($this->entity);
-        $this->setRelevants();
-        $this->applyDefaultsValues();
+        $this->defaultMeta = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true);
+        foreach (Metadados::getDicionario($this->entity, true) as $i => $item)
+            $this->dicionario[$i] = new Meta($item, $i, $this->defaultMeta['default']);
+        $this->addSelectUniqueMeta();
     }
 
     /**
@@ -94,6 +91,9 @@ class Dicionario
 
     public function getExtends()
     {
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         return $this->info['extend'];
     }
 
@@ -109,6 +109,9 @@ class Dicionario
 
     public function getAssociationSimple()
     {
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         $data = null;
         foreach (["extend", "list", "selecao"] as $e) {
             if (!empty($this->info[$e])) {
@@ -121,6 +124,9 @@ class Dicionario
 
     public function getAssociationMult()
     {
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         $data = null;
         foreach (["extend_mult", "list_mult", "selecao_mult"] as $e) {
             if (!empty($this->info[$e])) {
@@ -136,6 +142,9 @@ class Dicionario
      */
     public function getTitle()
     {
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         return $this->dicionario[$this->info['title']] ?? null;
     }
 
@@ -144,6 +153,9 @@ class Dicionario
      */
     public function getPublisher()
     {
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         return $this->dicionario[$this->info['publisher']] ?? null;
     }
 
@@ -157,11 +169,17 @@ class Dicionario
 
     public function getRelevant()
     {
+        if(!$this->relevant)
+            $this->setRelevants();
+
         return $this->relevant;
     }
 
     public function getListas()
     {
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         $data = null;
         foreach (["extend_mult", "list", "selecao", "list_mult", "selecao_mult"] as $e) {
             if (!empty($this->info[$e])) {
@@ -231,6 +249,9 @@ class Dicionario
         else
             $this->createTableData();
 
+        if(!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
         if (!empty($this->search(0)->getValue()))
             $this->createRelationalData();
     }
@@ -274,9 +295,9 @@ class Dicionario
     private function createTableData()
     {
         if (!$this->getError()) {
+            $create = new Create();
             $dados = $this->getData();
             unset($dados['id']);
-            $create = new Create();
             $create->exeCreate($this->entity, $dados);
             if ($create->getErro())
                 $this->search(0)->setError($create->getErro());
@@ -337,14 +358,13 @@ class Dicionario
         return (!empty($results) ? $results[0] : null);
     }
 
-    private function checkSelectUnique()
+    private function addSelectUniqueMeta()
     {
-        $type = json_decode(file_get_contents(DEV && DOMINIO === "entityForm" && file_exists(PATH_HOME . "entity/input_type.json") ? PATH_HOME . "entity/input_type.json" : (file_exists(PATH_HOME . "vendor/conn/entity-form/entity/input_type.json") ? PATH_HOME . "vendor/conn/entity-form/entity/input_type.json" : null)), true);
         foreach ($this->dicionario as $meta) {
             if (!empty($meta->getSelect())) {
                 foreach ($meta->getSelect() as $select) {
                     $d = new Dicionario($meta->getRelation());
-                    $this->dicionario[] = new Meta(array_merge($type['default'], $type['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]));
+                    $this->dicionario[] = new Meta(array_merge($this->defaultMeta['default'], $this->defaultMeta['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]), null, $this->defaultMeta['default']);
                 }
             }
         }
@@ -352,7 +372,7 @@ class Dicionario
 
     private function setRelevants()
     {
-        foreach ($this->relevant as $item) {
+        foreach (Metadados::getRelevantAll($this->entity) as $item) {
             if ($m = $this->search("format", $item)) {
                 $this->relevant = $m;
                 break;

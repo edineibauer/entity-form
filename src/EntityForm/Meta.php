@@ -31,9 +31,9 @@ class Meta
     /**
      * @param mixed $dados
      */
-    public function __construct($dados = null, $id = null)
+    public function __construct($dados = null, $id = null, $defaultMeta = null)
     {
-        $this->setDados($dados);
+        $this->setDados($dados, $defaultMeta);
         if ($id !== null)
             $this->setIndice($id);
     }
@@ -77,9 +77,9 @@ class Meta
     }
 
     /**
-     * @param string $column
+     * @param mixed $column
      */
-    public function setColumn(string $column)
+    public function setColumn($column)
     {
         $this->column = $column;
     }
@@ -122,22 +122,18 @@ class Meta
      */
     public function setForm($form = null)
     {
-        $content = ['input', 'cols', 'coll', 'colm', 'class', 'style'];
-        if ($form) {
+        if (!empty($form) && is_array($form)) {
             foreach ($form as $name => $value) {
-                if (in_array($name, $content))
+                if (in_array($name, ['input', 'cols', 'coll', 'colm', 'class', 'style']))
                     $this->form[$name] = $value;
             }
-        } else {
-            foreach ($content as $item)
-                $this->form[$item] = "";
         }
     }
 
     /**
-     * @param mixed $format
+     * @param string $format
      */
-    public function setFormat($format)
+    public function setFormat(string $format)
     {
         $this->format = $format;
     }
@@ -159,17 +155,17 @@ class Meta
     }
 
     /**
-     * @param string $nome
+     * @param mixed $nome
      */
-    public function setNome(string $nome)
+    public function setNome($nome)
     {
         $this->nome = $nome;
     }
 
     /**
-     * @param string $relation
+     * @param mixed $relation
      */
-    public function setRelation(string $relation)
+    public function setRelation($relation)
     {
         $this->relation = $relation;
     }
@@ -259,7 +255,7 @@ class Meta
      */
     public function getForm()
     {
-        return $this->form;
+        return $this->form ?? $this->defaultForm();
     }
 
     /**
@@ -383,35 +379,20 @@ class Meta
     /**
      * @param mixed $dados
      */
-    public function setDados($dados = null)
+    public function setDados($dados = null, $default = null)
     {
-        $this->clearMeta();
+        $this->clearMeta($default);
+        $this->setValue(null);
         if ($dados)
             $this->applyDados($dados);
 
         return $this;
     }
 
-    private function clearMeta()
+    private function clearMeta($dados = null)
     {
-        $dados = [
-            "allow" => ['regex' => "", 'validate' => "", 'names' => [], 'values' => []],
-            "column" => "",
-            "default" => "",
-            "filter" => [],
-            "form" => ['input' => "text", 'cols' => 12, 'coll' => "", 'colm' => "", 'class' => "", 'style' => ""],
-            "format" => "text",
-            "key" => "",
-            "indice" => "",
-            "nome" => "",
-            "relation" => "",
-            "select" => [],
-            "size" => false,
-            "type" => "varchar",
-            "unique" => false,
-            "update" => true,
-            "value" => ""
-        ];
+        if(!$dados)
+            $dados = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true)['default'];
         $this->applyDados($dados);
     }
 
@@ -571,5 +552,15 @@ class Meta
         }
 
         return (int)$return;
+    }
+
+    /**
+     * Retorna form padrão caso o campo não tenha form, mas tenha sido solicitado nos $this->fields
+     * @return array
+     */
+    private function defaultForm(): array
+    {
+        $input = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true);
+        return $input['default']['form'];
     }
 }
