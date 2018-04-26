@@ -27,6 +27,7 @@ class Dicionario
         $this->info = Metadados::getInfo($this->entity);
         $this->relevant = Metadados::getRelevantAll($this->entity);
         $this->setRelevants();
+        $this->applyDefaultsValues();
     }
 
     /**
@@ -46,6 +47,9 @@ class Dicionario
         } elseif (is_object($data) && get_class($data) === "EntityForm\Meta") {
             $this->dicionario[$data->getIndice()] = $data;
         }
+
+        var_dump($this->getData());
+        die;
 
         Validate::dicionario($this);
     }
@@ -213,9 +217,10 @@ class Dicionario
      *
      * @param mixed $column
      */
-    public function removeMeta($meta) {
+    public function removeMeta($meta)
+    {
         $indice = is_numeric($meta) ? ($this->dicionario[$meta] ?? null) : (is_object($meta) && get_class($meta) === "EntityForm\Meta" ? $this->searchValue($meta->getColumn()) : (is_string($meta) ? $this->searchValue($meta) : null));
-        if($indice)
+        if ($indice)
             unset($this->dicionario[$indice]);
     }
 
@@ -231,6 +236,15 @@ class Dicionario
 
         if (!empty($this->search(0)->getValue()))
             $this->createRelationalData();
+    }
+
+    /**
+     * Aplica valores padrões de cada meta
+     */
+    private function applyDefaultsValues()
+    {
+        foreach ($this->dicionario as $meta)
+            $meta->setValue(null);
     }
 
     /**
@@ -266,6 +280,8 @@ class Dicionario
             $create = new Create();
             $dados = $this->getData();
             unset($dados['id']);
+            var_dump($dados);
+            die;
             $create->exeCreate($this->entity, $dados);
             if ($create->getErro())
                 $this->search(0)->setError($create->getErro());
