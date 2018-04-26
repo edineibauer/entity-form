@@ -48,9 +48,6 @@ class Dicionario
             $this->dicionario[$data->getIndice()] = $data;
         }
 
-        var_dump($this->getData());
-        die;
-
         Validate::dicionario($this);
     }
 
@@ -277,11 +274,9 @@ class Dicionario
     private function createTableData()
     {
         if (!$this->getError()) {
-            $create = new Create();
             $dados = $this->getData();
             unset($dados['id']);
-            var_dump($dados);
-            die;
+            $create = new Create();
             $create->exeCreate($this->entity, $dados);
             if ($create->getErro())
                 $this->search(0)->setError($create->getErro());
