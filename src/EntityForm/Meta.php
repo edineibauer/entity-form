@@ -4,7 +4,6 @@ namespace EntityForm;
 
 
 use ConnCrud\Read;
-use ConnCrud\Update;
 use Entity\Entity;
 use Helpers\Check;
 
@@ -29,13 +28,15 @@ class Meta
     private $value;
 
     /**
+     * Pode receber os dados em formato array das informações dessa Meta
+     *
      * @param mixed $dados
+     * @param mixed $default
      */
-    public function __construct($dados = null, $id = null, $defaultMeta = null)
+    public function __construct($dados = null, $default = null)
     {
-        $this->setDados($dados, $defaultMeta);
-        if ($id !== null)
-            $this->setIndice($id);
+        if ($dados)
+            $this->setDados($dados, $default);
     }
 
     /**
@@ -44,6 +45,9 @@ class Meta
      */
     public function setValue($value, bool $validate = true)
     {
+        if ($validate)
+            $this->error = null;
+
         if (in_array($this->key, ["list_mult", "selecao_mult", "extend_mult"]))
             $this->checkValueExtendList($value);
         elseif (in_array($this->key, ["extend", "list", "selecao"]))
@@ -127,6 +131,8 @@ class Meta
                 if (in_array($name, ['input', 'cols', 'coll', 'colm', 'class', 'style']))
                     $this->form[$name] = $value;
             }
+        } else {
+            $this->form = false;
         }
     }
 
@@ -364,7 +370,7 @@ class Meta
             "form" => $this->form,
             "format" => $this->format,
             "key" => $this->key,
-            "key" => $this->indice,
+            "indice" => $this->indice,
             "nome" => $this->nome,
             "relation" => $this->relation,
             "select" => $this->select,
@@ -377,32 +383,18 @@ class Meta
     }
 
     /**
+     * Informa dados a esta Meta
+     *
      * @param mixed $dados
+     * @param mixed $default
      */
-    public function setDados($dados = null, $default = null)
-    {
-        $this->clearMeta($default);
-        $this->setValue(null);
-        if ($dados)
-            $this->applyDados($dados);
-
-        return $this;
-    }
-
-    private function clearMeta($dados = null)
-    {
-        if(!$dados)
-            $dados = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true)['default'];
-        $this->applyDados($dados);
-    }
-
-    /**
-     * @param array $dados
-     */
-    private function applyDados(array $dados)
+    public function setDados($dados = null, $default)
     {
         if (!empty($dados)) {
-            foreach ($dados as $dado => $value) {
+            if (!$default)
+                $default = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true)['default'];
+
+            foreach (array_merge($default, $dados) as $dado => $value) {
                 switch ($dado) {
                     case 'allow':
                         $this->setAllow($value);

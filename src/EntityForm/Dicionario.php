@@ -14,6 +14,7 @@ class Dicionario
     private $dicionario;
     private $info;
     private $relevant;
+    private $metasEdited;
 
     /**
      * @param string $entity
@@ -22,12 +23,16 @@ class Dicionario
     {
         $this->entity = $entity;
         $this->defaultMeta = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true);
-        foreach (Metadados::getDicionario($this->entity, true) as $i => $item)
-            $this->dicionario[$i] = new Meta($item, $i, $this->defaultMeta['default']);
+        foreach (Metadados::getDicionario($this->entity, true) as $i => $item) {
+            $item['indice'] = $i;
+            $this->dicionario[$i] = new Meta($item, $this->defaultMeta['default']);
+        }
         $this->addSelectUniqueMeta();
     }
 
     /**
+     * Seta valores para as Metas do Dicionário
+     * valores aceitos: Array de valores, id para buscar os valores no banco, ou uma meta com valor
      * @param mixed $data
      */
     public function setData($data)
@@ -37,12 +42,13 @@ class Dicionario
 
         } elseif (is_numeric($data)) {
             $read = new Read();
-            $read->exeRead(PRE . $this->entity, "WHERE id = :id", "id={$data}");
+            $read->exeRead($this->entity, "WHERE id = :id", "id={$data}");
             if ($read->getResult())
                 $this->setDataArray($read->getResult()[0]);
 
-        } elseif (is_object($data) && get_class($data) === "EntityForm\Meta") {
-            $this->dicionario[$data->getIndice()] = $data;
+        } elseif (is_object($data) && get_class($data) === "EntityForm\Meta" && !empty($data->getValue())) {
+            $this->dicionario[$data->getIndice()]->setValue($data->getValue());
+            $this->metasEdited[] = $data->getColumn();
         }
 
         Validate::dicionario($this);
@@ -67,6 +73,7 @@ class Dicionario
 
         return $data;
     }
+
 
     /**
      * @return string
@@ -256,19 +263,6 @@ class Dicionario
             $this->createRelationalData();
     }
 
-    /**
-     * Aplica valores padrões de cada meta
-     */
-    private function applyDefaultsValues()
-    {
-        foreach ($this->dicionario as $meta)
-            $meta->setValue(null);
-    }
-
-    /**
-     * @param Dicionario $d
-     * @return mixed
-     */
     private function updateTableData()
     {
         $id = $this->search(0)->getValue();
@@ -276,7 +270,7 @@ class Dicionario
             $up = new Update();
             $dados = $this->getData();
             foreach ($this->dicionario as $meta) {
-                if ($meta->getError())
+                if ($meta->getError() || !in_array($meta->getColumn(), $this->metasEdited))
                     unset($dados[$meta->getColumn()]);
             }
 
@@ -338,6 +332,7 @@ class Dicionario
     private function setDataArray(array $data)
     {
         foreach ($data as $column => $value) {
+            $this->metasEdited[] = $column;
             if (is_numeric($column) && isset($this->dicionario[$column]))
                 $this->dicionario[$column]->setValue($value);
             elseif (isset($this->dicionario[$field = $this->searchValue($column)]))
@@ -364,7 +359,7 @@ class Dicionario
             if (!empty($meta->getSelect())) {
                 foreach ($meta->getSelect() as $select) {
                     $d = new Dicionario($meta->getRelation());
-                    $this->dicionario[] = new Meta(array_merge($this->defaultMeta['default'], $this->defaultMeta['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]), null, $this->defaultMeta['default']);
+                    $this->dicionario[] = new Meta(array_merge($this->defaultMeta['default'], $this->defaultMeta['list'], ["relation" => $d->search($select)->getRelation(), "column" => $select . "__" . $meta->getColumn(), "nome" => ucwords($select)]), $this->defaultMeta['default']);
                 }
             }
         }
