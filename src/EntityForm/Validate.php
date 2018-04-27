@@ -146,16 +146,13 @@ class Validate
 
                     if ($value = self::getValueFromVarible($d, $variable))
                         $newDefault .= ($mod ? self::proccessFunction($value, $mod, $param) : $value) . $base;
-                    else
-                        $error = true;
 
                 } else {
                     $newDefault .= $expressao;
                 }
             }
 
-            if (!$error)
-                $m->setValue($newDefault);
+            $m->setValue($newDefault);
         }
 
     }
