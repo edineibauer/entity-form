@@ -123,7 +123,6 @@ class Validate
     {
         if (preg_match('/{\$/', $m->getDefault())) {
             $newDefault = "";
-            $error = false;
             foreach (explode('{$', $m->getDefault()) as $i => $expressao) {
                 if ($i > 0) {
                     $variable = explode('}', $expressao);
