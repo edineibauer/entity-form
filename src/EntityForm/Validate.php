@@ -45,8 +45,6 @@ class Validate
                         $d->getRelevant()->setError($m->getError());
                         $m->setError(null);
                         $m->setValue(null, false);
-                    } elseif (in_array($m->getKey(), ["extend_mult", "list_mult", "selecao_mult"])) {
-                        self::readMultValues($d, $m);
                     }
 
                     if ($m->getError())
@@ -60,27 +58,6 @@ class Validate
 
         } else {
             $d->search(0)->setError("Permissão Negada");
-        }
-    }
-
-    /**
-     * Busca por valores multiplos
-     *
-     * @param Dicionario $d
-     * @param Meta $m
-     */
-    private static function readMultValues(Dicionario $d, Meta $m)
-    {
-        if ($id = $d->search(0)->getValue()) {
-            $read = new Read();
-            $read->exeRead(PRE . $d->getEntity() . "_" . $m->getRelation() . '_' . $m->getColumn(), "WHERE {$d->getEntity()}_id = :id", "id={$id}");
-            if ($read->getResult()) {
-                $data = [];
-                foreach ($read->getResult() as $item)
-                    $data[] = $item[$m->getRelation() . "_id"];
-
-                $m->setValue($data);
-            }
         }
     }
 
@@ -123,6 +100,7 @@ class Validate
     {
         if (preg_match('/{\$/', $m->getDefault())) {
             $newDefault = "";
+            $error = false;
             foreach (explode('{$', $m->getDefault()) as $i => $expressao) {
                 if ($i > 0) {
                     $variable = explode('}', $expressao);

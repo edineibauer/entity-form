@@ -43,8 +43,13 @@ class Dicionario
         } elseif (is_numeric($data)) {
             $read = new Read();
             $read->exeRead($this->entity, "WHERE id = :id", "id={$data}");
-            if ($read->getResult())
-                $this->setDataArray($read->getResult()[0]);
+            if ($read->getResult()) {
+                $dataRead = $read->getResult()[0];
+                foreach ($this->getAssociationMult() as $meta)
+                    $dataRead[$meta->getColumn()] = $this->readMultValues($meta, $dataRead['id']);
+
+                $this->setDataArray($dataRead);
+            }
 
         } elseif (is_object($data) && get_class($data) === "EntityForm\Meta" && !empty($data->getValue())) {
             $this->dicionario[$data->getIndice()]->setValue($data->getValue());
@@ -52,6 +57,26 @@ class Dicionario
         }
 
         Validate::dicionario($this);
+    }
+
+    /**
+     * Busca por valores multiplos
+     *
+     * @param Meta $m
+     * @param int $id
+     */
+    private function readMultValues(Meta $m, int $id)
+    {
+        $read = new Read();
+        $read->exeRead(PRE . $this->entity . "_" . $m->getRelation() . '_' . $m->getColumn(), "WHERE {$this->entity}_id = :id", "id={$id}");
+        if ($read->getResult()) {
+            $data = [];
+            foreach ($read->getResult() as $item)
+                $data[] = $item[$m->getRelation() . "_id"];
+            return $data;
+        }
+
+        return null;
     }
 
     /**
@@ -278,7 +303,7 @@ class Dicionario
             if ($up->getErro())
                 $this->search(0)->setError($up->getErro());
         } else {
-            $this->search(0)->setValue(null);
+            $this->search(0)->setValue(null, false);
         }
     }
 
@@ -296,7 +321,7 @@ class Dicionario
             if ($create->getErro())
                 $this->search(0)->setError($create->getErro());
             elseif ($create->getResult())
-                $this->search(0)->setValue((int)$create->getResult());
+                $this->search(0)->setValue((int)$create->getResult(), false);
         }
     }
 
