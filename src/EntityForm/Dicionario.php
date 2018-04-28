@@ -6,6 +6,8 @@ use ConnCrud\Create;
 use ConnCrud\Delete;
 use ConnCrud\Read;
 use ConnCrud\Update;
+use Entity\Entity;
+use Helpers\Helper;
 
 class Dicionario
 {
@@ -64,19 +66,18 @@ class Dicionario
      *
      * @param Meta $m
      * @param int $id
+     * @return array
      */
-    private function readMultValues(Meta $m, int $id)
+    private function readMultValues(Meta $m, int $id): array
     {
+        $data = [];
         $read = new Read();
         $read->exeRead(PRE . $this->entity . "_" . $m->getRelation() . '_' . $m->getColumn(), "WHERE {$this->entity}_id = :id", "id={$id}");
         if ($read->getResult()) {
-            $data = [];
             foreach ($read->getResult() as $item)
                 $data[] = $item[$m->getRelation() . "_id"];
-            return $data;
         }
-
-        return null;
+        return $data;
     }
 
     /**
@@ -85,17 +86,58 @@ class Dicionario
      * @param string $column
      * @return mixed
      */
-    public function getData(string $column = null)
+    public function getDataFullRead(string $column = null)
     {
         if (!empty($column))
             return (is_int($column) && isset($this->dicionario[$column]) ? $this->dicionario[$column]->getValue() : (!empty($value = $this->dicionario[$this->searchValue($column)]) ? $value->getValue() : null));
 
         $data = null;
         foreach ($this->dicionario as $meta) {
+            if($meta->getFormat() === "source" && preg_match('/"type": "image\//i', $meta->getValue())) {
+                $data[$meta->getColumn()] = Helper::convertImageJson($meta->getValue());
+            } elseif($meta->getFormat() === "source") {
+                $data[$meta->getColumn()] = json_decode($meta->getValue(), true)[0];
+            } elseif($meta->getType() === "json") {
+                $data[$meta->getColumn()] = json_decode($meta->getValue(), true);
+            } else {
+                $data[$meta->getColumn()] = $meta->getValue();
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retorna os valores do dicionárioo de forma a preencher as necessidades do Form Crud
+     *
+     * @param string $column
+     * @return mixed
+     */
+    public function getDataForm()
+    {
+        if (!empty($column))
+            return (is_int($column) && isset($this->dicionario[$column]) ? $this->dicionario[$column]->getValue() : (!empty($value = $this->dicionario[$this->searchValue($column)]) ? $value->getValue() : null));
+
+        $data = null;
+        foreach ($this->dicionario as $meta) {
+            $data[$meta->getColumn()] = $meta->getValue();
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retorna valores de uma entidade correspondente ao seu armazenamento em sql na sua tabela
+     *
+     * @return mixed
+     */
+    private function getDataOnlyEntity()
+    {
+        $data = null;
+        foreach ($this->dicionario as $meta) {
             if (!in_array($meta->getKey(), ["extend_mult", "list_mult", "selecao_mult"]))
                 $data[$meta->getColumn()] = $meta->getValue();
         }
-
         return $data;
     }
 
@@ -123,7 +165,7 @@ class Dicionario
 
     public function getExtends()
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
         return $this->info['extend'];
@@ -139,12 +181,15 @@ class Dicionario
         return $data;
     }
 
-    public function getAssociationSimple()
+    /**
+     * @return array
+     */
+    public function getAssociationSimple(): array
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
-        $data = null;
+        $data = [];
         foreach (["extend", "list", "selecao"] as $e) {
             if (!empty($this->info[$e])) {
                 foreach ($this->info[$e] as $simple)
@@ -154,12 +199,15 @@ class Dicionario
         return $data;
     }
 
-    public function getAssociationMult()
+    /**
+     * @return array
+     */
+    public function getAssociationMult(): array
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
-        $data = null;
+        $data = [];
         foreach (["extend_mult", "list_mult", "selecao_mult"] as $e) {
             if (!empty($this->info[$e])) {
                 foreach ($this->info[$e] as $mult)
@@ -174,7 +222,7 @@ class Dicionario
      */
     public function getTitle()
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
         return $this->dicionario[$this->info['title']] ?? null;
@@ -185,7 +233,7 @@ class Dicionario
      */
     public function getPublisher()
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
         return $this->dicionario[$this->info['publisher']] ?? null;
@@ -201,7 +249,7 @@ class Dicionario
 
     public function getRelevant()
     {
-        if(!$this->relevant)
+        if (!$this->relevant)
             $this->setRelevants();
 
         return $this->relevant;
@@ -209,7 +257,7 @@ class Dicionario
 
     public function getListas()
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
         $data = null;
@@ -281,7 +329,7 @@ class Dicionario
         else
             $this->createTableData();
 
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
         if (!empty($this->search(0)->getValue()))
@@ -293,7 +341,7 @@ class Dicionario
         $id = $this->search(0)->getValue();
         if (Validate::update($this->entity, $id)) {
             $up = new Update();
-            $dados = $this->getData();
+            $dados = $this->getDataOnlyEntity();
             foreach ($this->dicionario as $meta) {
                 if ($meta->getError() || !in_array($meta->getColumn(), $this->metasEdited))
                     unset($dados[$meta->getColumn()]);
@@ -315,7 +363,7 @@ class Dicionario
     {
         if (!$this->getError()) {
             $create = new Create();
-            $dados = $this->getData();
+            $dados = $this->getDataOnlyEntity();
             unset($dados['id']);
             $create->exeCreate($this->entity, $dados);
             if ($create->getErro())

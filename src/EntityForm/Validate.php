@@ -122,7 +122,9 @@ class Validate
                     }
 
                     if ($value = self::getValueFromVarible($d, $variable))
-                        $newDefault .= ($mod ? self::proccessFunction($value, $mod, $param) : $value) . $base;
+                        $newDefault .= ($mod ? self::proccessFunction($value, $mod, $param) : $value);
+
+                    $newDefault .= $base;
 
                 } else {
                     $newDefault .= $expressao;
