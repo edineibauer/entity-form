@@ -97,6 +97,16 @@ class Dicionario
                 $data[$meta->getColumn()] = Helper::convertImageJson($meta->getValue());
             } elseif($meta->getFormat() === "source") {
                 $data[$meta->getColumn()] = json_decode($meta->getValue(), true)[0];
+            } elseif(in_array($meta->getKey(), ["list", "selecao", "extend"])) {
+                $data[$meta->getColumn()] = Entity::read($meta->getRelation(), $meta->getValue());
+            } elseif(in_array($meta->getKey(), ["list_mult", "selecao_mult", "extend_mult"])) {
+                if(!empty($meta->getValue())) {
+                    $lista = [];
+                    foreach (json_decode($meta->getValue(), true) as $id) {
+                        $lista[] = Entity::read($meta->getRelation(), $id);
+                    }
+                    $data[$meta->getColumn()] = $lista;
+                }
             } elseif($meta->getType() === "json") {
                 $data[$meta->getColumn()] = json_decode($meta->getValue(), true);
             } else {
