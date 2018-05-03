@@ -125,13 +125,9 @@ class Dicionario
      */
     public function getDataForm()
     {
-        if (!empty($column))
-            return (is_int($column) && isset($this->dicionario[$column]) ? $this->dicionario[$column]->getValue() : (!empty($value = $this->dicionario[$this->searchValue($column)]) ? $value->getValue() : null));
-
         $data = null;
-        foreach ($this->dicionario as $meta) {
+        foreach ($this->dicionario as $meta)
             $data[$meta->getColumn()] = $meta->getValue();
-        }
 
         return $data;
     }
@@ -255,6 +251,17 @@ class Dicionario
     public function getDicionario()
     {
         return $this->dicionario;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInfo()
+    {
+        if (!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
+        return $this->info;
     }
 
     public function getRelevant()
