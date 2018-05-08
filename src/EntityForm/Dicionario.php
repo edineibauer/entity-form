@@ -367,6 +367,8 @@ class Dicionario
             $up->exeUpdate($this->entity, $dados, "WHERE id = :id", "id={$id}");
             if ($up->getErro())
                 $this->search(0)->setError($up->getErro());
+            else
+                new React("update", $this->entity, $dados);
         } else {
             $this->search(0)->setValue(null, false);
         }
@@ -383,10 +385,12 @@ class Dicionario
             $dados = $this->getDataOnlyEntity();
             unset($dados['id']);
             $create->exeCreate($this->entity, $dados);
-            if ($create->getErro())
+            if ($create->getErro()) {
                 $this->search(0)->setError($create->getErro());
-            elseif ($create->getResult())
+            } elseif ($create->getResult()) {
                 $this->search(0)->setValue((int)$create->getResult(), false);
+                new React("create", $this->entity, array_merge(["id" => $create->getResult()], $dados));
+            }
         }
     }
 
