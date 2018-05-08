@@ -20,7 +20,7 @@ class React
                     $actions = json_decode(file_get_contents(PATH_HOME . "vendor/conn/{$lib}/entity/react/{$react}"), true);
 
                     if ($actions['entity'] === $entity && $action === $actions['action'])
-                        $actions['function']($entity, $dados);
+                        include_once PATH_HOME . "vendor/conn/{$lib}/ajax/react/{$actions['function']}.php";
                 }
             }
         }
