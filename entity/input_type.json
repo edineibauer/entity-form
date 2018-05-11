@@ -42,6 +42,16 @@
       "input": "textarea"
     }
   },
+  "string": {
+    "format": "string",
+    "type": "varchar",
+    "nome": "Informação",
+    "size": 8192,
+    "key": "information",
+    "form": {
+      "input": "span"
+    }
+  },
   "html": {
     "format": "html",
     "type": "text",

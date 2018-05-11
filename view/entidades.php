@@ -108,6 +108,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <option value="color">Cor</option>
                             <option value="source">Arquivo</option>
                             <option value="sources">Arquivos Multiplos</option>
+                            <option value="string">Informação</option>
                         </select>
                     </div>
                     <div class="col s12 m4 padding-small">
@@ -149,7 +150,6 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         </select>
                     </div>
                 </div>
-
 
                 <div class="col s12">
                     <div class="col s12 m8 l8 padding-small hide" id="nomeAttr">
