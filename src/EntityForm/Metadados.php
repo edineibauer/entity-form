@@ -19,6 +19,11 @@ class Metadados
             if (!$keepId)
                 unset($data[0]);
 
+            foreach ($data as $i => $datum) {
+                if($datum['format'] === 'string')
+                    unset($data[$i]);
+            }
+
             return Helper::convertStringToValueArray($data);
         }
 

@@ -16,6 +16,18 @@ class EntityCreateEntityDatabase extends EntityDatabase
 
         if ($data = Metadados::getDicionario($entity)) {
 
+            //remove Strings from metadados para não salvar no banco
+            foreach ($data as $i => $datum) {
+                if($datum['format'] === 'string')
+                    unset($data[$i]);
+            }
+
+            //remove Strings from metadados para não salvar no banco
+            foreach ($dados as $i => $dadosm) {
+                if($dadosm['format'] === 'string')
+                    unset($dados[$i]);
+            }
+
             $sql = new \ConnCrud\SqlCommand();
             $sql->exeCommand("SELECT 1 FROM " . PRE . "{$entity} LIMIT 1");
             if (!$sql->getErro() && !empty($dados['dicionario']))
