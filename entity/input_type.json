@@ -461,7 +461,7 @@
     "size": 16,
     "unique": true,
     "allow": {
-      "regex": "/^\\w{5,16}$/",
+      "regex": "/^.{5,16}$/",
       "validate": "rg"
     },
     "form": {
