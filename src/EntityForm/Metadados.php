@@ -11,7 +11,7 @@ class Metadados
      * @param mixed $keepId
      * @return mixed
      */
-    public static function getDicionario($entity, $keepId = null)
+    public static function getDicionario($entity, $keepId = null, $keepStrings = null)
     {
         $path = PATH_HOME . "entity/cache/" . $entity . '.json';
         $data = file_exists($path) ? json_decode(file_get_contents($path), true) : null;
@@ -19,9 +19,11 @@ class Metadados
             if (!$keepId)
                 unset($data[0]);
 
-            foreach ($data as $i => $datum) {
-                if($datum['format'] === 'string')
-                    unset($data[$i]);
+            if(!$keepStrings) {
+                foreach ($data as $i => $datum) {
+                    if ($datum['format'] === 'string')
+                        unset($data[$i]);
+                }
             }
 
             return Helper::convertStringToValueArray($data);

@@ -25,7 +25,7 @@ class Dicionario
     {
         $this->entity = $entity;
         $this->defaultMeta = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true);
-        if ($dicEntity = Metadados::getDicionario($this->entity, true)) {
+        if ($dicEntity = Metadados::getDicionario($this->entity, true, true)) {
             foreach ($dicEntity as $i => $item) {
                 $item['indice'] = $i;
                 $this->dicionario[$i] = new Meta($item, $this->defaultMeta['default']);
@@ -145,7 +145,7 @@ class Dicionario
     {
         $data = null;
         foreach ($this->dicionario as $meta) {
-            if (!in_array($meta->getKey(), ["extend_mult", "list_mult", "selecao_mult"]))
+            if (!in_array($meta->getKey(), ["extend_mult", "list_mult", "selecao_mult", "information"]))
                 $data[$meta->getColumn()] = $meta->getValue();
         }
         return $data;
