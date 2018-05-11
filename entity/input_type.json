@@ -458,10 +458,10 @@
     "format": "rg",
     "type": "varchar",
     "nome": "RG",
-    "size": 15,
+    "size": 16,
     "unique": true,
     "allow": {
-      "regex": "/^\\d{5,15}$/",
+      "regex": "/^\\w{5,16}$/",
       "validate": "rg"
     },
     "form": {
