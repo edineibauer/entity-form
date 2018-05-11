@@ -2,6 +2,8 @@
 
 namespace EntityForm;
 
+use ConnCrud\Read;
+
 class EntityCreateEntityDatabase extends EntityDatabase
 {
     /**
@@ -11,31 +13,41 @@ class EntityCreateEntityDatabase extends EntityDatabase
     public function __construct(string $entity, array $dados)
     {
         parent::__construct($entity);
-        $data = Metadados::getDicionario($entity);
 
-        if ($data) {
-            if (isset($dados['dicionario']) && !empty($dados['dicionario'])) {
+        if ($data = Metadados::getDicionario($entity)) {
+
+            $sql = new \ConnCrud\SqlCommand();
+            $sql->exeCommand("SELECT 1 FROM " . PRE . "{$entity} LIMIT 1");
+            if (!$sql->getErro() && !empty($dados['dicionario']))
                 new EntityUpdateEntityDatabase($entity, $dados['dicionario']);
-            } else {
-                $data = $this->checkCreateMultSelectField($data);
-                $this->prepareCommandToCreateTable($entity, $data);
-                $this->createKeys($entity, $data);
-            }
+            elseif ($sql->getErro())
+                $this->createTableFromEntityJson($entity, $data);
         }
+    }
+
+    /**
+     * @param string $entity
+     * @param array $data
+     */
+    private function createTableFromEntityJson(string $entity, array $data)
+    {
+        $data = $this->checkCreateMultSelectField($data);
+        $this->prepareCommandToCreateTable($entity, $data);
+        $this->createKeys($entity, $data);
     }
 
     /**
      * @param array $dicionario
      * @return array
      */
-    private function checkCreateMultSelectField(array $dicionario) :array
+    private function checkCreateMultSelectField(array $dicionario): array
     {
         foreach ($dicionario as $dic) {
-            if(in_array($dic['key'], ["list_mult", "extend_mult", "selecao_mult", "list", "extend", "selecao"]) && !empty($dic['select'])) {
+            if (in_array($dic['key'], ["list_mult", "extend_mult", "selecao_mult", "list", "extend", "selecao"]) && !empty($dic['select'])) {
                 $relDic = Metadados::getDicionario($dic['relation']);
                 foreach ($dic['select'] as $select) {
                     foreach ($relDic as $item) {
-                        if($item['column'] === $select) {
+                        if ($item['column'] === $select) {
                             $ret = parent::getSelecaoUnique($dic, $select);
                             $dicionario[$ret[0]] = $ret[1];
                         }
@@ -81,7 +93,7 @@ class EntityCreateEntityDatabase extends EntityDatabase
                     parent::createIndexFk($entity, $dados['column'], $dados['relation'], "", $dados['key']);
                 else
                     parent::createRelationalTable($dados);
-            } elseif($dados['key'] === "publisher") {
+            } elseif ($dados['key'] === "publisher") {
                 parent::createIndexFk($entity, $dados['column'], "usuarios", "", "publisher");
             }
         }
