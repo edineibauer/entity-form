@@ -45,10 +45,17 @@ abstract class EntityDatabase
 
     protected function prepareSqlColumn($dados)
     {
-        if(defined('JSON_SUPPORT') && !JSON_SUPPORT && $dados['type'] === "json") {
+        if (!defined("JSON_SUPPORT")) {
+            $value = $this->createJsonConstant();
+            if (!$value && $dados['type'] === "json") {
+                $dados['type'] = "varchar";
+                $dados['size'] = 8192;
+            }
+        } elseif (!JSON_SUPPORT && $dados['type'] === "json") {
             $dados['type'] = "varchar";
             $dados['size'] = 8192;
         }
+
         $type = in_array($dados['type'], ["float", "real", "decimal", "double"]) ? "double" : $dados['type'];
         return "`{$dados['column']}` {$type} "
             . (!empty($dados['size']) ? "({$dados['size']}) " : ($dados['type'] === "varchar" ? "(254) " : " "))
@@ -56,12 +63,40 @@ abstract class EntityDatabase
             . ($dados['default'] !== false && !empty($dados['default']) ? $this->prepareDefault($dados['default']) : ($dados['default'] !== false ? "DEFAULT NULL" : ""));
     }
 
+    /**
+     * @return bool
+     */
+    private function createJsonConstant() :bool
+    {
+        $sql = new SqlCommand();
+        $sql->exeCommand("CREATE TABLE IF NOT EXISTS `testJsonSupport` (`json_test` json DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        $field = "JSON_SUPPORT";
+        $value = !$sql->getResult();
+
+        $file = file_get_contents(PATH_HOME . "_config/config.php");
+        if (preg_match("/\'{$field}\',/i", $file)) {
+            $valueOld = explode("'", explode("('{$field}', '", $file)[1])[0];
+            $file = str_replace("'{$field}', '{$valueOld}'", "'{$field}', '{$value}'", $file);
+        } else {
+            $file = str_replace("<?php", "<?php\ndefine('{$field}', '{$value}');", $file);
+        }
+
+        $f = fopen(PATH_HOME . "_config/config.php", "w+");
+        fwrite($f, $file);
+        fclose($f);
+
+        if ($value)
+            $sql->exeCommand("DROP TABLE `testJsonSupport`");
+
+        return $value;
+    }
+
     protected function getSelecaoUnique(array $data, string $select)
     {
         $inputType = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/input_type.json"), true);
         $dic = Metadados::getDicionario($data['relation']);
         foreach ($dic as $item) {
-            if($item['column'] === $select){
+            if ($item['column'] === $select) {
                 $dicionario = array_replace_recursive($inputType['default'], $inputType['selecao']);
                 $dicionario["nome"] = $select;
                 $dicionario["column"] = Check::name($select) . '__' . Check::name($data['column']);
@@ -80,7 +115,7 @@ abstract class EntityDatabase
     {
         $exe = new SqlCommand();
         $exe->exeCommand($sql);
-        if($exe->getErro()) {
+        if ($exe->getErro()) {
             var_dump($sql);
             var_dump($exe->getErro());
         }
