@@ -63,34 +63,6 @@ abstract class EntityDatabase
             . ($dados['default'] !== false && !empty($dados['default']) ? $this->prepareDefault($dados['default']) : ($dados['default'] !== false ? "DEFAULT NULL" : ""));
     }
 
-    /**
-     * @return bool
-     */
-    private function createJsonConstant() :bool
-    {
-        $sql = new SqlCommand();
-        $sql->exeCommand("CREATE TABLE IF NOT EXISTS `testJsonSupport` (`json_test` json DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8");
-        $field = "JSON_SUPPORT";
-        $value = !$sql->getResult();
-
-        $file = file_get_contents(PATH_HOME . "_config/config.php");
-        if (preg_match("/\'{$field}\',/i", $file)) {
-            $valueOld = explode("'", explode("('{$field}', '", $file)[1])[0];
-            $file = str_replace("'{$field}', '{$valueOld}'", "'{$field}', '{$value}'", $file);
-        } else {
-            $file = str_replace("<?php", "<?php\ndefine('{$field}', '{$value}');", $file);
-        }
-
-        $f = fopen(PATH_HOME . "_config/config.php", "w+");
-        fwrite($f, $file);
-        fclose($f);
-
-        if ($value)
-            $sql->exeCommand("DROP TABLE `testJsonSupport`");
-
-        return $value;
-    }
-
     protected function getSelecaoUnique(array $data, string $select)
     {
         $inputType = json_decode(file_get_contents(PATH_HOME . "vendor/conn/entity-form/entity/input_type.json"), true);
@@ -130,5 +102,33 @@ abstract class EntityDatabase
             return "DEFAULT {$default}";
 
         return "DEFAULT '{$default}'";
+    }
+
+    /**
+     * @return bool
+     */
+    private function createJsonConstant() :bool
+    {
+        $sql = new SqlCommand();
+        $sql->exeCommand("CREATE TABLE IF NOT EXISTS `testJsonSupport` (`json_test` json DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        $field = "JSON_SUPPORT";
+        $value = !$sql->getResult();
+
+        $file = file_get_contents(PATH_HOME . "_config/config.php");
+        if (preg_match("/\'{$field}\',/i", $file)) {
+            $valueOld = explode("'", explode("('{$field}', '", $file)[1])[0];
+            $file = str_replace("'{$field}', '{$valueOld}'", "'{$field}', '{$value}'", $file);
+        } else {
+            $file = str_replace("<?php", "<?php\ndefine('{$field}', '{$value}');", $file);
+        }
+
+        $f = fopen(PATH_HOME . "_config/config.php", "w+");
+        fwrite($f, $file);
+        fclose($f);
+
+        if ($value)
+            $sql->exeCommand("DROP TABLE `testJsonSupport`");
+
+        return $value;
     }
 }
