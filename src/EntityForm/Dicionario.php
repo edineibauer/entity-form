@@ -386,8 +386,6 @@ class Dicionario
     private function createTableData()
     {
         if (!$this->getError()) {
-            ElasticSearch::add($this->dicionario);
-
             $create = new Create();
             $dados = $this->getDataOnlyEntity();
             unset($dados['id']);
@@ -396,6 +394,7 @@ class Dicionario
                 $this->search(0)->setError($create->getErro());
             } elseif ($create->getResult()) {
                 $this->search(0)->setValue((int)$create->getResult(), false);
+//                ElasticSearch::add($this->dicionario);
                 new React("create", $this->entity, array_merge(["id" => $create->getResult()], $dados));
             }
         }

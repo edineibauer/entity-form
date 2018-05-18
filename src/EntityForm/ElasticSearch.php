@@ -8,11 +8,6 @@ class ElasticSearch
 {
     private static $client;
 
-    public function __construct()
-    {
-        self::$client = ClientBuilder::create()->build();
-    }
-
     /**
      * @param Dicionario $dicionario
      */
@@ -23,7 +18,14 @@ class ElasticSearch
             $data[$meta->getColumn()] = $meta->getValue();
 
         try {
-            self::$client->index($data);
+            $client = ClientBuilder::create()->build();
+            $params = [
+                'index' => DATABASE,
+                'type' => $dicionario->getEntity(),
+                'id' => $data['id'],
+                'body' => $data
+            ];
+            $client->index($params);
         } catch (\Exception $e) {
             var_dump($e);
         }

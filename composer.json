@@ -14,8 +14,7 @@
   "require": {
     "php": "^7.0",
     "conn/config": "dev-master",
-    "conn/conn-crud": "dev-master",
-    "elasticsearch/elasticsearch": "~6.0"
+    "conn/conn-crud": "dev-master"
   },
   "autoload": {
     "psr-0": {
