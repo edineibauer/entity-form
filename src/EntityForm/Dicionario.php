@@ -361,6 +361,7 @@ class Dicionario
     {
         $id = $this->search(0)->getValue();
         if (Validate::update($this->entity, $id)) {
+
             $up = new Update();
             $dados = $this->getDataOnlyEntity();
             foreach ($this->dicionario as $meta) {
@@ -385,6 +386,8 @@ class Dicionario
     private function createTableData()
     {
         if (!$this->getError()) {
+            ElasticSearch::add($this->dicionario);
+
             $create = new Create();
             $dados = $this->getDataOnlyEntity();
             unset($dados['id']);
