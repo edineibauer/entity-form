@@ -4,7 +4,7 @@ namespace EntityForm;
 
 use Elasticsearch\ClientBuilder;
 
-trait ElasticSearch
+class ElasticSearch
 {
     private static $client;
 
