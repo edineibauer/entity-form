@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 if (0 < $_FILES['file']['error']) {
     echo 'Error: ' . $_FILES['file']['error'] . '<br>';
@@ -22,3 +23,6 @@ if (0 < $_FILES['file']['error']) {
         echo "existe";
     }
 }
+
+$data['data'] = ob_get_contents();
+ob_end_clean();

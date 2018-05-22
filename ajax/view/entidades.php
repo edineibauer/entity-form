@@ -1,8 +1,9 @@
 <?php
 if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $_SESSION['userlogin']['nivel'] !== "1") {
-    header("Location: " . HOME . "login");
-
+    $data['response'] = 3;
+    $data['data'] = HOME . "login";
 } else {
+    ob_start();
     ?>
     <ul id="nav-entity" class="color-text-white z-depth-4">
         <div class="row color-blue">
@@ -544,4 +545,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
         <div class="clearfix"><br></div>
     </div>
     <?php
+
+    $data['data'] = ob_get_contents();
+    ob_end_clean();
 }
