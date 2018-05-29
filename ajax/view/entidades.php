@@ -36,7 +36,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
         </ul>
     </ul>
 
-    <form class="col s12 m4 z-depth-2" id="nav-menu space-header">
+    <form class="col s12 m4 z-depth-2 space-header" id="nav-menu">
         <header class="row">
             <div class="panel">
                 <div class="col s12 padding-tiny">
