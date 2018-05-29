@@ -5,7 +5,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
 } else {
     ob_start();
     ?>
-    <ul id="nav-entity" class="color-text-white z-depth-4">
+    <ul id="nav-entity" class="color-text-white z-depth-4 space-header">
         <div class="row color-blue">
             <div class="panel">
                 <div class="col s7 upper padding-medium">
@@ -36,7 +36,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
         </ul>
     </ul>
 
-    <form class="col s12 m4 z-depth-2" id="nav-menu">
+    <form class="col s12 m4 z-depth-2" id="nav-menu space-header">
         <header class="row">
             <div class="panel">
                 <div class="col s12 padding-tiny">
@@ -88,7 +88,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
         </div>
     </form>
 
-    <div id="main" class="row color-gray-light">
+    <div id="main" class="row color-gray-light space-header">
         <div class="col s12 hide" id="requireNameEntity">
             <div class="card padding-medium">
                 <div class="row">
@@ -546,6 +546,6 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
     </div>
     <?php
 
-    $data['data'] = ob_get_contents();
+    $data['data']['content'] = ob_get_contents();
     ob_end_clean();
 }
