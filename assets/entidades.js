@@ -638,4 +638,5 @@ $("#content").off("keyup change focus", "#entityName").on("keyup change focus", 
 
 $(function () {
     $("#space-attr-entity").css("height", $(document).height() - $(".header").height() - 16 - 72.3 - 32);
+    $("#entity-space").css("height", $(document).height() - $(".header").height() - 16 - 72.3);
 });
