@@ -470,147 +470,6 @@ function checkEntityMultipleFields(values) {
     });
 }
 
-/*
-
-SLIDE
-
-function changeLeftRange($this) {
-    var value = Math.pow(2, parseInt($this.val()));
-    var left = ((((parseInt($this.val()) * 100) / parseInt($this.attr("max"))) * ($this.width() - 27)) / 100);
-    left += (value < 10 ? 9 : (value < 100 ? 5 : (value < 1000 ? 1 : (value < 10000 ? -3 : (value < 100000 ? -7 : (value < 1000000 ? -11 : -15))))));
-    $this.siblings(".tempRangeInfo").css("left", left + "px").text(value);
-}
-
-*/
-
-$("input[type=range]").mousedown(function () {
-    changeLeftRange($(this));
-    $(this).mousemove(function () {
-        changeLeftRange($(this));
-    });
-}).mouseup(function () {
-    $(this).off("mousemove");
-}).change(function () {
-    changeLeftRange($(this));
-});
-
-/* EVENTS */
-
-$("#entityName").on("keyup change focus", function () {
-    if ($(this).val().length > 2)
-        $("#requireNameEntity").removeClass("hide");
-    else
-        $("#requireNameEntity").addClass("hide");
-});
-
-$("#relation").change(function () {
-    checkFieldsOpenOrClose();
-    checkEntityMultipleFields();
-    checkFilterToApply();
-});
-
-$(".selectInput").change(function () {
-    setFormat($(this).val());
-    applyAttr(assignObject(defaults.default, defaults[getType()]));
-    checkFieldsOpenOrClose();
-});
-
-$("#nome").on("keyup change", function () {
-    checkFieldsOpenOrClose($(this).val());
-});
-
-$("#default_custom").change(function () {
-    if ($(this).is(":checked")) {
-        $("#default_container").removeClass("hide");
-        $("#default").focus();
-        if ($("#unique").is(":checked"))
-            $("#unique").trigger("click");
-    } else {
-        $("#default_container").addClass("hide");
-    }
-});
-
-$("#size_custom").change(function () {
-    if ($(this).is(":checked")) {
-        $("#size_container").removeClass("hide");
-        $("#size").focus();
-    } else {
-        $("#size_container").addClass("hide");
-    }
-});
-
-$("#unique").change(function () {
-    if ($(this).is(":checked") && $("#default_custom").is(":checked")) $("#default_custom").trigger("click");
-});
-
-$("#form").change(function () {
-    if ($(this).is(":checked"))
-        $(".form_body").removeClass("hide");
-    else
-        $(".form_body").addClass("hide");
-});
-
-$(".file-format").change(function () {
-    if ($(this).is(":checked"))
-        $("#formato-" + $(this).attr("id")).removeClass("hide");
-    else
-        $("#formato-" + $(this).attr("id")).addClass("hide");
-}).click(function () {
-    var $this = $(this);
-    setTimeout(function () {
-        if ($this.prop("checked") && !$("#all-" + $this.attr("id")).prop("checked"))
-            $("#all-" + $this.attr("id")).trigger("click");
-    }, 50);
-});
-
-$(".allformat").change(function () {
-    $("." + $(this).attr("rel") + "-format").prop("checked", $(this).is(":checked"));
-});
-
-$(".oneformat").change(function () {
-    if (!$(this).is(":checked")) {
-        $("#all-" + $(this).attr("rel")).prop("checked", false);
-    } else {
-        var all = true;
-        $.each($("." + $(this).attr("rel") + "-format"), function () {
-            if (all && !$(this).is(":checked"))
-                all = false;
-        });
-        $("#all-" + $(this).attr("rel")).prop("checked", all);
-    }
-});
-
-$("#colm").change(function () {
-    var $coll = $("#coll");
-    var $cols = $("#cols");
-    var value = parseInt($(this).val());
-    if (parseInt($coll.val()) > value) {
-        $coll.find("option").removeAttr("selected");
-        $coll.find("option[value=" + $(this).val() + "]").attr("selected", "selected");
-    }
-    if (parseInt($cols.val()) < value) {
-        $cols.find("option").removeAttr("selected");
-        $cols.find("option[value=" + $(this).val() + "]").attr("selected", "selected");
-    }
-});
-
-$("#requireListFilter").off("change", ".filter").on("change", ".filter", function () {
-    var $this = $(this);
-    var dic = null;
-    var column = $this.val();
-    var entity = $("#relation").val();
-
-    $this.removeClass("m3").addClass("m6").siblings(".filter_column").remove();
-    $.each(dicionarios[entity], function (i, e) {
-        if (e.column === column) {
-            if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(e.key) > -1)
-                addColumnFilter($this, e.relation, "");
-            return false;
-        }
-    });
-
-});
-
 function addColumnFilter($this, entity, select) {
     $this.removeClass("m6").addClass("m3");
     var $column = $('<select class="filter_column col s12 m3"></select>').insertAfter($this);
@@ -650,6 +509,132 @@ function getType() {
     });
     return result;
 }
+
+/*
+
+SLIDE
+
+function changeLeftRange($this) {
+    var value = Math.pow(2, parseInt($this.val()));
+    var left = ((((parseInt($this.val()) * 100) / parseInt($this.attr("max"))) * ($this.width() - 27)) / 100);
+    left += (value < 10 ? 9 : (value < 100 ? 5 : (value < 1000 ? 1 : (value < 10000 ? -3 : (value < 100000 ? -7 : (value < 1000000 ? -11 : -15))))));
+    $this.siblings(".tempRangeInfo").css("left", left + "px").text(value);
+}
+
+$("#content").off("mousedown", input[type=range]).on("mousedown", "input[type=range]", function () {
+    changeLeftRange($(this));
+    $(this).mousemove(function () {
+        changeLeftRange($(this));
+    });
+}).mouseup(function () {
+    $(this).off("mousemove");
+}).change(function () {
+    changeLeftRange($(this));
+});*/
+
+/* EVENTS */
+
+$("#content").off("keyup change focus", "#entityName").on("keyup change focus", "#entityName", function () {
+    if ($(this).val().length > 2)
+        $("#requireNameEntity").removeClass("hide");
+    else
+        $("#requireNameEntity").addClass("hide");
+
+}).off("change", "#relation").on("change", "#relation", function () {
+    checkFieldsOpenOrClose();
+    checkEntityMultipleFields();
+    checkFilterToApply();
+
+}).off("change", ".selectInput").on("change", ".selectInput", function () {
+    setFormat($(this).val());
+    applyAttr(assignObject(defaults.default, defaults[getType()]));
+    checkFieldsOpenOrClose();
+
+}).off("keyup change", "#nome").on("keyup change", "#nome", function () {
+    checkFieldsOpenOrClose($(this).val());
+
+}).off("change", "#default_custom").on("change", "#default_custom", function () {
+    if ($(this).is(":checked")) {
+        $("#default_container").removeClass("hide");
+        $("#default").focus();
+        if ($("#unique").is(":checked"))
+            $("#unique").trigger("click");
+    } else {
+        $("#default_container").addClass("hide");
+    }
+
+}).off("change", "#size_custom").on("change", "#size_custom", function () {
+    if ($(this).is(":checked")) {
+        $("#size_container").removeClass("hide");
+        $("#size").focus();
+    } else {
+        $("#size_container").addClass("hide");
+    }
+
+}).off("change", "#unique").on("change", "#unique", function () {
+    if ($(this).is(":checked") && $("#default_custom").is(":checked")) $("#default_custom").trigger("click");
+
+}).off("change", "#form").on("change", "#form", function () {
+    if ($(this).is(":checked"))
+        $(".form_body").removeClass("hide");
+    else
+        $(".form_body").addClass("hide");
+
+}).off("change", ".file-format").on("change", ".file-format", function () {
+    if ($(this).is(":checked"))
+        $("#formato-" + $(this).attr("id")).removeClass("hide");
+    else
+        $("#formato-" + $(this).attr("id")).addClass("hide");
+
+}).off("click", ".file-format").on("click", ".file-format", function () {
+    var $this = $(this);
+    setTimeout(function () {
+        if ($this.prop("checked") && !$("#all-" + $this.attr("id")).prop("checked"))
+            $("#all-" + $this.attr("id")).trigger("click");
+    }, 50);
+
+}).off("change", ".allformat").on("change", ".allformat", function () {
+    $("." + $(this).attr("rel") + "-format").prop("checked", $(this).is(":checked"));
+
+}).off("change", ".oneformat").on("change", ".oneformat", function () {
+    if (!$(this).is(":checked")) {
+        $("#all-" + $(this).attr("rel")).prop("checked", false);
+    } else {
+        var all = true;
+        $.each($("." + $(this).attr("rel") + "-format"), function () {
+            if (all && !$(this).is(":checked"))
+                all = false;
+        });
+        $("#all-" + $(this).attr("rel")).prop("checked", all);
+    }
+
+}).off("change", "#colm").on("change", "#colm", function () {
+    var $coll = $("#coll");
+    var $cols = $("#cols");
+    var value = parseInt($(this).val());
+    if (parseInt($coll.val()) > value) {
+        $coll.find("option").removeAttr("selected");
+        $coll.find("option[value=" + $(this).val() + "]").attr("selected", "selected");
+    }
+    if (parseInt($cols.val()) < value) {
+        $cols.find("option").removeAttr("selected");
+        $cols.find("option[value=" + $(this).val() + "]").attr("selected", "selected");
+    }
+
+}).off("change", ".filter").on("change", ".filter", function () {
+    var $this = $(this);
+    var column = $this.val();
+    var entity = $("#relation").val();
+
+    $this.removeClass("m3").addClass("m6").siblings(".filter_column").remove();
+    $.each(dicionarios[entity], function (i, e) {
+        if (e.column === column) {
+            if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(e.key) > -1)
+                addColumnFilter($this, e.relation, "");
+            return false;
+        }
+    });
+});
 
 $(function () {
     $("#space-attr-entity").css("height", $(document).height() - $(".header").height() - 16 - 72.3 - 32);
