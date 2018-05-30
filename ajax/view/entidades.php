@@ -541,6 +541,8 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     <div class="clearfix"></div>
                 </div>
             </li>
+
+            <div class="clearfix"><br><br><br><br></div>
         </div>
         <div class="clearfix"><br></div>
     </div>
