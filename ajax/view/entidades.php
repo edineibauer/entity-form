@@ -24,12 +24,12 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             <div class="col s12 hide" id="tpl-entity">
                 <div class="col s7 padding-small">__$__</div>
                 <div class="padding-small col s5 align-right">
-                    <button class="color-text-white radius pointer right padding-tiny btn-flat" onclick="removeEntity('__$__')">
-                        <i class="material-icons white-text font-medium">delete</i>
+                    <button class="color-text-white radius pointer right padding-tiny btn-flat" style="height: 26px;" onclick="removeEntity('__$__')">
+                        <i class="material-icons white-text font-medium" style="margin-top: 4px;">delete</i>
                     </button>
-                    <button class="color-text-white radius pointer right padding-tiny btn-flat" style="margin-right: 5px;"
+                    <button class="color-text-white radius pointer right padding-tiny btn-flat" style="margin-right: 5px;height: 26px;"
                        onclick="entityEdit('__$__')">
-                        <i class="material-icons white-text font-medium">edit</i>
+                        <i class="material-icons white-text font-medium" style="margin-top: 4px;">edit</i>
                     </button>
                 </div>
             </div>
@@ -79,11 +79,11 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
 
             <li class="col s12 hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;">
                 __$1__
-                <button class=" btn-flat pointer right color-text-white radius" onclick="deleteAttr(__$0__)"><i
+                <button class="btn-flat pointer right color-text-white radius" onclick="deleteAttr(__$0__)"><i
                             class="material-icons right font-large">delete</i></button>
-                <button class="waves-effect waves-red btn-flat pointer right" style="margin-right: 10px;"
+                <button class="btn-flat pointer right color-text-white radius" style="margin-right: 10px;"
                    onclick="editAttr(__$0__)">
-                    <i class="material-icons right">edit</i></button>
+                    <i class="material-icons right font-large">edit</i></button>
             </li>
         </div>
     </form>
