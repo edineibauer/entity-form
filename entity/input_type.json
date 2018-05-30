@@ -433,6 +433,7 @@
     "nome": "CPF",
     "size": 11,
     "unique": true,
+    "default": false,
     "allow": {
       "validate": "cpf"
     },
@@ -446,6 +447,7 @@
     "nome": "Inscrição Estadual",
     "size": 12,
     "unique": true,
+    "default": false,
     "allow": {
       "regex": "/^\\d{12}$/",
       "validate": "ie"
@@ -460,6 +462,7 @@
     "nome": "RG",
     "size": 16,
     "unique": true,
+    "default": false,
     "allow": {
       "regex": "/^.{5,16}$/",
       "validate": "rg"
@@ -474,6 +477,7 @@
     "nome": "CNPJ",
     "size": 14,
     "unique": true,
+    "default": false,
     "allow": {
       "validate": "cnpj"
     },
@@ -501,6 +505,7 @@
     "nome": "Telefone",
     "size": 17,
     "unique": true,
+    "default": false,
     "allow": {
       "regex": "/^\\d{10,14}$/"
     },
