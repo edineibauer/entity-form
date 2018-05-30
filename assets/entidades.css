@@ -33,3 +33,8 @@
     overflow-x: hidden;
     max-height: 661px;
 }
+
+#space-attr-entity {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

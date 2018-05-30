@@ -650,3 +650,7 @@ function getType() {
     });
     return result;
 }
+
+$(function () {
+    $("#space-attr-entity").css("height", $(document).height() - $(".header").height() - 16 - 72.3 - 32);
+});

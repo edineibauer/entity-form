@@ -54,7 +54,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
         </header>
         <div class="row"></div>
-        <div class="panel">
+        <div class="panel" id="space-attr-entity">
             <div class="row">
                 <label class="col s12">
                     <span>Nome da Entidade</span>
