@@ -55,6 +55,8 @@ class Dicionario
                     $dataRead[$meta->getColumn()] = $this->readMultValues($meta, $dataRead['id']);
 
                 $this->setDataArray($dataRead);
+            } else {
+                $this->search(0)->setError("Id não existe");
             }
 
         } elseif (is_object($data) && get_class($data) === "EntityForm\Meta" && !empty($data->getValue())) {
@@ -97,21 +99,21 @@ class Dicionario
 
         $data = null;
         foreach ($this->dicionario as $meta) {
-            if($meta->getFormat() === "source" && preg_match('/"type": "image\//i', $meta->getValue())) {
+            if ($meta->getFormat() === "source" && preg_match('/"type": "image\//i', $meta->getValue())) {
                 $data[$meta->getColumn()] = Helper::convertImageJson($meta->getValue());
-            } elseif($meta->getFormat() === "source") {
+            } elseif ($meta->getFormat() === "source") {
                 $data[$meta->getColumn()] = json_decode($meta->getValue(), true)[0];
-            } elseif(in_array($meta->getKey(), ["list", "selecao", "extend"])) {
+            } elseif (in_array($meta->getKey(), ["list", "selecao", "extend"])) {
                 $data[$meta->getColumn()] = Entity::read($meta->getRelation(), $meta->getValue());
-            } elseif(in_array($meta->getKey(), ["list_mult", "selecao_mult", "extend_mult"])) {
-                if(!empty($meta->getValue())) {
+            } elseif (in_array($meta->getKey(), ["list_mult", "selecao_mult", "extend_mult"])) {
+                if (!empty($meta->getValue())) {
                     $lista = [];
                     foreach (json_decode($meta->getValue(), true) as $id) {
                         $lista[] = Entity::read($meta->getRelation(), $id);
                     }
                     $data[$meta->getColumn()] = $lista;
                 }
-            } elseif($meta->getType() === "json") {
+            } elseif ($meta->getType() === "json") {
                 $data[$meta->getColumn()] = json_decode($meta->getValue(), true);
             } else {
                 $data[$meta->getColumn()] = $meta->getValue();
@@ -345,23 +347,27 @@ class Dicionario
      */
     public function save()
     {
-        if (!empty($this->search(0)->getValue()))
+        $id = $this->search(0)->getValue();
+        if (!$this->getError() || !empty($id))
+            $this->saveAssociacaoSimples();
+
+        if (!empty($id))
             $this->updateTableData();
-        else
+        elseif (!$this->getError())
             $this->createTableData();
 
-        if (!$this->info)
-            $this->info = Metadados::getInfo($this->entity);
+        if (!$this->getError() || !empty($id)) {
+            if (!$this->info)
+                $this->info = Metadados::getInfo($this->entity);
 
-        if (!empty($this->search(0)->getValue()))
             $this->createRelationalData();
+        }
     }
 
     private function updateTableData()
     {
         $id = $this->search(0)->getValue();
         if (Validate::update($this->entity, $id)) {
-
             $up = new Update();
             $dados = $this->getDataOnlyEntity();
             foreach ($this->dicionario as $meta) {
@@ -385,25 +391,43 @@ class Dicionario
      */
     private function createTableData()
     {
-        if (!$this->getError()) {
-            $create = new Create();
-            $dados = $this->getDataOnlyEntity();
-            unset($dados['id']);
-            $create->exeCreate($this->entity, $dados);
-            if ($create->getErro()) {
-                $this->search(0)->setError($create->getErro());
-            } elseif ($create->getResult()) {
-                $this->search(0)->setValue((int)$create->getResult(), false);
-//                ElasticSearch::add($this->dicionario);
-                new React("create", $this->entity, array_merge(["id" => $create->getResult()], $dados));
+        $create = new Create();
+        $dados = $this->getDataOnlyEntity();
+        unset($dados['id']);
+        $create->exeCreate($this->entity, $dados);
+        if ($create->getErro()) {
+            $this->search(0)->setError($create->getErro());
+        } elseif ($create->getResult()) {
+            $this->search(0)->setValue((int)$create->getResult(), false);
+            new React("create", $this->entity, array_merge(["id" => $create->getResult()], $dados));
+        }
+    }
+
+    private function saveAssociacaoSimples()
+    {
+        if (!$this->info)
+            $this->info = Metadados::getInfo($this->entity);
+
+        foreach (["extend", "list", "selecao"] as $e) {
+            if (!empty($this->info[$e])) {
+                foreach ($this->info[$e] as $simple) {
+                    $d = $this->dicionario[$simple]->getValue();
+                    if (is_object($d) && get_class($d) === "EntityForm\Dicionario") {
+                        $d->save();
+                        if (!empty($d->getError()))
+                            $this->dicionario[$simple]->setError($d->getError()[$d->getEntity()]);
+
+                        if(!empty($d->search(0)->getValue()))
+                            $this->dicionario[$simple]->setValue((int)$d->search(0)->getValue(), false);
+
+                    } elseif (!is_numeric($this->dicionario[$simple]->getValue())) {
+                        $this->dicionario[$simple]->setError("Valor não esperado");
+                    }
+                }
             }
         }
     }
 
-
-    /**
-     * @param Dicionario $d
-     */
     private function createRelationalData()
     {
         $create = new Create();

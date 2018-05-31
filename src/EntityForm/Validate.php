@@ -19,7 +19,7 @@ class Validate
     {
         if ($m->getColumn() !== "id") {
             self::checkDefaultSet($m);
-            if (!empty($m->getValue())) {
+            if (!empty($m->getValue()) && !in_array($m->getKey(), ["extend", "list", "selecao"])) {
                 self::convertValues($m);
                 self::checkType($m);
                 self::checkSize($m);
@@ -37,7 +37,7 @@ class Validate
     {
         if (Entity::checkPermission($d->getEntity(), $d->search(0)->getValue())) {
             foreach ($d->getDicionario() as $m) {
-                if ($m->getColumn() !== "id") {
+                if ($m->getColumn() !== "id" && !in_array($m->getKey(), ["extend", "list", "selecao"])) {
                     self::checkLink($d, $m);
                     self::checkUnique($d, $m);
 

@@ -49,9 +49,9 @@ class Meta
             $this->error = null;
 
         if (in_array($this->key, ["list_mult", "selecao_mult", "extend_mult"]))
-            $this->checkValueExtendList($value);
+            $this->checkValueAssociacaoMult($value);
         elseif (in_array($this->key, ["extend", "list", "selecao"]))
-            $this->checkValueExtend($value);
+            $this->checkValueAssociacaoSimples($value);
         elseif ($this->key === "publisher" && !empty($_SESSION['userlogin']))
             $this->value = $value ?? $_SESSION['userlogin']['id'];
         elseif ($this->key === "publisher")
@@ -449,13 +449,13 @@ class Meta
     /**
      * @param mixed $value
      */
-    private function checkValueExtend($value)
+    private function checkValueAssociacaoSimples($value)
     {
         if (!empty($value)) {
             if (is_numeric($value))
-                $this->value = $this->checkIdExist($value);
+                $this->value = $value;
             elseif (is_array($value) && !isset($value[0]))
-                $this->value = $this->getIdFromDataExtend($value);
+                $this->value = $this->getDicionarioFromDataExtend($value);
             else
                 $this->error = "valor não esperado";
         }
@@ -464,7 +464,7 @@ class Meta
     /**
      * @param mixed $value
      */
-    private function checkValueExtendList($value)
+    private function checkValueAssociacaoMult($value)
     {
         if (!empty($value)) {
             if (Check::isJson($value))
@@ -529,6 +529,23 @@ class Meta
         }
 
         return !empty($newList) ? json_encode($newList) : null;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    private function getDicionarioFromDataExtend(array $data)
+    {
+        $d = new Dicionario($this->relation);
+        $d->setData($data);
+        if ($d->getError()) {
+            $this->error = $d->getError()[$this->relation];
+            if (empty($d->search(0)->getValue()))
+                return null;
+        }
+
+        return $d;
     }
 
     /**
