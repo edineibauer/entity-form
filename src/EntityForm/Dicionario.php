@@ -26,9 +26,11 @@ class Dicionario
         $this->entity = $entity;
         $this->defaultMeta = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true);
         if ($dicEntity = Metadados::getDicionario($this->entity, true, true)) {
-            foreach ($dicEntity as $i => $item)
+            foreach ($dicEntity as $i => $item) {
+                if (!isset($item['indice']))
+                    $item['indice'] = $i;
                 $this->dicionario[$i] = new Meta($item, $this->defaultMeta['default']);
-
+            }
             $this->addSelectUniqueMeta();
         } else {
             echo "Entidade não existe";
@@ -416,7 +418,7 @@ class Dicionario
                         if (!empty($d->getError()))
                             $this->dicionario[$simple]->setError($d->getError()[$d->getEntity()]);
 
-                        if(!empty($d->search(0)->getValue()))
+                        if (!empty($d->search(0)->getValue()))
                             $this->dicionario[$simple]->setValue((int)$d->search(0)->getValue(), false);
 
                     } elseif (!is_numeric($this->dicionario[$simple]->getValue())) {
