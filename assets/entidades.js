@@ -1,5 +1,6 @@
 var entity = {};
 var dicionarios = {};
+var dicionariosNomes = {};
 var identifier = {};
 var defaults = {};
 var data = {
@@ -34,9 +35,11 @@ function readDicionarios() {
         $("#entity-space, #relation").html("");
 
         $.each(dicionarios, function (i, e) {
+            dicionariosNomes[i] = i;
             copy("#tpl-entity", "#entity-space", i, true);
             $("#relation").append("<option value='" + i + "'>" + i + "</option>");
         });
+        console.log(dicionariosNomes);
     });
 }
 
@@ -97,7 +100,8 @@ function saveEntity(silent) {
         post("entity-form", "save/entity", {
             "name": entity.name,
             "dados": dicionarios[entity.name],
-            "id": identifier[entity.name]
+            "id": identifier[entity.name],
+            "newName": $("#entityName").val()
         }, function (g) {
             toast("Salvo");
             if (g && typeof(silent) === "undefined")
