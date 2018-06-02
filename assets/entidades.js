@@ -66,16 +66,21 @@ function showEntity() {
     $("#entityName").val(entity.name).focus();
     $("#entityAttr").html("");
 
-    let c=1;
+    let maxIndice = 1;
     $.each(dicionarios[entity.name], function (i, e) {
+        if(maxIndice < e.indice)
+            maxIndice = e.indice;
+    });
+    maxIndice++;
+
+    for(c = 1; c < maxIndice; c++) {
         $.each(dicionarios[entity.name], function (i, f) {
-            if(f && f.indice == c) {
+            if (f && f.indice == c) {
                 copy("#tpl-attrEntity", "#entityAttr", [i, f.column], true);
                 return;
             }
         });
-        c++;
-    });
+    }
 
     showImport();
 }
