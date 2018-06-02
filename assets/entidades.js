@@ -39,7 +39,6 @@ function readDicionarios() {
             copy("#tpl-entity", "#entity-space", i, true);
             $("#relation").append("<option value='" + i + "'>" + i + "</option>");
         });
-        console.log(dicionariosNomes);
     });
 }
 
@@ -97,12 +96,18 @@ function showImport() {
 
 function saveEntity(silent) {
     if (checkSaveAttr() && entity.name.length > 2 && typeof(dicionarios[entity.name]) !== "undefined" && !$.isEmptyObject(dicionarios[entity.name])) {
+        let newName = slug($("#entityName").val(), "_");
         post("entity-form", "save/entity", {
             "name": entity.name,
             "dados": dicionarios[entity.name],
             "id": identifier[entity.name],
-            "newName": $("#entityName").val()
+            "newName": newName
         }, function (g) {
+            if(entity.name !== $("#entityName").val()) {
+                dicionarios[newName] = dicionarios[entity.name];
+                entity.name = newName;
+                console.log(dicionarios);
+            }
             toast("Salvo");
             if (g && typeof(silent) === "undefined")
                 readDicionarios()
