@@ -106,7 +106,6 @@ function saveEntity(silent) {
             if(entity.name !== $("#entityName").val()) {
                 dicionarios[newName] = dicionarios[entity.name];
                 entity.name = newName;
-                console.log(dicionarios);
             }
             toast("Salvo");
             if (g && typeof(silent) === "undefined")
