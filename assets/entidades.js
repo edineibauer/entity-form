@@ -124,11 +124,13 @@ function indiceChange(id, val) {
     let dic = dicionarios[entity.name];
     let $li = $(".list-att-" + id);
     let max = 0;
-    let nextIndice = dic[id].indice + val;
     let nextId = null;
+    let searchNextIndice = val > 0 ? 10000 : 0;
     $.each(dic, function (i, e) {
-        if(e.indice === nextIndice)
+        if((val > 0 && e.indice > dic[id].indice && e.indice < searchNextIndice) || (val < 0 && e.indice < dic[id].indice && e.indice > searchNextIndice)) {
+            searchNextIndice = e.indice;
             nextId = i;
+        }
         max++;
     });
 
@@ -137,7 +139,7 @@ function indiceChange(id, val) {
         return;
 
     dic[nextId].indice = dic[id].indice;
-    dic[id].indice = nextIndice;
+    dic[id].indice = searchNextIndice;
 
     //atualiza o html
     if (val > 0) {
