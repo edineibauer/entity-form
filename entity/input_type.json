@@ -11,7 +11,6 @@
     "default": null,
     "update": true,
     "relation": null,
-    "indice": 1,
     "allow": {
       "regex": null,
       "values": [],
@@ -28,7 +27,8 @@
     },
     "select": [],
     "filter": [],
-    "value": null
+    "value": null,
+    "indice": 1
   },
   "text": {
     "size": 127
