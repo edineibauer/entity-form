@@ -326,6 +326,13 @@
     "update": false,
     "form": false
   },
+  "owner": {
+    "format": "owner",
+    "type": "int",
+    "key": "publisher",
+    "update": false,
+    "form": false
+  },
   "source": {
     "format": "source",
     "type": "json",

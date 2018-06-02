@@ -160,6 +160,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <option value="selecao">Seleção</option>
                             <option value="selecao_mult">Seleção Multipla</option>
                             <option value="publisher">Autor</option>
+                            <option value="owner">Dono</option>
                         </select>
                     </div>
                 </div>
