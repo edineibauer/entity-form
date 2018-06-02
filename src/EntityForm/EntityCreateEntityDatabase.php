@@ -2,8 +2,6 @@
 
 namespace EntityForm;
 
-use ConnCrud\Read;
-
 class EntityCreateEntityDatabase extends EntityDatabase
 {
     /**
@@ -24,7 +22,7 @@ class EntityCreateEntityDatabase extends EntityDatabase
 
             //remove Strings from metadados para não salvar no banco
             foreach ($dados as $i => $dadosm) {
-                if($dadosm['format'] === 'string')
+                if(!empty($dadosm['format']) && $dadosm['format'] === 'string')
                     unset($dados[$i]);
             }
 

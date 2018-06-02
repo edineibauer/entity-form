@@ -1,5 +1,6 @@
 var entity = {};
 var dicionarios = {};
+var dicionarioIndice = {};
 var identifier = {};
 var defaults = {};
 var data = {
@@ -64,10 +65,17 @@ function entityEdit(id) {
 
 function showEntity() {
     $("#entityName").val(entity.name).focus();
-
     $("#entityAttr").html("");
-    $.each(dicionarios[entity.name], function (i, column) {
-        copy("#tpl-attrEntity", "#entityAttr", [i, column.column], true);
+
+    let c=1;
+    $.each(dicionarios[entity.name], function (i, e) {
+        $.each(dicionarios[entity.name], function (i, f) {
+            if(f && f.indice == c) {
+                copy("#tpl-attrEntity", "#entityAttr", [i, f.column], true);
+                return;
+            }
+        });
+        c++;
     });
 
     showImport();
@@ -88,9 +96,8 @@ function saveEntity(silent) {
             "id": identifier[entity.name]
         }, function (g) {
             toast("Salvo");
-            if (g && typeof(silent) === "undefined") {
+            if (g && typeof(silent) === "undefined")
                 readDicionarios()
-            }
         });
     }
 }
@@ -111,6 +118,33 @@ function resetAttr(id) {
         $(".selectInput, #relation").removeAttr("disabled").removeClass("disabled");
 
     applyAttr(getDefaultsInfo());
+}
+
+function indiceChange(id, val) {
+    let dic = dicionarios[entity.name];
+    let $li = $(".list-att-" + id);
+    let max = 0;
+    let nextIndice = dic[id].indice + val;
+    let nextId = null;
+    $.each(dic, function (i, e) {
+        if(e.indice === nextIndice)
+            nextId = i;
+        max++;
+    });
+
+    //retorna caso não tenha alteração
+    if (!nextId || (dic[id].indice === 1 && val === -1) || (dic[id].indice === max && val === 1))
+        return;
+
+    dic[nextId].indice = dic[id].indice;
+    dic[id].indice = nextIndice;
+
+    //atualiza o html
+    if (val > 0) {
+        $li.detach().insertAfter($(".list-att-" + nextId));
+    } else {
+        $li.detach().insertBefore($(".list-att-" + nextId));
+    }
 }
 
 function editAttr(id) {
@@ -170,6 +204,13 @@ function saveAttrInputs() {
         checkSaveSource();
     else
         checkSaveAllow();
+
+    let lastIndice = 0;
+    $.each(dicionarios[entity.name], function (i, e) {
+        if(e.indice > lastIndice)
+            lastIndice = e.indice;
+    });
+    dicionarios[entity.name][entity.edit]['indice'] = lastIndice + 1;
 }
 
 function checkSaveFilter() {

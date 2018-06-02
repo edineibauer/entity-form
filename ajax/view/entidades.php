@@ -28,7 +28,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">delete</i>
                     </button>
                     <button class="color-text-white radius pointer right padding-tiny btn-flat" style="margin-right: 5px;height: 26px;"
-                       onclick="entityEdit('__$__')">
+                            onclick="entityEdit('__$__')">
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">edit</i>
                     </button>
                 </div>
@@ -77,13 +77,25 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
 
             <ul class="row" id="entityAttr"></ul>
 
-            <li class="col s12 hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;">
-                __$1__
-                <button class="btn-flat pointer right color-text-white radius" onclick="deleteAttr(__$0__)"><i
-                            class="material-icons right font-large">delete</i></button>
-                <button class="btn-flat pointer right color-text-white radius" style="margin-right: 10px;"
-                   onclick="editAttr(__$0__)">
-                    <i class="material-icons right font-large">edit</i></button>
+            <li class="col s12 list-att-__$0__ hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;padding-left:0">
+                <div class="left" style="width: 27px">
+                    <button class="btn-flat z-depth-0 pointer left color-white color-text-grey radius padding-0" style="margin-bottom: 1px"
+                            onclick="indiceChange(__$0__,-1)">
+                        <i class="material-icons right font-large">keyboard_arrow_up</i>
+                    </button>
+                    <button class="btn-flat z-depth-0 pointer left color-white color-text-grey radius padding-0"
+                            onclick="indiceChange(__$0__,1)">
+                        <i class="material-icons right font-large">keyboard_arrow_down</i>
+                    </button>
+                </div>
+                <span class="left overflow-hidden padding-4" style="width: 150px">__$1__</span>
+                <button class="btn-flat pointer right opacity color-text-white radius"style="padding: 9px 5px" onclick="deleteAttr(__$0__)">
+                    <i class="material-icons right font-large">delete</i>
+                </button>
+                <button class="btn-flat pointer right color-text-white radius" style="margin-right: 5px;padding: 9px"
+                        onclick="editAttr(__$0__)">
+                    <i class="material-icons right font-large">edit</i>
+                </button>
             </li>
         </div>
     </form>
