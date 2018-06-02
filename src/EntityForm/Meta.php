@@ -281,11 +281,11 @@ class Meta
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getIndice()
+    public function getIndice(): int
     {
-        return $this->indice;
+        return (int)$this->indice;
     }
 
     /**
