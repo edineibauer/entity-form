@@ -217,17 +217,25 @@ class Validate
      */
     private static function convertValues(Meta $m)
     {
-        if ($m->getFormat() === "password")
+        if ($m->getFormat() === "password") {
             $m->setValue(Check::password($m->getValue()), false);
 
-        if ($m->getFormat() === "json" && is_array($m->getValue()))
+        } elseif ($m->getFormat() === "json" && is_array($m->getValue())) {
             $m->setValue(json_encode($m->getValue()), false);
 
-        if ($m->getFormat() === "percent" && strlen($m->getValue()) > 2){
+        } elseif ($m->getFormat() === "percent" && strlen($m->getValue()) > 2){
             if(strlen($m->getValue()) === 3)
                 $formatado = (float) (substr($m->getValue(), 0, 1) . "." . substr($m->getValue(), 1, 2));
             else
                 $formatado = (float) (substr($m->getValue(), 0, 2) . "." . substr($m->getValue(), 2, 2));
+
+            $m->setValue($formatado, false);
+
+        } elseif ($m->getFormat() === "valor" && strlen($m->getValue()) > 2 && !preg_match('/\./i', $m->getValue())){
+            if(strlen($m->getValue()) === 3)
+                $formatado = (substr($m->getValue(), 0, 1) . "." . substr($m->getValue(), 1, 2));
+            else
+                $formatado = (substr($m->getValue(), 0, strlen($m->getValue()) - 2) . "." . substr($m->getValue(), -2, 2));
 
             $m->setValue($formatado, false);
         }
@@ -248,12 +256,11 @@ class Validate
                 $m->setError("número inválido");
 
         } elseif ($m->getType() === "decimal") {
-            $size = (!empty($m->getSize()) ? explode(',', str_replace(array('(', ')'), '', $m->getSize())) : array(10, 30));
-            $val = explode('.', str_replace(',', '.', $m->getValue()));
-            if (strlen($val[1]) > $size[1])
-                $m->setError("valor das casas decimais excedido. Max {$size[1]}");
-            elseif (strlen($val[0]) > $size[0])
-                $m->setError("valor inteiro do valor decimal excedido. Max {$size[0]}");
+            $size = (!empty($m->getSize()) ? [1, $m->getSize()] : [1, 15]);
+            if (strlen($m->getValue()) > $size[1])
+                $m->setError("valor maior que o permitido de {$size[1]}");
+            elseif (strlen($m->getValue()) < $size[0])
+                $m->setError("valor menor que o permitido de {$size[0]}");
 
         } elseif (in_array($m->getType(), array("double", "real", "float"))) {
             if (!is_numeric($m->getValue()))
@@ -400,9 +407,8 @@ class Validate
                     }
                 }
             }
-        } else {
-            if (!empty($m->getAllow()['values']) && !empty($m->getValue()) && !in_array($m->getValue(), $m->getAllow()['values']))
-                $m->setError("valor não é permitido");
+        } elseif (!empty($m->getAllow()['values']) && !empty($m->getValue()) && !in_array($m->getValue(), $m->getAllow()['values'])) {
+            $m->setError("valor não é permitido");
         }
     }
 }

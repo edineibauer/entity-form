@@ -522,10 +522,11 @@
   },
   "valor": {
     "format": "valor",
-    "type": "int",
+    "type": "decimal",
     "nome": "Valor",
+    "size": 17,
     "allow": {
-      "regex": "/^\\d{1,10}$/"
+      "regex": "/^\\d{1,17}$/"
     },
     "form": {
       "input": "valor"

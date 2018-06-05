@@ -56,9 +56,9 @@ abstract class EntityDatabase
             $dados['size'] = 8192;
         }
 
-        $type = in_array($dados['type'], ["float", "real", "decimal", "double"]) ? "double" : $dados['type'];
+        $type = in_array($dados['type'], ["float", "real", "double"]) ? "double" : $dados['type'];
         return "`{$dados['column']}` {$type} "
-            . (!empty($dados['size']) ? "({$dados['size']}) " : ($dados['type'] === "varchar" ? "(254) " : " "))
+            . (!empty($dados['size']) ? "({$dados['size']}) " : ($dados['type'] === "varchar" ? "(254) " : ($dados['type'] === "decimal" ? "(15,2) " : " ")))
             . ($dados['default'] === false ? "NOT NULL " : "")
             . ($dados['default'] !== false && !empty($dados['default']) ? $this->prepareDefault($dados['default']) : ($dados['default'] !== false ? "DEFAULT NULL" : ""));
     }
