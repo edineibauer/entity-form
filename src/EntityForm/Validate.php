@@ -167,17 +167,17 @@ class Validate
                     } else {
                         return null;
                     }
-                } elseif (!empty($m->getSelect()) && in_array($variable, $m->getSelect())) {
-                    if ($meta = $d->search($variable . "__" . $variables[$i - 1])) {
-                        if (!empty($meta->getValue()) && !empty($meta->getRelation())) {
-                            $d = new Dicionario($meta->getRelation());
-                            $d->setData($meta->getValue());
-                        } else {
-                            return null;
-                        }
-                    } else {
-                        return null;
-                    }
+                    //                } elseif (!empty($m->getSelect()) && in_array($variable, $m->getSelect())) {
+                    //                    if ($meta = $d->search($variable . "__" . $variables[$i - 1])) {
+                    //                        if (!empty($meta->getValue()) && !empty($meta->getRelation())) {
+                    //                            $d = new Dicionario($meta->getRelation());
+                    //                            $d->setData($meta->getValue());
+                    //                        } else {
+                    //                            return null;
+                    //                        }
+                    //                    } else {
+                    //                        return null;
+                    //                    }
                 } else {
                     return null;
                 }
@@ -222,6 +222,15 @@ class Validate
 
         if ($m->getFormat() === "json" && is_array($m->getValue()))
             $m->setValue(json_encode($m->getValue()), false);
+
+        if ($m->getFormat() === "percent" && strlen($m->getValue()) > 2){
+            if(strlen($m->getValue()) === 3)
+                $formatado = (float) (substr($m->getValue(), 0, 1) . "." . substr($m->getValue(), 1, 2));
+            else
+                $formatado = (float) (substr($m->getValue(), 0, 2) . "." . substr($m->getValue(), 2, 2));
+
+            $m->setValue($formatado, false);
+        }
 
         if ($m->getKey() === "link")
             $m->setValue(Check::name($m->getValue()), false);
