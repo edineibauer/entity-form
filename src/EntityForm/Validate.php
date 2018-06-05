@@ -20,10 +20,10 @@ class Validate
         if ($m->getColumn() !== "id") {
             self::checkDefaultSet($m);
             if (!empty($m->getValue()) && !in_array($m->getKey(), ["extend", "list", "selecao"])) {
+                self::checkRegular($m);
                 self::convertValues($m);
                 self::checkType($m);
                 self::checkSize($m);
-                self::checkRegular($m);
                 self::checkValidate($m);
                 self::checkValues($m);
             }
