@@ -530,5 +530,15 @@
     "form": {
       "input": "valor"
     }
+  },
+  "percent": {
+    "format": "percent",
+    "type": "float",
+    "allow": {
+      "regex": "/^\\d{1,4}$/"
+    },
+    "form": {
+      "input": "percent"
+    }
   }
 }
