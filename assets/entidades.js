@@ -46,6 +46,11 @@ function entityReset() {
 }
 
 function entityEdit(id) {
+    if(typeof(id) === "undefined")
+        $("#importForm").removeClass("hide");
+    else
+        $("#importForm").addClass("hide");
+
     if ((typeof(id) === "undefined" && entity.name !== "") || (typeof(id) !== "undefined" && id !== entity.name)) {
         saveEntity(true);
         entityReset();
@@ -55,7 +60,6 @@ function entityEdit(id) {
 
         showEntity();
     } else {
-        showImport();
         $("#entityName").focus();
     }
 }
@@ -79,15 +83,6 @@ function showEntity() {
             }
         });
     }
-
-    showImport();
-}
-
-function showImport() {
-    if ($("#entityAttr").html() === "")
-        $("#importForm").removeClass("hide");
-    else
-        $("#importForm").addClass("hide");
 }
 
 function saveEntity(silent) {
