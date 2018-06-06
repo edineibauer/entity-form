@@ -217,11 +217,11 @@ class Validate
      */
     private static function convertValues(Meta $m)
     {
+        if ($m->getType() === "json" && is_array($m->getValue()))
+            $m->setValue(json_encode($m->getValue()), false);
+
         if ($m->getFormat() === "password") {
             $m->setValue(Check::password($m->getValue()), false);
-
-        } elseif ($m->getFormat() === "json" && is_array($m->getValue())) {
-            $m->setValue(json_encode($m->getValue()), false);
 
         } elseif ($m->getFormat() === "percent" && strlen($m->getValue()) > 2){
             if(strlen($m->getValue()) === 3)
