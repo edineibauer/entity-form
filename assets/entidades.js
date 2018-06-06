@@ -47,9 +47,9 @@ function entityReset() {
 
 function entityEdit(id) {
     if(typeof(id) === "undefined")
-        $("#importForm").removeClass("hide");
+        $("#importForm").removeClass("hide").css("height", 'auto').css("z-index", 1);
     else
-        $("#importForm").addClass("hide");
+        $("#importForm").addClass("hide").css("height", 0).css("z-index", -1);
 
     if ((typeof(id) === "undefined" && entity.name !== "") || (typeof(id) !== "undefined" && id !== entity.name)) {
         saveEntity(true);

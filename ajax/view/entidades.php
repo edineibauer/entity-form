@@ -63,13 +63,12 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
             <div class="col s12"><br></div>
 
-            <div class="row hide" id="importForm">
-                <hr>
-                <br>
+            <div class="col hide overflow-hidden relative" id="importForm">
+                <hr><br>
                 <span class="row">
-                <label for="import">Importar Entidade</label>
-                <input type="file" name="import" id="import"/>
-            </span>
+                    <label for="import">Importar Entidade</label>
+                    <input type="file" name="import" id="import"/>
+                </span>
                 <button class="col s12 btn-large color-hover-cyan" onclick="sendImport()">
                     <i class="material-icons padding-right left">send</i><span class="left">Enviar</span>
                 </button>
