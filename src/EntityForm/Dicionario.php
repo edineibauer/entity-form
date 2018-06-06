@@ -414,15 +414,14 @@ class Dicionario
                 foreach ($this->info[$e] as $simple) {
                     $d = $this->dicionario[$simple]->getValue();
                     if (is_object($d) && get_class($d) === "EntityForm\Dicionario") {
-                        $d->save();
+                        if($e === "extend" || !empty($d->search(0)->getValue()))
+                            $d->save();
+
                         if (!empty($d->getError()))
                             $this->dicionario[$simple]->setError($d->getError()[$d->getEntity()]);
 
                         if (!empty($d->search(0)->getValue()))
                             $this->dicionario[$simple]->setValue((int)$d->search(0)->getValue(), false);
-
-                    } elseif (!is_numeric($this->dicionario[$simple]->getValue())) {
-                        $this->dicionario[$simple]->setError("Valor não esperado");
                     }
                 }
             }

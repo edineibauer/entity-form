@@ -49,7 +49,6 @@ class Validate
 
                     if ($m->getError())
                         $m->setValue(null, false);
-
                 }
             }
 
