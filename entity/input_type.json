@@ -275,7 +275,9 @@
     "default": false,
     "update": false,
     "form": {
-      "input": "extend"
+      "input": "extend",
+      "fields": "",
+      "defaults": ""
     }
   },
   "extend_mult": {
@@ -283,7 +285,9 @@
     "type": "json",
     "key": "extend_mult",
     "form": {
-      "input": "extend_mult"
+      "input": "extend_mult",
+      "fields": "",
+      "defaults": ""
     }
   },
   "list": {
@@ -291,7 +295,9 @@
     "type": "int",
     "key": "list",
     "form": {
-      "input": "list"
+      "input": "list",
+      "fields": "",
+      "defaults": ""
     }
   },
   "selecao": {
@@ -299,7 +305,9 @@
     "type": "int",
     "key": "selecao",
     "form": {
-      "input": "selecao"
+      "input": "selecao",
+      "fields": "",
+      "defaults": ""
     }
   },
   "list_mult": {
@@ -307,7 +315,9 @@
     "type": "json",
     "key": "list_mult",
     "form": {
-      "input": "list_mult"
+      "input": "list_mult",
+      "fields": "",
+      "defaults": ""
     }
   },
   "selecao_mult": {
@@ -315,7 +325,9 @@
     "type": "json",
     "key": "selecao_mult",
     "form": {
-      "input": "selecao_mult"
+      "input": "selecao_mult",
+      "fields": "",
+      "defaults": ""
     }
   },
   "publisher": {

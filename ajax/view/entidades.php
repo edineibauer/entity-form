@@ -172,7 +172,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         <input id="nome" autocomplete="off" type="text" class="input">
                     </div>
 
-                    <div class="col s12 m4 l4 hide" id="relation_container">
+                    <div class="col s12 m4 l4 hide relation_container">
                         <label>Entidade Relacionada</label>
                         <select class="input" id="relation"></select>
                     </div>
@@ -247,7 +247,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
             <option id="optionTpl" class="hide" value="__$0____$2__">__$1__</option>
 
-            <div class="hide card padding-medium" id="requireListFilter">
+            <div class="hide card padding-medium relation_container" id="requireListFilter">
                 <header class="row padding-small">
                     <span class="left padding-medium" style="padding-left: 0!important;">Filtrar Lista</span>
                     <button class="btn-floating color-blue opacity hover-opacity-off" onclick="addFilter()"><i
@@ -282,8 +282,28 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         <div class="slider"></div>
                     </label>
                 </header>
-
                 <input type="hidden" id="input" class="input"/>
+
+                <div class="col hide relation_container padding-bottom">
+                    <div class="col s12 m5 padding-small">
+                        <h4>Mostrar Campo</h4>
+                        <div class="col" id="relation_fields_show"></div>
+
+                        <label class="col s12 relativep pointer border-bottom hide" id="tpl_relation_fields_show">
+                            <input type="checkbox" class="relation_fields_show" rel="__$0__" __$2__ />
+                            <span class="left padding-8 font-medium">__$1__</span>
+                        </label>
+                    </div>
+                    <div class="col s12 m7 padding-small">
+                        <h4>Definir Valor Padrão</h4>
+                        <div class="col" id="relation_fields_default" style="padding-top:4px"></div>
+
+                        <div class="col hide" id="tpl_relation_fields_default">
+                            <input type="text" class="col font-medium relation_fields_default" value="__$2__" style="margin-bottom: 4px;" rel="__$0__">
+                        </div>
+                    </div>
+                    <div class="col padding-12"></div>
+                </div>
 
                 <div class="row hide form_body">
                     <div class="col s4 padding-small form_body">

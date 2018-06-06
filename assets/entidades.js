@@ -113,9 +113,9 @@ function saveEntity(silent) {
 function resetAttr(id) {
     entity.edit = typeof(id) !== "undefined" ? id : null;
     $(".selectInput").css("color", "#CCCCCC").val("");
-    $("#format-source, #requireListExtend, #requireListFilter").addClass("hide");
+    $("#format-source, #requireListExtend").addClass("hide");
     $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
-    $("#spaceValueAllow, #requireListExtendDiv, #list-filter").html("");
+    $("#spaceValueAllow, #requireListExtendDiv, #list-filter, #relation_fields_show, #relation_fields_default").html("");
     $(".file-format").each(function () {
         $(this).prop("checked", false);
         $("." + $(this).attr("id") + "-format").prop("checked", false);
@@ -210,6 +210,7 @@ function saveAttrInputs() {
 
     checkSaveFilter();
     checkSaveSelect();
+    checkSaveAssociacaoShowAttr();
 
     if (dicionarios[entity.name][entity.edit]['format'] === "source" || dicionarios[entity.name][entity.edit]['format'] === "sources")
         checkSaveSource();
@@ -239,6 +240,36 @@ function checkSaveFilter() {
 
             if (filter !== "" && filter_operator !== "" && filter_value !== "")
                 dicionarios[entity.name][entity.edit]['filter'].push(filter + "," + filter_operator + "," + filter_value + "," + filter_column);
+        });
+    }
+}
+
+function checkSaveAssociacaoShowAttr() {
+    if($.inArray(dicionarios[entity.name][entity.edit]['format'], ["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"]) > -1) {
+
+        if (typeof (dicionarios[entity.name][entity.edit]['form']['fields']) === "undefined" || typeof (dicionarios[entity.name][entity.edit]['form']['defaults']) === "undefined") {
+            dicionarios[entity.name][entity.edit]['form']['fields'] = [];
+            dicionarios[entity.name][entity.edit]['form']['defaults'] = {};
+        }
+
+        $.each($(".relation_fields_show"), function () {
+            let id = $(this).attr("rel");
+            if(id !== "__$0__") {
+                id = parseInt(id);
+                if ($(this).is(":checked")) {
+                    if ($.inArray(id, dicionarios[entity.name][entity.edit].form.fields) === -1)
+                        dicionarios[entity.name][entity.edit].form.fields.push(id);
+                } else {
+                    dicionarios[entity.name][entity.edit].form.fields = $.grep(dicionarios[entity.name][entity.edit].form.fields, function (value) {
+                        return value != id;
+                    });
+                }
+            }
+        });
+        $.each($(".relation_fields_default"), function () {
+            if($(this).attr("rel") !== "__$0__") {
+                dicionarios[entity.name][entity.edit].form.defaults[parseInt($(this).attr("rel"))] = $(this).val();
+            }
         });
     }
 }
@@ -375,10 +406,11 @@ function setFormat(val) {
         $("#format-source").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
-        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(val) > -1)
-            $("#relation_container").removeClass("hide");
-        else
-            $("#relation_container").addClass("hide");
+        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(val) > -1) {
+            $(".relation_container").removeClass("hide");
+        } else {
+            $(".relation_container").addClass("hide");
+        }
     }
 
     $(".requireName, #nomeAttr").removeClass("hide");
@@ -405,11 +437,6 @@ function checkFieldsOpenOrClose(nome) {
             $(".requireName").removeClass("hide");
         else
             $(".requireName").addClass("hide");
-
-        if (["list", "list_mult", "selecao", "selecao_mult"].indexOf(getType()) > -1)
-            $("#requireListFilter").removeClass("hide");
-        else
-            $("#requireListFilter").addClass("hide");
     }
 }
 
@@ -514,6 +541,34 @@ function checkFilterToApply() {
     }
 }
 
+function checkAttrRelationToShow() {
+    if(entity.edit !== null) {
+        let dic = dicionarios[entity.name][entity.edit];
+        let dicRelation = dicionarios[$("#relation").val()];
+        $("#relation_fields_show, #relation_fields_default").html("");
+
+        //check if fields exist
+        if (typeof (dic['form']['fields']) === "undefined" || typeof (dic['form']['defaults']) === "undefined") {
+            dic['form']['fields'] = [];
+            dic['form']['defaults'] = {};
+            $.each(dicRelation, function (i, e) {
+                dic.form.fields.push(parseInt(i));
+                dic.form.defaults[parseInt(i)] = "";
+            });
+        }
+
+        console.log(dic['form']);
+
+        $.each(dicRelation, function (i, e) {
+            i = parseInt(i);
+            var checked = $.inArray(i, dic.form.fields) > -1 ? 'checked="checked"' : '';
+            var value = typeof (dic.form.defaults[i]) !== "undefined" ? dic.form.defaults[i] : "";
+            copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: checked}, "append");
+            copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: value}, "append");
+        });
+    }
+}
+
 function checkEntityMultipleFields(values) {
     $("#requireListExtend").addClass("hide");
     $("#requireListExtendDiv").html("");
@@ -524,6 +579,8 @@ function checkEntityMultipleFields(values) {
             $("#requireListExtend").removeClass("hide");
         }
     });
+    checkFilterToApply();
+    checkAttrRelationToShow();
 }
 
 function addColumnFilter($this, entity, select) {
@@ -610,7 +667,6 @@ $(function () {
     }).off("change", "#relation").on("change", "#relation", function () {
         checkFieldsOpenOrClose();
         checkEntityMultipleFields();
-        checkFilterToApply();
 
     }).off("change", ".selectInput").on("change", ".selectInput", function () {
         setFormat($(this).val());
