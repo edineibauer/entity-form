@@ -9,6 +9,7 @@ use Helpers\Check;
 
 class Meta
 {
+    private $id;
     private $allow;
     private $column;
     private $default;
@@ -81,6 +82,14 @@ class Meta
     }
 
     /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = (int) $id;
+    }
+
+    /**
      * @param mixed $column
      */
     public function setColumn($column)
@@ -128,7 +137,7 @@ class Meta
     {
         if (!empty($form) && is_array($form)) {
             foreach ($form as $name => $value) {
-                if (in_array($name, ['input', 'cols', 'coll', 'colm', 'class', 'style']))
+                if (in_array($name, ['input', 'cols', 'coll', 'colm', 'class', 'style', 'defaults', 'fields']))
                     $this->form[$name] = $value;
             }
         } else {
@@ -214,6 +223,14 @@ class Meta
     public function setUpdate(bool $update)
     {
         $this->update = $update;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return (int)$this->id;
     }
 
     /**
@@ -363,6 +380,7 @@ class Meta
     public function getDados()
     {
         return [
+            "id" => $this->id,
             "allow" => $this->allow,
             "column" => $this->column,
             "default" => $this->default,
@@ -396,6 +414,9 @@ class Meta
 
             foreach (array_replace_recursive($default, $dados) as $dado => $value) {
                 switch ($dado) {
+                    case 'id':
+                        $this->setId($value);
+                        break;
                     case 'allow':
                         $this->setAllow($value);
                         break;
