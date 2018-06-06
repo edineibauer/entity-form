@@ -113,7 +113,7 @@ function saveEntity(silent) {
 function resetAttr(id) {
     entity.edit = typeof(id) !== "undefined" ? id : null;
     $(".selectInput").css("color", "#CCCCCC").val("");
-    $("#format-source, #requireListExtend").addClass("hide");
+    $("#format-source, #requireListExtend, .relation_container, .relation_creation_container").addClass("hide");
     $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
     $("#spaceValueAllow, #requireListExtendDiv, #list-filter, #relation_fields_show, #relation_fields_default").html("");
     $(".file-format").each(function () {
@@ -405,13 +405,13 @@ function setFormat(val) {
         $("#format-source").removeClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").addClass("hide");
     } else {
-        $("#format-source").addClass("hide");
+        $("#format-source, .relation_creation_container, .relation_container").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
         if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(val) > -1) {
             $(".relation_container").removeClass("hide");
-        } else {
-            $(".relation_container").addClass("hide");
+            if(["selecao", "selecao_mult"].indexOf(val) === -1)
+                $(".relation_creation_container").removeClass("hide");
         }
     }
 

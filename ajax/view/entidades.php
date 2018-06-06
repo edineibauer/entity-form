@@ -284,7 +284,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                 </header>
                 <input type="hidden" id="input" class="input"/>
 
-                <div class="col hide relation_container padding-bottom">
+                <div class="col hide relation_creation_container padding-bottom">
                     <div class="col s12 m5 padding-small">
                         <h4>Mostrar Campo</h4>
                         <div class="col" id="relation_fields_show"></div>
