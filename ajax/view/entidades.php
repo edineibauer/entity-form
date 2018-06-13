@@ -7,13 +7,16 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
     ?>
     <ul id="nav-entity" class="color-text-white z-depth-4 space-header theme-l1">
         <div class="row">
-            <div class="panel">
-                <div class="col s7 upper padding-medium">
+            <div class="padding-12 col">
+                <div class="left upper padding-medium">
                     Entidades
                 </div>
-                <div class="col s5 align-right">
+                <div class="right align-right">
                     <button class="btn color-white btn-floating right" id="newEntityBtn" onclick="entityEdit()">
                         <i class="material-icons">add</i>
+                    </button>
+                    <button class="btn color-white btn-floating right" onclick="uploadEntity()">
+                        <i class="material-icons">backup</i>
                     </button>
                 </div>
             </div>

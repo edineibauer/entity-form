@@ -46,11 +46,7 @@ function entityReset() {
 }
 
 function entityEdit(id) {
-    if(typeof(id) === "undefined")
-        $("#importForm").removeClass("hide");
-    else
-        $("#importForm").addClass("hide");
-
+    $("#importForm").addClass("hide");
     if ((typeof(id) === "undefined" && entity.name !== "") || (typeof(id) !== "undefined" && id !== entity.name)) {
         saveEntity(true);
         entityReset();
@@ -62,6 +58,12 @@ function entityEdit(id) {
     } else {
         $("#entityName").focus();
     }
+}
+
+function uploadEntity() {
+    entityReset();
+    showEntity();
+    $("#importForm").removeClass("hide");
 }
 
 function showEntity() {
