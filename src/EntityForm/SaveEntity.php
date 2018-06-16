@@ -34,10 +34,10 @@ class SaveEntity
         $data = json_decode(file_get_contents(PATH_HOME . "entity/cache/{$this->entity}.json"), true);
         $this->id = 1;
         foreach ($data as $i => $datum) {
-            if($i > $this->id)
-                $this->id = (int) $i;
+            if ($i > $this->id)
+                $this->id = (int)$i;
         }
-        $this->id ++;
+        $this->id++;
         $this->createEntityJson($this->generateInfo($data), "info");
 
         new EntityCreateEntityDatabase($this->entity, []);
@@ -119,7 +119,7 @@ class SaveEntity
     {
         $data = [
             "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
-            "required" => null, "unique" => null, "publisher" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null,
+            "required" => null, "unique" => null, "publisher" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null, "owner" => null, "ownerPublisher" => null,
             "source" => [
                 "image" => null,
                 "audio" => null,
@@ -140,7 +140,7 @@ class SaveEntity
             if (in_array($dados['format'], ["title", "link", "status", "date", "datetime", "valor", "email", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
                 $data[$dados['format']] = $i;
 
-            if($dados['key'] === "publisher")
+            if ($dados['key'] === "publisher")
                 $data["publisher"] = $i;
 
             if ($dados['key'] === "source" || $dados['key'] === "sources")
@@ -151,6 +151,56 @@ class SaveEntity
 
             if (!$dados['update'])
                 $data["constant"][] = $i;
+
+            if ($dados['relation'] === "usuarios" && $dados['format'] === "extend")
+                $data = $this->checkOwnerList($data, $metadados);
+        }
+
+        $this->createGeneral($data);
+
+        return $data;
+    }
+
+    /**
+     * @param array $metadados
+     */
+    private function createGeneral(array $metadados)
+    {
+
+        $general = [];
+        if (file_exists(PATH_HOME . "entity/cache/info/general_info.json"))
+            $general = json_decode(file_get_contents(PATH_HOME . "entity/cache/info/general_info.json"), true);
+
+        if(!empty($metadados['owner'])) {
+            foreach ($metadados['owner'] as $owner)
+                $general[$owner]['owner'] = $this->entity;
+        }
+        if(!empty($metadados['ownerPublisher'])) {
+            foreach ($metadados['ownerPublisher'] as $owner)
+                $general[$owner]['ownerPublisher'] = $this->entity;
+        }
+
+        $fp = fopen(PATH_HOME . "entity/cache/info/general_info.json", "w");
+        fwrite($fp, json_encode($general));
+        fclose($fp);
+    }
+
+    /**
+     * @param array $data
+     * @param array $metadados
+     * @return array
+     */
+    private function checkOwnerList(array $data, array $metadados)
+    {
+        $list = [];
+        foreach ($metadados as $i => $metadado) {
+            if ($metadado['relation'] !== "usuarios") {
+                if (in_array($metadado['format'], ["extend", "extend_mult"])) {
+                    $data['owner'][] = $metadado['relation'];
+                } elseif (in_array($metadado['format'], ["list", "list_mult"])) {
+                    $data['ownerPublisher'][] = $metadado['relation'];
+                }
+            }
         }
 
         return $data;
