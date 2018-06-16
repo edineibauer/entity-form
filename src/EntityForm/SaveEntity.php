@@ -153,7 +153,7 @@ class SaveEntity
                 $data["constant"][] = $i;
 
             if ($dados['relation'] === "usuarios" && $dados['format'] === "extend")
-                $data = $this->checkOwnerList($data, $metadados);
+                $data = $this->checkOwnerList($data, $metadados, $dados['column']);
         }
 
         $this->createGeneral($data);
@@ -173,11 +173,11 @@ class SaveEntity
 
         if(!empty($metadados['owner'])) {
             foreach ($metadados['owner'] as $owner)
-                $general[$owner]['owner'] = $this->entity;
+                $general[$owner["entity"]]['owner'] = [$this->entity, $owner["column"], $owner["userColumn"]];
         }
         if(!empty($metadados['ownerPublisher'])) {
             foreach ($metadados['ownerPublisher'] as $owner)
-                $general[$owner]['ownerPublisher'] = $this->entity;
+                $general[$owner["entity"]]['ownerPublisher'] = [$this->entity, $owner["column"], $owner["userColumn"]];
         }
 
         $fp = fopen(PATH_HOME . "entity/cache/info/general_info.json", "w");
@@ -188,17 +188,18 @@ class SaveEntity
     /**
      * @param array $data
      * @param array $metadados
+     * @param string $column
      * @return array
      */
-    private function checkOwnerList(array $data, array $metadados)
+    private function checkOwnerList(array $data, array $metadados, string $column)
     {
         $list = [];
         foreach ($metadados as $i => $metadado) {
             if ($metadado['relation'] !== "usuarios") {
                 if (in_array($metadado['format'], ["extend", "extend_mult"])) {
-                    $data['owner'][] = $metadado['relation'];
+                    $data['owner'][] = ["entity" => $metadado['relation'], "column" => $metadado['column'], "userColumn" => $column];
                 } elseif (in_array($metadado['format'], ["list", "list_mult"])) {
-                    $data['ownerPublisher'][] = $metadado['relation'];
+                    $data['ownerPublisher'][] = ["entity" => $metadado['relation'], "column" => $metadado['column'], "userColumn" => $column];
                 }
             }
         }
