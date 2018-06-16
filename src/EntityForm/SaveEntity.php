@@ -166,10 +166,9 @@ class SaveEntity
      */
     private function createGeneral(array $metadados)
     {
-
         $general = [];
-        if (file_exists(PATH_HOME . "entity/cache/info/general_info.json"))
-            $general = json_decode(file_get_contents(PATH_HOME . "entity/cache/info/general_info.json"), true);
+        if (file_exists(PATH_HOME . "entity/general/general_info.json"))
+            $general = json_decode(file_get_contents(PATH_HOME . "entity/general/general_info.json"), true);
 
         if(!empty($metadados['owner'])) {
             foreach ($metadados['owner'] as $owner)
@@ -180,7 +179,8 @@ class SaveEntity
                 $general[$owner["entity"]]['ownerPublisher'] = [$this->entity, $owner["column"], $owner["userColumn"]];
         }
 
-        $fp = fopen(PATH_HOME . "entity/cache/info/general_info.json", "w");
+        Helper::createFolderIfNoExist(PATH_HOME . "entity/general");
+        $fp = fopen(PATH_HOME . "entity/general/general_info.json", "w");
         fwrite($fp, json_encode($general));
         fclose($fp);
     }
