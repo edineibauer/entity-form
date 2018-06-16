@@ -400,7 +400,34 @@ class Dicionario
             $this->search(0)->setError($create->getErro());
         } elseif ($create->getResult()) {
             $this->search(0)->setValue((int)$create->getResult(), false);
+            $this->checkToSetOwnerList($create->getResult());
             new React("create", $this->entity, array_merge(["id" => $create->getResult()], $dados));
+        }
+    }
+
+    /**
+     * @param int $id
+     */
+    private function checkToSetOwnerList(int $id)
+    {
+        $general = json_decode(file_get_contents(PATH_HOME . "entity/cache/info/general_info.json"), true);
+        if(!empty($general[$this->entity]['owner'])) {
+            $entityRelation = $general[$this->entity]['owner'][0];
+            $column = $general[$this->entity]['owner'][1];
+
+            $read = new Read();
+            $read->exeRead($entityRelation, "WHERE {$userColumn} = :user", "user={$_SESSION['userlogin']['id']}");
+            if($read->getResult()) {
+                $idUser = $read->getResult()[0]['id'];
+
+                $tableRelational = PRE . $entityRelation . "_" . $this->entity . "_" . $column;
+                $read->exeRead($tableRelational, "WHERE {$entityRelation}_id = :ai && {$this->entity}_id = :bi", "ai={$idUser}&bi={$id}");
+                if (!$read->getResult()) {
+
+                    $create = new Create();
+                    $create->exeCreate($tableRelational, [$entityRelation . "_id" => $idUser, $this->entity . "_id" => $id]);
+                }
+            }
         }
     }
 
