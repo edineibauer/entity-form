@@ -39,18 +39,15 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
         </ul>
     </ul>
 
-    <form class="col s12 m4 z-depth-2 space-header color-white" id="nav-menu">
+    <div class="col s12 m4 z-depth-2 space-header color-white" id="nav-menu">
         <header class="row">
             <div class="panel">
                 <div class="col s12 padding-tiny">
-                    <button class="btn color-blue left" type="submit" id="saveEntityBtn" name="action"
-                            onclick="saveEntity()">
+                    <button class="btn color-blue left" id="saveEntityBtn" onclick="saveEntity()">
                         salvar
                         <i class="material-icons right padding-left">check</i>
                     </button>
-                    <button class="btn color-grey right" type="submit" title="Novo Atributo" id="saveAttrBtn"
-                            name="action"
-                            onclick="editAttr()">
+                    <button class="btn color-grey right" title="Novo Atributo" id="saveAttrBtn" onclick="editAttr()">
                         <i class="material-icons right">add</i>
                     </button>
                 </div>
@@ -100,7 +97,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                 </button>
             </li>
         </div>
-    </form>
+    </div>
 
     <div id="main" class="row color-gray-light space-header">
         <div class="col s12 hide" id="requireNameEntity">
