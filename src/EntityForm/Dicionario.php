@@ -414,6 +414,7 @@ class Dicionario
         if(!empty($general[$this->entity]['owner'])) {
             $entityRelation = $general[$this->entity]['owner'][0];
             $column = $general[$this->entity]['owner'][1];
+            $userColumn = $general[$this->entity]['owner'][2];
 
             $read = new Read();
             $read->exeRead($entityRelation, "WHERE {$userColumn} = :user", "user={$_SESSION['userlogin']['id']}");
