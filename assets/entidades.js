@@ -464,7 +464,7 @@ function removeEntity(entity) {
     }
 }
 
-function sendImport() {
+/*function sendImport() {
     if ($("#import").val() !== "") {
         var form_data = new FormData();
         form_data.append('file', $('#import').prop('files')[0]);
@@ -492,7 +492,7 @@ function sendImport() {
             }
         });
     }
-}
+}*/
 
 function addFilter(value) {
     var field = "";
