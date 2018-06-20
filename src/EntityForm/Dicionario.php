@@ -412,21 +412,23 @@ class Dicionario
     {
         $general = json_decode(file_get_contents(PATH_HOME . "entity/general/general_info.json"), true);
         if(!empty($general[$this->entity]['owner'])) {
-            $entityRelation = $general[$this->entity]['owner'][0];
-            $column = $general[$this->entity]['owner'][1];
-            $userColumn = $general[$this->entity]['owner'][2];
+            foreach ($general[$this->entity]['owner'] as $item) {
+                $entityRelation = $item[0];
+                $column = $item[1];
+                $userColumn = $item[2];
 
-            $read = new Read();
-            $read->exeRead($entityRelation, "WHERE {$userColumn} = :user", "user={$_SESSION['userlogin']['id']}");
-            if($read->getResult()) {
-                $idUser = $read->getResult()[0]['id'];
+                $read = new Read();
+                $read->exeRead($entityRelation, "WHERE {$userColumn} = :user", "user={$_SESSION['userlogin']['id']}");
+                if($read->getResult()) {
+                    $idUser = $read->getResult()[0]['id'];
 
-                $tableRelational = PRE . $entityRelation . "_" . $this->entity . "_" . $column;
-                $read->exeRead($tableRelational, "WHERE {$entityRelation}_id = :ai && {$this->entity}_id = :bi", "ai={$idUser}&bi={$id}");
-                if (!$read->getResult()) {
+                    $tableRelational = PRE . $entityRelation . "_" . $this->entity . "_" . $column;
+                    $read->exeRead($tableRelational, "WHERE {$entityRelation}_id = :ai && {$this->entity}_id = :bi", "ai={$idUser}&bi={$id}");
+                    if (!$read->getResult()) {
 
-                    $create = new Create();
-                    $create->exeCreate($tableRelational, [$entityRelation . "_id" => $idUser, $this->entity . "_id" => $id]);
+                        $create = new Create();
+                        $create->exeCreate($tableRelational, [$entityRelation . "_id" => $idUser, $this->entity . "_id" => $id]);
+                    }
                 }
             }
         }

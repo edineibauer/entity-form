@@ -170,13 +170,27 @@ class SaveEntity
         if (file_exists(PATH_HOME . "entity/general/general_info.json"))
             $general = json_decode(file_get_contents(PATH_HOME . "entity/general/general_info.json"), true);
 
-        if(!empty($metadados['owner'])) {
-            foreach ($metadados['owner'] as $owner)
-                $general[$owner["entity"]]['owner'] = [$this->entity, $owner["column"], $owner["userColumn"]];
+        if (!empty($metadados['owner'])) {
+            foreach ($metadados['owner'] as $owner) {
+                $add = true;
+                foreach ($general[$owner["entity"]]['owner'] as $ow) {
+                    if ($ow[0] === $this->entity)
+                        $add = false;
+                }
+                if ($add)
+                    $general[$owner["entity"]]['owner'][] = [$this->entity, $owner["column"], $owner["userColumn"]];
+            }
         }
-        if(!empty($metadados['ownerPublisher'])) {
-            foreach ($metadados['ownerPublisher'] as $owner)
-                $general[$owner["entity"]]['ownerPublisher'] = [$this->entity, $owner["column"], $owner["userColumn"]];
+        if (!empty($metadados['ownerPublisher'])) {
+            foreach ($metadados['ownerPublisher'] as $owner) {
+                $add = true;
+                foreach ($general[$owner["entity"]]['ownerPublisher'] as $ow) {
+                    if ($ow[0] === $this->entity)
+                        $add = false;
+                }
+                if ($add)
+                    $general[$owner["entity"]]['ownerPublisher'][] = [$this->entity, $owner["column"], $owner["userColumn"]];
+            }
         }
 
         Helper::createFolderIfNoExist(PATH_HOME . "entity/general");
@@ -193,7 +207,6 @@ class SaveEntity
      */
     private function checkOwnerList(array $data, array $metadados, string $column)
     {
-        $list = [];
         foreach ($metadados as $i => $metadado) {
             if ($metadado['relation'] !== "usuarios") {
                 if (in_array($metadado['format'], ["extend", "extend_mult"])) {
