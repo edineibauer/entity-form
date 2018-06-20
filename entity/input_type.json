@@ -427,7 +427,7 @@
   "password": {
     "format": "password",
     "type": "varchar",
-    "nome": "Senha",
+    "nome": "Nova Senha",
     "size": 254,
     "default": false,
     "form": {
