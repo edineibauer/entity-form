@@ -6,6 +6,7 @@
   "cpf",
   "cnpj",
   "valor",
+  "percent",
   "text",
   "textarea",
   "url",
