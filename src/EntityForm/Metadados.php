@@ -21,7 +21,7 @@ class Metadados
 
             if(!$keepStrings) {
                 foreach ($data as $i => $datum) {
-                    if ($datum['format'] === 'string')
+                    if ($datum['key'] === 'information')
                         unset($data[$i]);
                 }
             }

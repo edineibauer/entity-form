@@ -16,13 +16,13 @@ class EntityCreateEntityDatabase extends EntityDatabase
 
             //remove Strings from metadados para não salvar no banco
             foreach ($data as $i => $datum) {
-                if($datum['format'] === 'string')
+                if($datum['key'] === 'information')
                     unset($data[$i]);
             }
 
             //remove Strings from metadados para não salvar no banco
             foreach ($dados as $i => $dadosm) {
-                if(!empty($dadosm['format']) && $dadosm['format'] === 'string')
+                if(!empty($dadosm['key']) && $dadosm['key'] === 'information')
                     unset($dados[$i]);
             }
 

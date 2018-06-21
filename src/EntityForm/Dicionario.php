@@ -349,19 +349,28 @@ class Dicionario
     public function save()
     {
         $id = $this->search(0)->getValue();
-        if (!$this->getError() || !empty($id))
-            $this->saveAssociacaoSimples();
+        $passCheck = $this->search("format", "passwordRequired");
+        if($passCheck) {
+            $d = new Dicionario("usuario");
+            $columnPass = $d->search($d->info['password'])->getColumn();
+        }
+        if(!$passCheck || $passCheck->getValue() === $_SESSION['userlogin'][$columnPass]) {
+            if (!$this->getError() || !empty($id))
+                $this->saveAssociacaoSimples();
 
-        if (!empty($id))
-            $this->updateTableData();
-        elseif (!$this->getError())
-            $this->createTableData();
+            if (!empty($id))
+                $this->updateTableData();
+            elseif (!$this->getError())
+                $this->createTableData();
 
-        if (!$this->getError() || !empty($id)) {
-            if (!$this->info)
-                $this->info = Metadados::getInfo($this->entity);
+            if (!$this->getError() || !empty($id)) {
+                if (!$this->info)
+                    $this->info = Metadados::getInfo($this->entity);
 
-            $this->createRelationalData();
+                $this->createRelationalData();
+            }
+        } else {
+
         }
     }
 

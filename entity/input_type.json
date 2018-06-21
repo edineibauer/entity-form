@@ -427,11 +427,22 @@
   "password": {
     "format": "password",
     "type": "varchar",
-    "nome": "Nova Senha",
+    "nome": "Senha",
     "size": 254,
     "default": false,
     "form": {
       "input": "password"
+    }
+  },
+  "passwordRequired": {
+    "format": "passwordRequired",
+    "type": "varchar",
+    "key": "information",
+    "nome": "Senha",
+    "size": 254,
+    "default": false,
+    "form": {
+      "input": "passwordRequired"
     }
   },
   "url": {
