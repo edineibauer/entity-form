@@ -438,7 +438,7 @@
     "format": "passwordRequired",
     "type": "varchar",
     "key": "information",
-    "nome": "Senha",
+    "nome": "Confirmação de Senha",
     "size": 254,
     "default": false,
     "form": {

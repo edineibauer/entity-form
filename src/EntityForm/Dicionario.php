@@ -351,8 +351,8 @@ class Dicionario
         $id = $this->search(0)->getValue();
         $passCheck = $this->search("format", "passwordRequired");
         if($passCheck) {
-            $d = new Dicionario("usuario");
-            $columnPass = $d->search($d->info['password'])->getColumn();
+            $d = new Dicionario("usuarios");
+            $columnPass = $d->search($d->getInfo()['password'])->getColumn();
         }
         if(!$passCheck || $passCheck->getValue() === $_SESSION['userlogin'][$columnPass]) {
             if (!$this->getError() || !empty($id))
@@ -370,7 +370,7 @@ class Dicionario
                 $this->createRelationalData();
             }
         } else {
-
+            $passCheck->setError("Senha Inválida");
         }
     }
 
