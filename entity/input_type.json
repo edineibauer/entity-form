@@ -547,7 +547,7 @@
     "format": "valor",
     "type": "decimal",
     "nome": "Valor",
-    "size": 17,
+    "size": 15,
     "allow": {
       "regex": "/^\\d{1,17}$/"
     },
