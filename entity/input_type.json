@@ -333,7 +333,7 @@
   "checkbox_mult": {
     "format": "checkbox_mult",
     "type": "json",
-    "key": "selecao_mult",
+    "key": "checkbox_mult",
     "form": {
       "input": "checkbox_mult",
       "fields": "",

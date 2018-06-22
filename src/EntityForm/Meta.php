@@ -50,7 +50,7 @@ class Meta
         if ($validate)
             $this->error = null;
 
-        if (in_array($this->key, ["list_mult", "selecao_mult", "extend_mult"]))
+        if (in_array($this->format, ["list_mult", "selecao_mult", "extend_mult", "checkbox_mult"]))
             $this->checkValueAssociacaoMult($value);
         elseif (in_array($this->key, ["extend", "list", "selecao"]))
             $this->checkValueAssociacaoSimples($value);
