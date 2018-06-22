@@ -330,6 +330,16 @@
       "defaults": ""
     }
   },
+  "checkbox_mult": {
+    "format": "checkbox_mult",
+    "type": "json",
+    "key": "selecao_mult",
+    "form": {
+      "input": "checkbox_mult",
+      "fields": "",
+      "defaults": ""
+    }
+  },
   "publisher": {
     "format": "publisher",
     "type": "int",

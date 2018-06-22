@@ -244,7 +244,7 @@ function checkSaveFilter() {
 }
 
 function checkSaveAssociacaoShowAttr() {
-    if($.inArray(dicionarios[entity.name][entity.edit]['format'], ["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"]) > -1) {
+    if($.inArray(dicionarios[entity.name][entity.edit]['format'], ["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_mult"]) > -1) {
 
         if (typeof (dicionarios[entity.name][entity.edit]['form']['fields']) === "undefined" || typeof (dicionarios[entity.name][entity.edit]['form']['defaults']) === "undefined") {
             dicionarios[entity.name][entity.edit]['form']['fields'] = [];
@@ -405,9 +405,9 @@ function setFormat(val) {
         $("#format-source, .relation_creation_container, .relation_container").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
-        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(val) > -1) {
+        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_mult"].indexOf(val) > -1) {
             $(".relation_container").removeClass("hide");
-            if(["selecao", "selecao_mult"].indexOf(val) === -1)
+            if(["selecao", "selecao_mult", "checkbox_mult"].indexOf(val) === -1)
                 $(".relation_creation_container").removeClass("hide");
         }
     }
@@ -419,7 +419,7 @@ function setFormat(val) {
 function getSelectInput(val) {
     if (["text", "textarea", "html", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source", "sources", "string"].indexOf(val) > -1)
         return $("#funcaoPrimary");
-    else if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "publisher", "owner", "passwordRequired"].indexOf(val) > -1)
+    else if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_mult", "publisher", "owner", "passwordRequired"].indexOf(val) > -1)
         return $("#funcaoRelation");
     else
         return $("#funcaoIdentifier");
@@ -427,7 +427,7 @@ function getSelectInput(val) {
 
 function checkRequiresFields() {
     var type = getType();
-    return (type !== "" && $("#nome").val().length > 1 && $("#nome").val() !== "id" && (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(type) < 0 || $("#relation").val() !== null));
+    return (type !== "" && $("#nome").val().length > 1 && $("#nome").val() !== "id" && (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_mult"].indexOf(type) < 0 || $("#relation").val() !== null));
 }
 
 function checkFieldsOpenOrClose(nome) {
@@ -521,7 +521,7 @@ function addFilter(value) {
             2: (field === e.column ? "\" selected=\"selected" : "")
         }, "append");
 
-        if (field === e.column && ["list", "list_mult", "selecao", "selecao_mult", "extend", "extend_mult"].indexOf(e.key) > -1)
+        if (field === e.column && ["list", "list_mult", "selecao", "selecao_mult", "checkbox_mult", "extend", "extend_mult"].indexOf(e.key) > -1)
             relation = e.relation
     });
 
@@ -531,7 +531,7 @@ function addFilter(value) {
 }
 
 function checkFilterToApply() {
-    if (["list", "list_mult", "selecao", "selecao_mult"].indexOf($("#funcaoRelation").val()) > -1) {
+    if (["list", "list_mult", "selecao", "selecao_mult", "checkbox_mult"].indexOf($("#funcaoRelation").val()) > -1) {
         $("#requireListFilter").removeClass("hide");
         $("#list-filter").html("");
         addFilter();
@@ -577,7 +577,7 @@ function checkEntityMultipleFields(values) {
     $("#requireListExtend").addClass("hide");
     $("#requireListExtendDiv").html("");
     $.each(dicionarios[$("#relation").val()], function (i, e) {
-        if (e.key === "selecao_mult" || e.key === "list_mult" || e.key === "extend_mult") {
+        if (e.key === "selecao_mult" || e.key === "list_mult" || e.key === "extend_mult" || e.key === "checkbox_mult") {
             var checked = typeof (values) !== "undefined" && $.inArray(e.column, values) > -1 ? '" checked="checked' : '';
             copy("#selectOneListOption", "#requireListExtendDiv", {0: e.column, 1: e.nome, 2: checked}, "append");
             $("#requireListExtend").removeClass("hide");
@@ -591,7 +591,7 @@ function addColumnFilter($this, entity, select) {
     $this.removeClass("m6").addClass("m3");
     var $column = $('<select class="filter_column col s12 m3"></select>').insertAfter($this);
     $.each(dicionarios[entity], function (id, data) {
-        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(data.key) < 0)
+        if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_mult"].indexOf(data.key) < 0)
             $column.append("<option value='" + data.column + "' " + (select === data.column ? "selected='selected'" : "") + ">" + data.nome + "</option>");
     });
 }
@@ -756,7 +756,7 @@ $(function () {
         $this.removeClass("m3").addClass("m6").siblings(".filter_column").remove();
         $.each(dicionarios[entity], function (i, e) {
             if (e.column === column) {
-                if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult"].indexOf(e.key) > -1)
+                if (["extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_mult"].indexOf(e.key) > -1)
                     addColumnFilter($this, e.relation, "");
                 return false;
             }

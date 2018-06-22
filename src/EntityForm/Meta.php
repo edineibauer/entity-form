@@ -15,6 +15,7 @@ class Meta
     private $default;
     private $error;
     private $filter;
+    private $template;
     private $form;
     private $format;
     private $key;
@@ -71,10 +72,7 @@ class Meta
     {
         $content = ['regex', 'validate', 'names', 'values'];
         if ($allow) {
-            foreach ($allow as $name => $value) {
-                if (in_array($name, $content))
-                    $this->allow[$name] = $value;
-            }
+            $this->allow = $allow;
         } else {
             foreach ($content as $item)
                 $this->allow[$item] = "";
@@ -128,6 +126,14 @@ class Meta
     public function setFilter($filter)
     {
         $this->filter = $filter;
+    }
+
+    /**
+     * @param mixed $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 
     /**
@@ -276,6 +282,14 @@ class Meta
     /**
      * @return mixed
      */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getForm()
     {
         return $this->form ?? $this->defaultForm();
@@ -385,6 +399,7 @@ class Meta
             "column" => $this->column,
             "default" => $this->default,
             "filter" => $this->filter,
+            "template" => $this->template,
             "form" => $this->form,
             "format" => $this->format,
             "key" => $this->key,
@@ -428,6 +443,9 @@ class Meta
                         break;
                     case 'filter':
                         $this->setFilter($value);
+                        break;
+                    case 'template':
+                        $this->setTemplate($value);
                         break;
                     case 'form':
                         $this->setForm($value);
