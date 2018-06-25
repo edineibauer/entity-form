@@ -109,6 +109,7 @@ function saveEntity(silent) {
 
 function resetAttr(id) {
     entity.edit = typeof(id) !== "undefined" ? id : null;
+    $("#atributos, #template, #style, #class").val("");
     $(".selectInput").css("color", "#CCCCCC").val("");
     $("#format-source, #requireListExtend, .relation_container, .relation_creation_container").addClass("hide");
     $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
@@ -312,7 +313,7 @@ function saveAttrValue($input) {
         dicionarios[entity.name][entity.edit][name] = false;
     else if ("form" === name)
         dicionarios[entity.name][entity.edit][name] = $input.prop("checked") ? {} : false;
-    else if (dicionarios[entity.name][entity.edit]['form'] !== false && ["class", "style", "coll", "cols", "colm", "input"].indexOf(name) > -1)
+    else if (dicionarios[entity.name][entity.edit]['form'] !== false && ["class", "style", "template", "atributos", "coll", "cols", "colm", "input"].indexOf(name) > -1)
         dicionarios[entity.name][entity.edit]['form'][name] = $input.val();
     else if ("regex" === name)
         dicionarios[entity.name][entity.edit]['allow'][name] = $input.val();

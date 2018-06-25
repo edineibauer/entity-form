@@ -372,6 +372,14 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         <label for="style">Style</label>
                         <input id="style" type="text" class="input form_body">
                     </div>
+                    <div class="col s12 m6 padding-small form_body">
+                        <label for="template">Template</label>
+                        <input id="template" type="text" class="input form_body">
+                    </div>
+                    <div class="col s12 m6 padding-small form_body">
+                        <label for="atributos">Atributos</label>
+                        <input id="atributos" type="text" class="input form_body">
+                    </div>
                     <div class="clearfix"><br></div>
                 </div>
             </div>

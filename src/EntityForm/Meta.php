@@ -15,7 +15,6 @@ class Meta
     private $default;
     private $error;
     private $filter;
-    private $template;
     private $form;
     private $format;
     private $key;
@@ -129,21 +128,13 @@ class Meta
     }
 
     /**
-     * @param mixed $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
-
-    /**
      * @param mixed $form
      */
     public function setForm($form = null)
     {
         if (!empty($form) && is_array($form)) {
             foreach ($form as $name => $value) {
-                if (in_array($name, ['input', 'cols', 'coll', 'colm', 'class', 'style', 'defaults', 'fields']))
+                if (in_array($name, ['input', 'cols', 'atributos', 'template', 'coll', 'colm', 'class', 'style', 'defaults', 'fields']))
                     $this->form[$name] = $value;
             }
         } else {
@@ -282,14 +273,6 @@ class Meta
     /**
      * @return mixed
      */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getForm()
     {
         return $this->form ?? $this->defaultForm();
@@ -399,7 +382,6 @@ class Meta
             "column" => $this->column,
             "default" => $this->default,
             "filter" => $this->filter,
-            "template" => $this->template,
             "form" => $this->form,
             "format" => $this->format,
             "key" => $this->key,
@@ -443,9 +425,6 @@ class Meta
                         break;
                     case 'filter':
                         $this->setFilter($value);
-                        break;
-                    case 'template':
-                        $this->setTemplate($value);
                         break;
                     case 'form':
                         $this->setForm($value);
