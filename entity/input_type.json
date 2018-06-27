@@ -559,9 +559,9 @@
     "format": "valor",
     "type": "decimal",
     "nome": "Valor",
-    "size": 15,
+    "size": 11,
     "allow": {
-      "regex": "/^\\d{1,17}$/"
+      "regex": ""
     },
     "form": {
       "input": "valor"
