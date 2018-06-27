@@ -23,7 +23,9 @@
       "style": null,
       "cols": 12,
       "colm": null,
-      "coll": null
+      "coll": null,
+      "atributos": null,
+      "template": null
     },
     "select": [],
     "filter": [],
