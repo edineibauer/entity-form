@@ -420,8 +420,8 @@ class Dicionario
     private function checkToSetOwnerList(int $id)
     {
         $general = json_decode(file_get_contents(PATH_HOME . "entity/general/general_info.json"), true);
-        if(!empty($general[$this->entity]['owner'])) {
-            foreach ($general[$this->entity]['owner'] as $item) {
+        if(!empty($general[$this->entity]['owner']) || !empty($general[$this->entity]['ownerPublisher'])) {
+            foreach (array_merge($general[$this->entity]['owner'] ?? [], $general[$this->entity]['ownerPublisher'] ?? []) as $item) {
                 $entityRelation = $item[0];
                 $column = $item[1];
                 $userColumn = $item[2];

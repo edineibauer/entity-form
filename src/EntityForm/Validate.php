@@ -229,14 +229,6 @@ class Validate
                 $formatado = (float) (substr($m->getValue(), 0, 2) . "." . substr($m->getValue(), 2, 2));
 
             $m->setValue($formatado, false);
-
-        } elseif ($m->getFormat() === "valor" && strlen($m->getValue()) > 2 && !preg_match('/\./i', $m->getValue())){
-            if(strlen($m->getValue()) === 3)
-                $formatado = (substr($m->getValue(), 0, 1) . "." . substr($m->getValue(), 1, 2));
-            else
-                $formatado = (substr($m->getValue(), 0, strlen($m->getValue()) - 2) . "." . substr($m->getValue(), -2, 2));
-
-            $m->setValue($formatado, false);
         }
 
         if ($m->getKey() === "link")
@@ -255,11 +247,6 @@ class Validate
                 $m->setError("número inválido");
 
         } elseif ($m->getType() === "decimal") {
-            $size = (!empty($m->getSize()) ? [1, $m->getSize()] : [1, 15]);
-            if (strlen($m->getValue()) > $size[1])
-                $m->setError("valor maior que o permitido de {$size[1]}");
-            elseif (strlen($m->getValue()) < $size[0])
-                $m->setError("valor menor que o permitido de {$size[0]}");
 
         } elseif (in_array($m->getType(), array("double", "real", "float"))) {
             if (!is_numeric($m->getValue()))
