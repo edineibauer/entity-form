@@ -355,6 +355,7 @@ class Dicionario
             $columnPass = $d->search($d->getInfo()['password'])->getColumn();
         }
         if(!$passCheck || $passCheck->getValue() === $_SESSION['userlogin'][$columnPass]) {
+            $this->checkSetorChangeToHigh();
             if (!$this->getError() || !empty($id))
                 $this->saveAssociacaoSimples();
 
@@ -371,6 +372,17 @@ class Dicionario
             }
         } else {
             $passCheck->setError("Senha Inválida");
+        }
+    }
+
+    private function checkSetorChangeToHigh()
+    {
+        if($this->getEntity() === "usuarios"){
+            $setor = $this->search("setor");
+            if($setor->getValue() < $_SESSION['userlogin']['setor']){
+                $setor->setValue($_SESSION['userlogin']['setor'], false);
+                $setor->setError("Permissão Negada");
+            }
         }
     }
 
