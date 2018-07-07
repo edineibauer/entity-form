@@ -379,7 +379,7 @@ class Dicionario
     {
         if($this->getEntity() === "usuarios"){
             $setor = $this->search("setor");
-            if($setor->getValue() < $_SESSION['userlogin']['setor']){
+            if(!empty($_SESSION['userlogin']) && $setor->getValue() < $_SESSION['userlogin']['setor']){
                 $setor->setValue($_SESSION['userlogin']['setor'], false);
                 $setor->setError("Permissão Negada");
             }
