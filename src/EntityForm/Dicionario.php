@@ -397,11 +397,15 @@ class Dicionario
                     unset($dados[$meta->getColumn()]);
             }
 
+            $read = new Read();
+            $read->exeRead($this->entity, "WHERE id=:ii", "ii={$id}");
+            $oldDados = $read->getResult() ? $read->getResult()[0] : [];
+
             $up->exeUpdate($this->entity, $dados, "WHERE id = :id", "id={$id}");
             if ($up->getErro())
                 $this->search(0)->setError($up->getErro());
             else
-                new React("update", $this->entity, $dados);
+                new React("update", $this->entity, $dados, $oldDados);
         } else {
             $this->search(0)->setValue(null, false);
         }
