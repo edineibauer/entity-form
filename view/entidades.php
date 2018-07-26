@@ -591,6 +591,6 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
     </div>
     <?php
 
-    $data['data']['content'] = ob_get_contents();
+    $data['data'] = ob_get_contents();
     ob_end_clean();
 }
