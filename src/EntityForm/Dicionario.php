@@ -369,6 +369,15 @@ class Dicionario
                     $this->info = Metadados::getInfo($this->entity);
 
                 $this->createRelationalData();
+
+                $dados = $this->getDataForm();
+                if(!empty($id)) {
+                    $dd = new Dicionario($this->entity);
+                    $oldDados = $dd->getDataForm();
+                    new React("update", $this->entity, $dados, $oldDados);
+                } else {
+                    new React("create", $this->entity, $dados);
+                }
             }
         } else {
             $passCheck->setError("Senha Inválida");
@@ -392,26 +401,14 @@ class Dicionario
         if (Validate::update($this->entity, $id)) {
             $up = new Update();
             $dadosEntity = $this->getDataOnlyEntity();
-            $dados = $this->getDataForm();
             foreach ($this->dicionario as $meta) {
                 if ($meta->getError() || !in_array($meta->getColumn(), $this->metasEdited))
                     unset($dadosEntity[$meta->getColumn()]);
             }
 
-            $read = new Read();
-            $read->exeRead($this->entity, "WHERE id=:ii", "ii={$id}");
-            if($read->getResult()) {
-                $dd = new Dicionario($this->entity);
-                $oldDados = $dd->getDataForm();
-            } else {
-                $oldDados = [];
-            }
-
             $up->exeUpdate($this->entity, $dadosEntity, "WHERE id = :id", "id={$id}");
             if ($up->getErro())
                 $this->search(0)->setError($up->getErro());
-            else
-                new React("update", $this->entity, $dados, $oldDados);
         } else {
             $this->search(0)->setValue(null, false);
         }
@@ -425,7 +422,6 @@ class Dicionario
     {
         $create = new Create();
         $dadosEntity = $this->getDataOnlyEntity();
-        $dados = $this->getDataForm();
         unset($dadosEntity['id']);
         $create->exeCreate($this->entity, $dadosEntity);
         if ($create->getErro()) {
@@ -433,7 +429,6 @@ class Dicionario
         } elseif ($create->getResult()) {
             $this->search(0)->setValue((int)$create->getResult(), false);
             $this->checkToSetOwnerList($create->getResult());
-            new React("create", $this->entity, array_merge(["id" => $create->getResult()], $dados));
         }
     }
 
