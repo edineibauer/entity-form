@@ -391,17 +391,23 @@ class Dicionario
         $id = $this->search(0)->getValue();
         if (Validate::update($this->entity, $id)) {
             $up = new Update();
-            $dados = $this->getDataOnlyEntity();
+            $dadosEntity = $this->getDataOnlyEntity();
+            $dados = $this->getDataForm();
             foreach ($this->dicionario as $meta) {
                 if ($meta->getError() || !in_array($meta->getColumn(), $this->metasEdited))
-                    unset($dados[$meta->getColumn()]);
+                    unset($dadosEntity[$meta->getColumn()]);
             }
 
             $read = new Read();
             $read->exeRead($this->entity, "WHERE id=:ii", "ii={$id}");
-            $oldDados = $read->getResult() ? $read->getResult()[0] : [];
+            if($read->getResult()) {
+                $dd = new Dicionario($this->entity);
+                $oldDados = $dd->getDataForm();
+            } else {
+                $oldDados = [];
+            }
 
-            $up->exeUpdate($this->entity, $dados, "WHERE id = :id", "id={$id}");
+            $up->exeUpdate($this->entity, $dadosEntity, "WHERE id = :id", "id={$id}");
             if ($up->getErro())
                 $this->search(0)->setError($up->getErro());
             else
@@ -418,9 +424,10 @@ class Dicionario
     private function createTableData()
     {
         $create = new Create();
-        $dados = $this->getDataOnlyEntity();
-        unset($dados['id']);
-        $create->exeCreate($this->entity, $dados);
+        $dadosEntity = $this->getDataOnlyEntity();
+        $dados = $this->getDataForm();
+        unset($dadosEntity['id']);
+        $create->exeCreate($this->entity, $dadosEntity);
         if ($create->getErro()) {
             $this->search(0)->setError($create->getErro());
         } elseif ($create->getResult()) {
