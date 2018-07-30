@@ -332,6 +332,16 @@
       "defaults": ""
     }
   },
+  "checkbox_rel": {
+    "format": "checkbox_rel",
+    "type": "int",
+    "key": "selecao",
+    "form": {
+      "input": "checkbox_rel",
+      "fields": "",
+      "defaults": ""
+    }
+  },
   "checkbox_mult": {
     "format": "checkbox_mult",
     "type": "json",

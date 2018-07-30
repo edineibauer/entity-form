@@ -98,7 +98,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
     private function dropKeysFromColumnRemoved($id, $dados)
     {
         $sql = new SqlCommand();
-        if ($dados['key'] === "list" || $dados['key'] === "extend" || $dados['key'] === "selecao" || $dados['key'] === "selecaoUnique" || $dados['key'] === "publisher") {
+        if ($dados['key'] === "list" || $dados['key'] === "extend" || $dados['key'] === "selecao" || $dados['key'] === "checkbox_rel" || $dados['key'] === "selecaoUnique" || $dados['key'] === "publisher") {
             $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $dados['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $dados['column']);
 
         } elseif ($dados['key'] === "list_mult" || $dados['key'] === "extend_mult" || $dados['key'] === "selecao_mult") {
@@ -133,7 +133,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
                 } else {
                     $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " ADD " . parent::prepareSqlColumn($dados));
 
-                    if (in_array($dados['key'], array('extend', 'list', "selecao", "selecaoUnique")))
+                    if (in_array($dados['key'], array('extend', 'list', "selecao", "checkbox_rel", "selecaoUnique")))
                         parent::createIndexFk($this->entity, $dados['column'], $dados['relation'], "", $dados['key']);
                     elseif($dados['key'] === "publisher")
                         parent::createIndexFk($this->entity, $dados['column'], "usuarios", "", "publisher");
