@@ -317,7 +317,7 @@ class Validate
             elseif ($m->getType() === "mediumint" && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(24)))
                 $m->setError("numero excedeu seu limite. Max " . self::intLength($m->getSize()));
 
-            elseif ($m->getType() === "int" && !in_array($m->getKey(), ["extend", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "extend_mult"]) && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(32)))
+            elseif ($m->getType() === "int" && !in_array($m->getKey(), ["extend", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "extend_mult", "checkbox_mult"]) && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(32)))
                 $m->setError("numero excedeu seu limite. Max " . self::intLength($m->getSize()));
 
             elseif ($m->getType() === "bigint" && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(64)))

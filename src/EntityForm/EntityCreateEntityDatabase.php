@@ -53,7 +53,7 @@ class EntityCreateEntityDatabase extends EntityDatabase
     private function checkCreateMultSelectField(array $dicionario): array
     {
         foreach ($dicionario as $dic) {
-            if (in_array($dic['key'], ["list_mult", "extend_mult", "selecao_mult", "list", "extend", "selecao", "checkbox_rel"]) && !empty($dic['select'])) {
+            if (in_array($dic['key'], ["list_mult", "extend_mult", "selecao_mult", "list", "extend", "selecao", "checkbox_rel", "checkbox_mult"]) && !empty($dic['select'])) {
                 $relDic = Metadados::getDicionario($dic['relation']);
                 foreach ($dic['select'] as $select) {
                     foreach ($relDic as $item) {
@@ -77,7 +77,7 @@ class EntityCreateEntityDatabase extends EntityDatabase
     {
         $string = "CREATE TABLE IF NOT EXISTS `" . PRE . $entity . "` (`id` INT(11) NOT NULL";
         foreach ($data as $dados) {
-            if (!in_array($dados['key'], ["list_mult", "extend_mult", "selecao_mult"])) {
+            if (!in_array($dados['key'], ["list_mult", "extend_mult", "selecao_mult", "checkbox_mult"])) {
                 $string .= ", " . parent::prepareSqlColumn($dados);
             }
         }
@@ -98,7 +98,7 @@ class EntityCreateEntityDatabase extends EntityDatabase
             if (in_array($dados['key'], ["title", "link", "status", "email", "cpf", "cnpj", "telefone", "cep"]))
                 parent::exeSql("ALTER TABLE `" . PRE . $entity . "` ADD KEY `index_{$i}` (`{$dados['column']}`)");
 
-            if (in_array($dados['key'], array("extend", "extend_mult", "list", "list_mult", "selecao", "checkbox_rel", "selecao_mult", "selecaoUnique"))) {
+            if (in_array($dados['key'], array("extend", "extend_mult", "list", "list_mult", "selecao", "checkbox_rel", "selecao_mult", "checkbox_mult", "selecaoUnique"))) {
                 if (in_array($dados['key'], ["extend", "list", "selecao", "checkbox_rel", "selecaoUnique"]))
                     parent::createIndexFk($entity, $dados['column'], $dados['relation'], "", $dados['key']);
                 else

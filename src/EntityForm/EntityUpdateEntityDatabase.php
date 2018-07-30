@@ -101,7 +101,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
         if ($dados['key'] === "list" || $dados['key'] === "extend" || $dados['key'] === "selecao" || $dados['key'] === "checkbox_rel" || $dados['key'] === "selecaoUnique" || $dados['key'] === "publisher") {
             $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $dados['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $dados['column']);
 
-        } elseif ($dados['key'] === "list_mult" || $dados['key'] === "extend_mult" || $dados['key'] === "selecao_mult") {
+        } elseif ($dados['key'] === "list_mult" || $dados['key'] === "extend_mult" || $dados['key'] === "selecao_mult" || $dados['key'] === "checkbox_mult") {
             $sql->exeCommand("DROP TABLE " . PRE . $this->entity . "_" . $dados['relation']);
 
         } elseif ($id < 10000){
@@ -127,7 +127,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
         if ($add) {
             $sql = new SqlCommand();
             foreach ($add as $id => $dados) {
-                if (in_array($dados['key'], ["list_mult", "extend_mult", "selecao_mult"])) {
+                if (in_array($dados['key'], ["list_mult", "extend_mult", "selecao_mult", "checkbox_mult"])) {
                     parent::createRelationalTable($dados);
 
                 } else {
