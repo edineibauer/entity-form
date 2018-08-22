@@ -27,6 +27,11 @@
       "atributos": null,
       "template": null
     },
+    "datagrid": {
+      "relevant": null,
+      "gridm": null,
+      "gridl": null
+    },
     "select": [],
     "filter": [],
     "value": null

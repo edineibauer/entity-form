@@ -387,6 +387,70 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
 
             <div class="requireName hide card padding-medium">
+                <header class="row padding-small">
+                    <span class="left padding-medium">DataGrid</span>
+                    <label class="switch">
+                        <input type="checkbox" class="input" id="datagrid">
+                        <div class="slider"></div>
+                    </label>
+                </header>
+
+                <div class="row hide datagrid_body">
+                    <div class="clearfix"></div>
+
+                    <div class="col s4 padding-small grid_body">
+                        <label>Importância</label>
+                        <select class="input" id="relevant">
+                            <option value="" selected disabled>auto</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="col s4 padding-small grid_body">
+                        <label>Colunas Small</label>
+                        <select class="input form_body" id="gridm">
+                            <option value="" selected disabled>auto</option>
+                            <option value="12">12/12</option>
+                            <option value="11">11/12</option>
+                            <option value="10">10/12</option>
+                            <option value="9">9/12</option>
+                            <option value="8">8/12</option>
+                            <option value="7">7/12</option>
+                            <option value="6">6/12</option>
+                            <option value="5">5/12</option>
+                            <option value="4">4/12</option>
+                            <option value="3">3/12</option>
+                            <option value="2">2/12</option>
+                            <option value="1">1/12</option>
+                        </select>
+                    </div>
+                    <div class="col s4 padding-small grid_body">
+                        <label>Colunas Desktop</label>
+                        <select class="input form_body" id="gridl">
+                            <option value="" selected disabled>auto</option>
+                            <option value="12">12/12</option>
+                            <option value="11">11/12</option>
+                            <option value="10">10/12</option>
+                            <option value="9">9/12</option>
+                            <option value="8">8/12</option>
+                            <option value="7">7/12</option>
+                            <option value="6">6/12</option>
+                            <option value="5">5/12</option>
+                            <option value="4">4/12</option>
+                            <option value="3">3/12</option>
+                            <option value="2">2/12</option>
+                            <option value="1">1/12</option>
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="requireName hide card padding-medium">
                 <header class="row padding-large">
                     <span class="left">Validação</span>
                     <i class="material-icons padding-left">check</i>
