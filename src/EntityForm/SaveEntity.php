@@ -173,9 +173,11 @@ class SaveEntity
         if (!empty($metadados['owner'])) {
             foreach ($metadados['owner'] as $owner) {
                 $add = true;
-                foreach ($general[$owner["entity"]]['owner'] as $ow) {
-                    if ($ow[0] === $this->entity)
-                        $add = false;
+                if(!empty($general[$owner["entity"]]['owner'])) {
+                    foreach ($general[$owner["entity"]]['owner'] as $ow) {
+                        if ($ow[0] === $this->entity)
+                            $add = false;
+                    }
                 }
                 if ($add)
                     $general[$owner["entity"]]['owner'][] = [$this->entity, $owner["column"], $owner["userColumn"]];
