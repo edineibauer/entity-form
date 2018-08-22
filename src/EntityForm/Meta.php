@@ -51,7 +51,7 @@ class Meta
 
         if (in_array($this->format, ["list_mult", "selecao_mult", "extend_mult", "checkbox_mult"]))
             $this->checkValueAssociacaoMult($value);
-        elseif (in_array($this->key, ["extend", "list", "selecao", "checkbox_rel"]))
+        elseif (in_array($this->key, ["extend", "extend_add", "list", "selecao", "checkbox_rel"]))
             $this->checkValueAssociacaoSimples($value);
         elseif ($this->key === "publisher" && !empty($_SESSION['userlogin']))
             $this->value = $value ?? $_SESSION['userlogin']['id'];

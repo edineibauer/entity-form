@@ -292,6 +292,16 @@
       "defaults": ""
     }
   },
+  "extend_add": {
+    "format": "extend_add",
+    "type": "int",
+    "key": "extend_add",
+    "form": {
+      "input": "extend_add",
+      "fields": "",
+      "defaults": ""
+    }
+  },
   "list": {
     "format": "list",
     "type": "int",

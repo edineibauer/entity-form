@@ -119,7 +119,7 @@ class SaveEntity
     {
         $data = [
             "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "password" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
-            "required" => null, "unique" => null, "publisher" => null, "constant" => null, "extend" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null, "checkbox_rel" => null, "checkbox_mult" => null, "owner" => null, "ownerPublisher" => null,
+            "required" => null, "unique" => null, "publisher" => null, "constant" => null, "extend" => null, "extend_add" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null, "checkbox_rel" => null, "checkbox_mult" => null, "owner" => null, "ownerPublisher" => null,
             "source" => [
                 "image" => null,
                 "audio" => null,
@@ -134,7 +134,7 @@ class SaveEntity
         ];
 
         foreach ($metadados as $i => $dados) {
-            if (in_array($dados['key'], ["unique", "extend", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"]))
+            if (in_array($dados['key'], ["unique", "extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"]))
                 $data[$dados['key']][] = $i;
 
             if (in_array($dados['format'], ["title", "link", "status", "date", "datetime", "valor", "email", "password", "tel", "cpf", "cnpj", "cep", "time", "week", "month", "year"]))
@@ -184,7 +184,7 @@ class SaveEntity
         if (!empty($metadados['ownerPublisher'])) {
             foreach ($metadados['ownerPublisher'] as $owner) {
                 $add = true;
-                if (!empty($general[$owner["entity"]]['ownerPublisher'])) {
+                if(!empty($general[$owner["entity"]]['ownerPublisher'])) {
                     foreach ($general[$owner["entity"]]['ownerPublisher'] as $ow) {
                         if ($ow[0] === $this->entity)
                             $add = false;
@@ -211,7 +211,7 @@ class SaveEntity
     {
         foreach ($metadados as $i => $metadado) {
             if ($metadado['relation'] !== "usuarios") {
-                if (in_array($metadado['format'], ["extend", "extend_mult"])) {
+                if (in_array($metadado['format'], ["extend", "extend_add", "extend_mult"])) {
                     $data['owner'][] = ["entity" => $metadado['relation'], "column" => $metadado['column'], "userColumn" => $column];
                 } elseif (in_array($metadado['format'], ["list", "list_mult"])) {
                     $data['ownerPublisher'][] = ["entity" => $metadado['relation'], "column" => $metadado['column'], "userColumn" => $column];

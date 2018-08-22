@@ -154,6 +154,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         <select class="selectInput" id="funcaoRelation">
                             <option value="" disabled selected>Input Relacional</option>
                             <option value="extend">Extensão</option>
+                            <option value="extend_add">Extensão Add</option>
                             <option value="extend_mult">Extensão Multipla</option>
                             <option value="list">Lista</option>
                             <option value="list_mult">Lista Multipla</option>

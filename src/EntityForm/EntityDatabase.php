@@ -40,7 +40,7 @@ abstract class EntityDatabase
         $col = !empty($col) ? "_" . $col : "";
 
         $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_" . $column . $col . "` (`{$column}`)");
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `" . PRE . $column . $col . "_" . $table . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `" . rand(1000000,10000000) . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
     }
 
     protected function prepareSqlColumn($dados)

@@ -19,7 +19,7 @@ class Validate
     {
         if ($m->getColumn() !== "id") {
             self::checkDefaultSet($m);
-            if (!empty($m->getValue()) && !in_array($m->getKey(), ["extend", "list", "selecao", "checkbox_rel"])) {
+            if (!empty($m->getValue()) && !in_array($m->getKey(), ["extend", "extend_add", "list", "selecao", "checkbox_rel"])) {
                 self::checkRegular($m);
                 self::convertValues($m);
                 self::checkType($m);
@@ -37,7 +37,7 @@ class Validate
     {
         if (Entity::checkPermission($d->getEntity(), $d->search(0)->getValue())) {
             foreach ($d->getDicionario() as $m) {
-                if ($m->getColumn() !== "id" && !in_array($m->getKey(), ["extend", "list", "selecao", "checkbox_rel"])) {
+                if ($m->getColumn() !== "id" && !in_array($m->getKey(), ["extend", "extend_add", "list", "selecao", "checkbox_rel"])) {
                     self::checkLink($d, $m);
                     self::checkUnique($d, $m);
 
@@ -317,7 +317,7 @@ class Validate
             elseif ($m->getType() === "mediumint" && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(24)))
                 $m->setError("numero excedeu seu limite. Max " . self::intLength($m->getSize()));
 
-            elseif ($m->getType() === "int" && !in_array($m->getKey(), ["extend", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "extend_mult", "checkbox_mult"]) && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(32)))
+            elseif ($m->getType() === "int" && !in_array($m->getKey(), ["extend", "extend_add", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "extend_mult", "checkbox_mult"]) && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(32)))
                 $m->setError("numero excedeu seu limite. Max " . self::intLength($m->getSize()));
 
             elseif ($m->getType() === "bigint" && ($m->getValue() > self::intLength($m->getSize()) || $m->getValue() > self::intLength(64)))

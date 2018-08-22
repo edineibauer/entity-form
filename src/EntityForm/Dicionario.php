@@ -104,7 +104,7 @@ class Dicionario
                 $data[$meta->getColumn()] = Helper::convertImageJson($meta->getValue());
             } elseif ($meta->getFormat() === "source") {
                 $data[$meta->getColumn()] = json_decode($meta->getValue(), true)[0];
-            } elseif (in_array($meta->getKey(), ["list", "selecao", "extend", "checkbox_rel"])) {
+            } elseif (in_array($meta->getKey(), ["list", "selecao", "extend", "extend_add", "checkbox_rel"])) {
                 $data[$meta->getColumn()] = Entity::read($meta->getRelation(), $meta->getValue());
             } elseif (in_array($meta->getFormat(), ["list_mult", "selecao_mult", "extend_mult", "checkbox_mult"])) {
                 if (!empty($meta->getValue())) {
@@ -188,7 +188,7 @@ class Dicionario
     {
         $data = null;
         foreach ($this->dicionario as $i => $item) {
-            if (!in_array($item->getKey(), ["extend", "list", "selecao", "checkbox_rel", "extend_mult", "list_mult", "selecao_mult", "checkbox_mult", "publisher"]))
+            if (!in_array($item->getKey(), ["extend", "list", "extend_add", "selecao", "checkbox_rel", "extend_mult", "list_mult", "selecao_mult", "checkbox_mult", "publisher"]))
                 $data[] = $this->dicionario[$i];
         }
         return $data;
@@ -203,7 +203,7 @@ class Dicionario
             $this->info = Metadados::getInfo($this->entity);
 
         $data = [];
-        foreach (["extend", "list", "selecao", "checkbox_rel"] as $e) {
+        foreach (["extend", "list", "extend_add", "selecao", "checkbox_rel"] as $e) {
             if (!empty($this->info[$e])) {
                 foreach ($this->info[$e] as $simple)
                     $data[] = $this->dicionario[$simple];
@@ -285,7 +285,7 @@ class Dicionario
             $this->info = Metadados::getInfo($this->entity);
 
         $data = null;
-        foreach (["extend_mult", "list", "selecao", "checkbox_rel", "list_mult", "selecao_mult", "checkbox_mult"] as $e) {
+        foreach (["extend_mult", "list", "extend_add", "selecao", "checkbox_rel", "list_mult", "selecao_mult", "checkbox_mult"] as $e) {
             if (!empty($this->info[$e])) {
                 foreach ($this->info[$e] as $indice)
                     $data[] = $this->dicionario[$indice];
@@ -466,7 +466,7 @@ class Dicionario
         if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
-        foreach (["extend", "list", "selecao", "checkbox_rel"] as $e) {
+        foreach (["extend", "list", "extend_add", "selecao", "checkbox_rel"] as $e) {
             if (!empty($this->info[$e])) {
                 foreach ($this->info[$e] as $simple) {
                     $d = $this->dicionario[$simple]->getValue();
