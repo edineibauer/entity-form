@@ -18,6 +18,7 @@ class Meta
     private $form;
     private $format;
     private $key;
+    private $group;
     private $indice;
     private $nome;
     private $relation;
@@ -167,6 +168,14 @@ class Meta
     }
 
     /**
+     * @param mixed $group
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+    }
+
+    /**
      * @param mixed $nome
      */
     public function setNome($nome)
@@ -305,6 +314,14 @@ class Meta
     /**
      * @return mixed
      */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getNome()
     {
         return $this->nome;
@@ -386,6 +403,7 @@ class Meta
             "format" => $this->format,
             "key" => $this->key,
             "indice" => $this->indice,
+            "group" => $this->group,
             "nome" => $this->nome,
             "relation" => $this->relation,
             "select" => $this->select,
@@ -437,6 +455,9 @@ class Meta
                         break;
                     case 'indice':
                         $this->setIndice($value);
+                        break;
+                    case 'group':
+                        $this->setGroup($value);
                         break;
                     case 'nome':
                         $this->setNome($value);
