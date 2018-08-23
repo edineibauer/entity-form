@@ -7,6 +7,7 @@
     "column": null,
     "size": false,
     "key": null,
+    "group": null,
     "unique": false,
     "default": null,
     "update": true,
@@ -278,6 +279,7 @@
     "format": "extend",
     "type": "int",
     "key": "extend",
+    "group": "relation",
     "unique": true,
     "default": false,
     "update": false,
@@ -291,6 +293,7 @@
     "format": "extend_mult",
     "type": "json",
     "key": "extend_mult",
+    "group": "relation",
     "form": {
       "input": "extend_mult",
       "fields": "",
@@ -301,6 +304,7 @@
     "format": "extend_add",
     "type": "int",
     "key": "extend_add",
+    "group": "relation",
     "form": {
       "input": "extend_add",
       "fields": "",
@@ -311,6 +315,7 @@
     "format": "list",
     "type": "int",
     "key": "list",
+    "group": "relation",
     "form": {
       "input": "list",
       "fields": "",
@@ -321,6 +326,7 @@
     "format": "selecao",
     "type": "int",
     "key": "selecao",
+    "group": "relation",
     "form": {
       "input": "selecao",
       "fields": "",
@@ -331,6 +337,7 @@
     "format": "list_mult",
     "type": "json",
     "key": "list_mult",
+    "group": "relation",
     "form": {
       "input": "list_mult",
       "fields": "",
@@ -341,6 +348,7 @@
     "format": "selecao_mult",
     "type": "json",
     "key": "selecao_mult",
+    "group": "relation",
     "form": {
       "input": "selecao_mult",
       "fields": "",
@@ -351,6 +359,7 @@
     "format": "checkbox_rel",
     "type": "int",
     "key": "selecao",
+    "group": "relation",
     "form": {
       "input": "checkbox_rel",
       "fields": "",
@@ -361,6 +370,7 @@
     "format": "checkbox_mult",
     "type": "json",
     "key": "checkbox_mult",
+    "group": "relation",
     "form": {
       "input": "checkbox_mult",
       "fields": "",
