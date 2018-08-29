@@ -596,7 +596,7 @@
     "nome": "Valor",
     "size": 11,
     "allow": {
-      "regex": ""
+      "regex": "\/^(\\d{1,15})?(\\.)?\\d{1,2}$\/"
     },
     "form": {
       "input": "valor"
