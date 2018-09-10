@@ -222,14 +222,6 @@ class Validate
         if ($m->getFormat() === "password" || $m->getFormat() === "passwordRequired") {
             $m->setValue(Check::password($m->getValue()), false);
 
-        } elseif ($m->getFormat() === "percent" && strlen($m->getValue()) > 2){
-            if(strlen($m->getValue()) === 3)
-                $formatado = (float) (substr($m->getValue(), 0, 1) . "." . substr($m->getValue(), 1, 2));
-            else
-                $formatado = (float) (substr($m->getValue(), 0, 2) . "." . substr($m->getValue(), 2, 2));
-
-            $m->setValue($formatado, false);
-
         } elseif ($m->getFormat() === "valor" && strlen($m->getValue()) > 2 && !preg_match('/\./i', $m->getValue())){
             if(strlen($m->getValue()) === 3)
                 $formatado = (substr($m->getValue(), 0, 1) . "." . substr($m->getValue(), 1, 2));
