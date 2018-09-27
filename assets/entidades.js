@@ -247,30 +247,33 @@ function checkSaveFilter() {
 function checkSaveAssociacaoShowAttr() {
     if($.inArray(dicionarios[entity.name][entity.edit]['key'], ["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"]) > -1) {
 
-        if (typeof (dicionarios[entity.name][entity.edit]['form']['fields']) === "undefined" || typeof (dicionarios[entity.name][entity.edit]['form']['defaults']) === "undefined") {
-            dicionarios[entity.name][entity.edit]['form']['fields'] = [];
-            dicionarios[entity.name][entity.edit]['form']['defaults'] = {};
-        }
+        if(dicionarios[entity.name][entity.edit]['form'] !== false) {
 
-        $.each($(".relation_fields_show"), function () {
-            let id = $(this).attr("rel");
-            if(id !== "__$0__") {
-                id = parseInt(id);
-                if ($(this).is(":checked")) {
-                    if ($.inArray(id, dicionarios[entity.name][entity.edit].form.fields) === -1)
-                        dicionarios[entity.name][entity.edit].form.fields.push(id);
-                } else {
-                    dicionarios[entity.name][entity.edit].form.fields = $.grep(dicionarios[entity.name][entity.edit].form.fields, function (value) {
-                        return value != id;
-                    });
+            if (typeof (dicionarios[entity.name][entity.edit]['form']['fields']) === "undefined" || typeof (dicionarios[entity.name][entity.edit]['form']['defaults']) === "undefined") {
+                dicionarios[entity.name][entity.edit]['form']['fields'] = [];
+                dicionarios[entity.name][entity.edit]['form']['defaults'] = {};
+            }
+
+            $.each($(".relation_fields_show"), function () {
+                let id = $(this).attr("rel");
+                if (id !== "__$0__") {
+                    id = parseInt(id);
+                    if ($(this).is(":checked")) {
+                        if ($.inArray(id, dicionarios[entity.name][entity.edit].form.fields) === -1)
+                            dicionarios[entity.name][entity.edit].form.fields.push(id);
+                    } else {
+                        dicionarios[entity.name][entity.edit].form.fields = $.grep(dicionarios[entity.name][entity.edit].form.fields, function (value) {
+                            return value != id;
+                        });
+                    }
                 }
-            }
-        });
-        $.each($(".relation_fields_default"), function () {
-            if($(this).attr("rel") !== "__$0__") {
-                dicionarios[entity.name][entity.edit].form.defaults[parseInt($(this).attr("rel"))] = $(this).val();
-            }
-        });
+            });
+            $.each($(".relation_fields_default"), function () {
+                if ($(this).attr("rel") !== "__$0__") {
+                    dicionarios[entity.name][entity.edit].form.defaults[parseInt($(this).attr("rel"))] = $(this).val();
+                }
+            });
+        }
     }
 }
 
@@ -550,22 +553,28 @@ function checkAttrRelationToShow() {
     //check if fields exist
     if(entity.edit !== null) {
         let dic = dicionarios[entity.name][entity.edit];
-        if (typeof (dic['form']['fields']) === "undefined" || typeof (dic['form']['defaults']) === "undefined") {
+        if (dic['form'] !== false && (typeof (dic['form']['fields']) === "undefined" || typeof (dic['form']['defaults']) === "undefined")) {
             dic['form']['fields'] = [];
             dic['form']['defaults'] = {};
             $.each(dicRelation, function (i, e) {
                 dic.form.fields.push(parseInt(i));
                 dic.form.defaults[parseInt(i)] = "";
             });
-        }
 
-        $.each(dicRelation, function (i, e) {
-            i = parseInt(i);
-            var checked = $.inArray(i, dic.form.fields) > -1 ? 'checked="checked"' : '';
-            var value = typeof (dic.form.defaults[i]) !== "undefined" ? dic.form.defaults[i] : "";
-            copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: checked}, "append");
-            copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: value}, "append");
-        });
+            $.each(dicRelation, function (i, e) {
+                i = parseInt(i);
+                var checked = $.inArray(i, dic.form.fields) > -1 ? 'checked="checked"' : '';
+                var value = typeof (dic.form.defaults[i]) !== "undefined" ? dic.form.defaults[i] : "";
+                copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: checked}, "append");
+                copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: value}, "append");
+            });
+        } else {
+            $.each(dicRelation, function (i, e) {
+                i = parseInt(i);
+                copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: 'checked="checked"'}, "append");
+                copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: ''}, "append");
+            });
+        }
     } else {
 
         $.each(dicRelation, function (i, e) {
