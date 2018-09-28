@@ -174,6 +174,12 @@ function checkSaveAttr() {
                         yes = false;
                     }
                 });
+
+                if(temp.length > 28){
+                    toast("Entidade deve ter no máximo 28 caracteres. [" + temp.length + "]", 4500, "warning");
+                    yes = false;
+                }
+
                 if (yes && allowName(temp)) {
                     entity.name = temp;
                     identifier[entity.name] = 1;
@@ -451,6 +457,13 @@ function allowName(nome) {
         $(".requireName").addClass("hide");
         return false;
     }
+
+    if(nome.length > 28){
+        toast("Nome do Campo deve ter no máximo 28 caracteres. [" + nome.length + "]");
+        $(".requireName").addClass("hide");
+        return false;
+    }
+
     return true;
 }
 
