@@ -181,6 +181,7 @@ class Dicionario
         if(!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
+        $data = [];
         foreach (["extend", "extend_add"] as $e) {
             if (!empty($this->info[$e])) {
                 foreach ($this->info[$e] as $mult)
