@@ -167,7 +167,7 @@ function checkSaveAttr() {
     if (checkRequiresFields()) {
         if (entity.edit === null) {
             if (entity.name === "") {
-                var temp = slug($("#entityName").val(), '_');
+                let temp = slug($("#entityName").val(), '_');
                 $.each(dicionarios, function (nome, data) {
                     if (nome === temp) {
                         $("body").panel(themeNotify("Nome de Entidade já existe", "warning"));
@@ -175,16 +175,14 @@ function checkSaveAttr() {
                     }
                 });
 
-                if(temp.length > 28){
-                    toast("Entidade deve ter no máximo 28 caracteres. [" + temp.length + "]", 4500, "warning");
-                    yes = false;
-                }
-
-                if (yes && allowName(temp)) {
+                if (yes && allowName(temp, 1)) {
                     entity.name = temp;
                     identifier[entity.name] = 1;
                     dicionarios[entity.name] = {};
                 }
+
+                if (yes)
+                    yes = checkUniqueNameColumn();
             }
             if (yes) {
                 entity.edit = identifier[entity.name];
@@ -201,7 +199,7 @@ function checkSaveAttr() {
 }
 
 function saveAttrInputs() {
-    if(typeof(dicionarios[entity.name][entity.edit]) !== "undefined")
+    if (typeof(dicionarios[entity.name][entity.edit]) !== "undefined")
         var oldData = dicionarios[entity.name][entity.edit];
 
     dicionarios[entity.name][entity.edit] = assignObject(defaults.default, defaults[getType()]);
@@ -223,7 +221,7 @@ function saveAttrInputs() {
     else
         checkSaveAllow();
 
-    if(typeof(oldData) === "undefined" || typeof(oldData['indice']) === "undefined") {
+    if (typeof(oldData) === "undefined" || typeof(oldData['indice']) === "undefined") {
         let lastIndice = 0;
         $.each(dicionarios[entity.name], function (i, e) {
             if (e.indice > lastIndice)
@@ -251,9 +249,9 @@ function checkSaveFilter() {
 }
 
 function checkSaveAssociacaoShowAttr() {
-    if($.inArray(dicionarios[entity.name][entity.edit]['key'], ["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"]) > -1) {
+    if ($.inArray(dicionarios[entity.name][entity.edit]['key'], ["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"]) > -1) {
 
-        if(dicionarios[entity.name][entity.edit]['form'] !== false) {
+        if (dicionarios[entity.name][entity.edit]['form'] !== false) {
 
             if (typeof (dicionarios[entity.name][entity.edit]['form']['fields']) === "undefined" || typeof (dicionarios[entity.name][entity.edit]['form']['defaults']) === "undefined") {
                 dicionarios[entity.name][entity.edit]['form']['fields'] = [];
@@ -419,7 +417,7 @@ function setFormat(val) {
 
         if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"].indexOf(val) > -1) {
             $(".relation_container").removeClass("hide");
-            if(["selecao", "selecao_mult", "checkbox_mult"].indexOf(val) === -1)
+            if (["selecao", "selecao_mult", "checkbox_mult"].indexOf(val) === -1)
                 $(".relation_creation_container").removeClass("hide");
         }
     }
@@ -443,7 +441,7 @@ function checkRequiresFields() {
 }
 
 function checkFieldsOpenOrClose(nome) {
-    if (allowName(nome)) {
+    if (allowName(nome, 2)) {
         if (checkRequiresFields())
             $(".requireName").removeClass("hide");
         else
@@ -451,18 +449,48 @@ function checkFieldsOpenOrClose(nome) {
     }
 }
 
-function allowName(nome) {
-    if (["add", "all", "alter", "analyze", "and", "as", "asc", "asensitive", "before", "between", "bigint", "binary", "blob", "both", "by", "call", "cascade", "case", "change", "char", "character", "check", "collate", "column", "condition", "connection", "constraint", "continue", "convert", "create", "cross", "current_date", "current_time", "current_timestamp", "current_user", "cursor", "database", "databases", "day_hour", "day_microsecond", "day_minute", "day_second", "dec", "decimal", "declare", "default", "delayed", "delete", "desc", "describe", "deterministic", "distinct", "distinctrow", "div", "double", "drop", "dual", "each", "else", "elseif", "enclosed", "escaped", "exists", "exit", "explain", "false", "fetch", "float", "for", "force", "foreign", "from", "fulltext", "goto", "grant", "group", "having", "high_priority", "hour_microsecond", "hour_minute", "hour_second", "if", "ignore", "in", "index", "infile", "inner", "inout", "insensitive", "insert", "int", "integer", "interval", "into", "is", "iterate", "join", "key", "keys", "kill", "leading", "leave", "left", "like", "limit", "lines", "load", "localtime", "localtimestamp", "lock", "long", "longblob", "longtext", "loop", "low_priority", "match", "mediumblob", "mediumint", "mediumtext", "middleint", "minute_microsecond", "minute_second", "mod", "modifies", "natural", "not", "no_write_to_binlog", "null", "numeric", "on", "optimize", "option", "optionally", "or", "order", "out", "outer", "outfile", "precision", "primary", "procedure", "purge", "read", "reads", "real", "references", "regexp", "rename", "repeat", "replace", "require", "restrict", "return", "revoke", "right", "rlike", "schema", "schemas", "second_microsecond", "select", "sensitive", "separator", "set", "show", "smallint", "soname", "spatia", "specific", "sql", "sqlexception", "sqlstate", "sqlwarning", "sql_big_result", "sql_calc_found_rows", "sql_small_result", "ssl", "starting", "straight_join", "table", "terminated", "then", "tinyblob", "tinyint", "tinytext", "to", "trailing", "trigger", "true", "undo", "union", "unique", "unlock", "unsigned", "update", "usage", "use", "using", "utc_date", "utc_time", "utc_timestamp", "values", "varbinary", "varchar", "varcharacter", "varying", "when", "where", "while", "with", "write", "xor", "year_month", "zerofill"].indexOf(nome) > 0) {
-        $("body").panel(themeNotify("Este nome é reservado pelo sistema", "error"));
-        $(".requireName").addClass("hide");
-        return false;
+function allowName(nome, tipo) {
+
+    if (typeof nome !== "undefined") {
+        //nomes especiais do banco
+        if (["add", "all", "alter", "analyze", "and", "as", "asc", "asensitive", "before", "between", "bigint", "binary", "blob", "both", "by", "call", "cascade", "case", "change", "char", "character", "check", "collate", "column", "condition", "connection", "constraint", "continue", "convert", "create", "cross", "current_date", "current_time", "current_timestamp", "current_user", "cursor", "database", "databases", "day_hour", "day_microsecond", "day_minute", "day_second", "dec", "decimal", "declare", "default", "delayed", "delete", "desc", "describe", "deterministic", "distinct", "distinctrow", "div", "double", "drop", "dual", "each", "else", "elseif", "enclosed", "escaped", "exists", "exit", "explain", "false", "fetch", "float", "for", "force", "foreign", "from", "fulltext", "goto", "grant", "group", "having", "high_priority", "hour_microsecond", "hour_minute", "hour_second", "if", "ignore", "in", "index", "infile", "inner", "inout", "insensitive", "insert", "int", "integer", "interval", "into", "is", "iterate", "join", "key", "keys", "kill", "leading", "leave", "left", "like", "limit", "lines", "load", "localtime", "localtimestamp", "lock", "long", "longblob", "longtext", "loop", "low_priority", "match", "mediumblob", "mediumint", "mediumtext", "middleint", "minute_microsecond", "minute_second", "mod", "modifies", "natural", "not", "no_write_to_binlog", "null", "numeric", "on", "optimize", "option", "optionally", "or", "order", "out", "outer", "outfile", "precision", "primary", "procedure", "purge", "read", "reads", "real", "references", "regexp", "rename", "repeat", "replace", "require", "restrict", "return", "revoke", "right", "rlike", "schema", "schemas", "second_microsecond", "select", "sensitive", "separator", "set", "show", "smallint", "soname", "spatia", "specific", "sql", "sqlexception", "sqlstate", "sqlwarning", "sql_big_result", "sql_calc_found_rows", "sql_small_result", "ssl", "starting", "straight_join", "table", "terminated", "then", "tinyblob", "tinyint", "tinytext", "to", "trailing", "trigger", "true", "undo", "union", "unique", "unlock", "unsigned", "update", "usage", "use", "using", "utc_date", "utc_time", "utc_timestamp", "values", "varbinary", "varchar", "varcharacter", "varying", "when", "where", "while", "with", "write", "xor", "year_month", "zerofill"].indexOf(nome) > 0) {
+            $("body").panel(themeNotify("Este nome é reservado pelo sistema", "error"));
+            $(".requireName").addClass("hide");
+            return false;
+        }
+
+        //tamanho máximo de caracteres
+        if (nome.length > 28) {
+            toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 28 caracteres. [" + nome.length + "]", 4500, "warning");
+            $(".requireName").addClass("hide");
+            return false;
+        }
+
+        //nome repetido
+        if (tipo === 2) {
+            let tt = slug(nome, "_");
+            $.each(dicionarios[entity.name], function (i, e) {
+                if (tt === e.column) {
+                    toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " já esta em uso", 4500, "warning");
+                    $(".requireName").addClass("hide");
+                    return false;
+                }
+            })
+        }
     }
 
-    if(nome.length > 28){
-        toast("Nome do Campo deve ter no máximo 28 caracteres. [" + nome.length + "]");
-        $(".requireName").addClass("hide");
-        return false;
-    }
+    return true;
+}
+
+function checkUniqueNameColumn() {
+    $.each(dicionarios[entity.name], function (j, k) {
+        $.each(dicionarios[entity.name], function (i, e) {
+            if (k.column === e.column) {
+                toast("Nome do Campo" + k.column + " precisa ser único", 4500, "warning");
+                return false;
+            }
+        });
+    });
 
     return true;
 }
@@ -564,7 +592,7 @@ function checkAttrRelationToShow() {
     $("#relation_fields_show, #relation_fields_default").html("");
 
     //check if fields exist
-    if(entity.edit !== null) {
+    if (entity.edit !== null) {
         let dic = dicionarios[entity.name][entity.edit];
         if (dic['form'] !== false && (typeof (dic['form']['fields']) === "undefined" || typeof (dic['form']['defaults']) === "undefined")) {
             dic['form']['fields'] = [];
@@ -584,7 +612,11 @@ function checkAttrRelationToShow() {
         } else {
             $.each(dicRelation, function (i, e) {
                 i = parseInt(i);
-                copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: 'checked="checked"'}, "append");
+                copy("#tpl_relation_fields_show", "#relation_fields_show", {
+                    0: i,
+                    1: e.nome,
+                    2: 'checked="checked"'
+                }, "append");
                 copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: ''}, "append");
             });
         }
@@ -592,7 +624,11 @@ function checkAttrRelationToShow() {
 
         $.each(dicRelation, function (i, e) {
             i = parseInt(i);
-            copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: 'checked="checked"'}, "append");
+            copy("#tpl_relation_fields_show", "#relation_fields_show", {
+                0: i,
+                1: e.nome,
+                2: 'checked="checked"'
+            }, "append");
             copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: ""}, "append");
         });
     }

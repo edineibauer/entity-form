@@ -142,13 +142,13 @@ class Dicionario
     /**
      * Retorna valores de uma entidade correspondente ao seu armazenamento em sql na sua tabela
      *
-     * @return mixed
+     * @return array
      */
-    private function getDataOnlyEntity()
+    private function getDataOnlyEntity(): array
     {
-        $data = null;
+        $data = [];
         foreach ($this->dicionario as $meta) {
-            if (!in_array($meta->getKey(), ["extend_mult", "list_mult", "selecao_mult", "information", "checkbox_mult"]) && ($meta->getFormat() !== "password" || strlen($meta->getValue()) > 3))
+            if (!in_array($meta->getFormat(), ["extend_mult", "list_mult", "selecao_mult", "information", "checkbox_mult"]) && ($meta->getFormat() !== "password" || strlen($meta->getValue()) > 3))
                 $data[$meta->getColumn()] = $meta->getValue();
         }
         return $data;
@@ -178,7 +178,7 @@ class Dicionario
 
     public function getExtends()
     {
-        if(!$this->info)
+        if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
         $data = [];
@@ -358,11 +358,11 @@ class Dicionario
     {
         $id = $this->search(0)->getValue();
         $passCheck = $this->search("format", "passwordRequired");
-        if($passCheck) {
+        if ($passCheck) {
             $d = new Dicionario("usuarios");
             $columnPass = $d->search($d->getInfo()['password'])->getColumn();
         }
-        if(!$passCheck || $passCheck->getValue() === $_SESSION['userlogin'][$columnPass]) {
+        if (!$passCheck || $passCheck->getValue() === $_SESSION['userlogin'][$columnPass]) {
             $this->checkSetorChangeToHigh();
             if (!$this->getError() || !empty($id))
                 $this->saveAssociacaoSimples();
@@ -379,7 +379,7 @@ class Dicionario
                 $this->createRelationalData();
 
                 $dados = $this->getDataForm();
-                if(!empty($id)) {
+                if (!empty($id)) {
                     $dd = new Dicionario($this->entity);
                     $oldDados = $dd->getDataForm();
                     new React("update", $this->entity, $dados, $oldDados);
@@ -394,9 +394,9 @@ class Dicionario
 
     private function checkSetorChangeToHigh()
     {
-        if($this->getEntity() === "usuarios"){
+        if ($this->getEntity() === "usuarios") {
             $setor = $this->search("setor");
-            if(!empty($_SESSION['userlogin']) && $setor->getValue() < $_SESSION['userlogin']['setor']){
+            if (!empty($_SESSION['userlogin']) && $setor->getValue() < $_SESSION['userlogin']['setor']) {
                 $setor->setValue($_SESSION['userlogin']['setor'], false);
                 $setor->setError("Permissão Negada");
             }
@@ -446,7 +446,7 @@ class Dicionario
     private function checkToSetOwnerList(int $id)
     {
         $general = json_decode(file_get_contents(PATH_HOME . "entity/general/general_info.json"), true);
-        if(!empty($general[$this->entity]['owner']) || !empty($general[$this->entity]['ownerPublisher'])) {
+        if (!empty($general[$this->entity]['owner']) || !empty($general[$this->entity]['ownerPublisher'])) {
             foreach (array_merge($general[$this->entity]['owner'] ?? [], $general[$this->entity]['ownerPublisher'] ?? []) as $item) {
                 $entityRelation = $item[0];
                 $column = $item[1];
@@ -454,7 +454,7 @@ class Dicionario
 
                 $read = new Read();
                 $read->exeRead($entityRelation, "WHERE {$userColumn} = :user", "user={$_SESSION['userlogin']['id']}");
-                if($read->getResult()) {
+                if ($read->getResult()) {
                     $idUser = $read->getResult()[0]['id'];
 
                     $tableRelational = PRE . $entityRelation . "_" . $column;
@@ -474,20 +474,17 @@ class Dicionario
         if (!$this->info)
             $this->info = Metadados::getInfo($this->entity);
 
-        foreach (["extend", "list", "extend_add", "selecao", "checkbox_rel"] as $e) {
-            if (!empty($this->info[$e])) {
-                foreach ($this->info[$e] as $simple) {
-                    $d = $this->dicionario[$simple]->getValue();
-                    if (is_object($d) && get_class($d) === "EntityForm\Dicionario") {
-                        if($e === "extend" || !empty($d->search(0)->getValue()))
-                            $d->save();
+        if (!empty($this->info["extend"])) {
+            foreach ($this->info["extend"] as $simple) {
+                $d = $this->dicionario[$simple]->getValue();
+                if (is_object($d) && get_class($d) === "EntityForm\Dicionario") {
+                    $d->save();
 
-                        if (!empty($d->getError()))
-                            $this->dicionario[$simple]->setError($d->getError()[$d->getEntity()]);
+                    if (!empty($d->getError()))
+                        $this->dicionario[$simple]->setError($d->getError()[$d->getEntity()]);
 
-                        if (!empty($d->search(0)->getValue()))
-                            $this->dicionario[$simple]->setValue((int)$d->search(0)->getValue(), false);
-                    }
+                    if (!empty($d->search(0)->getValue()))
+                        $this->dicionario[$simple]->setValue((int)$d->search(0)->getValue(), false);
                 }
             }
         }
@@ -535,8 +532,7 @@ class Dicionario
             $search = $field;
             $field = "column";
         }
-        $results = array_keys(array_filter($this->dicionario, function ($value) use ($field, $search)
-        {
+        $results = array_keys(array_filter($this->dicionario, function ($value) use ($field, $search) {
             return $value->get($field) === $search;
         }));
         return (!empty($results) ? $results[0] : null);

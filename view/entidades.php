@@ -250,7 +250,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
             <option id="optionTpl" class="hide" value="__$0____$2__">__$1__</option>
 
-            <div class="hide card padding-medium relation_container" id="requireListFilter">
+            <div class="hide card padding-medium relation_container requireName" id="requireListFilter">
                 <header class="row padding-small">
                     <span class="left padding-medium" style="padding-left: 0!important;">Filtrar Lista</span>
                     <button class="btn-floating color-blue opacity hover-opacity-off" onclick="addFilter()"><i

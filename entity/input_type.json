@@ -280,8 +280,6 @@
     "type": "int",
     "key": "extend",
     "group": "relation",
-    "unique": true,
-    "default": false,
     "update": false,
     "form": {
       "input": "extend",
@@ -379,6 +377,7 @@
   },
   "publisher": {
     "format": "publisher",
+    "nome": "autor",
     "type": "int",
     "key": "publisher",
     "update": false,
@@ -386,6 +385,7 @@
   },
   "owner": {
     "format": "owner",
+    "nome": "dono",
     "type": "int",
     "key": "publisher",
     "update": false,
