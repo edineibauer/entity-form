@@ -14,12 +14,20 @@ if($name !== $newName) {
     rename(PATH_HOME . "entity/cache/info/{$name}.json",PATH_HOME . "entity/cache/info/{$newName}.json");
 
     //change name entity in others relations
+    $dic = new \EntityForm\Dicionario($newName);
+    foreach ($dic->getAssociationMult() as $item)
+        $sql->exeCommand("RENAME TABLE  `" . PRE . "{$name}_{$item->getColumn()}` TO  `" . PRE . "{$newName}_{$item->getColumn()}`");
+
+    //change name entity in others relations
     foreach (\Helpers\Helper::listFolder(PATH_HOME . "entity/cache") as $f) {
         if($f !== "info" && preg_match('/\.json$/i', $f)) {
-            $c = file_get_contents(PATH_HOME . "entity/cache/{$f}");
-            $c = str_replace('"' . $name . '",', '"' . $newName . '",', $c);
+            $cc = json_decode(file_get_contents(PATH_HOME . "entity/cache/{$f}"), true);
+            foreach ($cc as $i => $c) {
+                if($c['relation'] === $name)
+                    $cc[$i]['relation'] = $newName;
+            }
             $file = fopen(PATH_HOME . "entity/cache/{$f}", "w");
-            fwrite($file, $c);
+            fwrite($file, json_encode($cc));
             fclose($file);
         }
     }

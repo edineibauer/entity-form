@@ -2,6 +2,8 @@
 
 namespace EntityForm;
 
+use ConnCrud\Delete;
+use ConnCrud\Read;
 use ConnCrud\SqlCommand;
 
 class EntityUpdateEntityDatabase extends EntityDatabase
@@ -67,6 +69,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
         $del = $this->getDeletes();
 
         if ($del) {
+            $delete = new Delete();
             foreach ($del as $id => $dic) {
                 $this->dropKeysFromColumnRemoved($id, $dic);
 
@@ -83,9 +86,9 @@ class EntityUpdateEntityDatabase extends EntityDatabase
             if (!isset($this->new[$i]))
                 $data[$i] = $d;
 
-            if(!empty($d['select']) && (empty($this->new[$i]['select']) || $d['select'] !== $this->new[$i]['select'])) {
+            if (!empty($d['select']) && (empty($this->new[$i]['select']) || $d['select'] !== $this->new[$i]['select'])) {
                 foreach ($d['select'] as $e => $oldSelect) {
-                    if(empty($this->new[$i]['select']) || !in_array($oldSelect, $this->new[$i]['select']))
+                    if (empty($this->new[$i]['select']) || !in_array($oldSelect, $this->new[$i]['select']))
                         $data[10001 + $e] = parent::getSelecaoUnique($d, $oldSelect)[1];
                 }
             }
@@ -97,14 +100,41 @@ class EntityUpdateEntityDatabase extends EntityDatabase
 
     private function dropKeysFromColumnRemoved($id, $dados)
     {
+        $read = new Read();
+        $delete = new Delete();
         $sql = new SqlCommand();
-        if ($dados['key'] === "list" || $dados['key'] === "extend_all" || $dados['key'] === "extend" || $dados['key'] === "selecao" || $dados['key'] === "checkbox_rel" || $dados['key'] === "selecaoUnique" || $dados['key'] === "publisher") {
-            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY " . PRE . $dados['column'] . "_" . $this->entity . ", DROP INDEX fk_" . $dados['column']);
+        if (in_array($dados['format'], ["list", "extend", "extend_add", "selecao", "checkbox_rel", "selecaoUnique", "publisher"]))
+            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY fk_contraint_" . $dados['column'] . ", DROP INDEX fk_" . $dados['column']);
 
-        } elseif ($dados['key'] === "list_mult" || $dados['key'] === "extend_mult" || $dados['key'] === "selecao_mult" || $dados['key'] === "checkbox_mult") {
-            $sql->exeCommand("DROP TABLE " . PRE . $this->entity . "_" . $dados['relation']);
+        //deleta dados armazenados da extensão
+        if (in_array($dados['format'], ['extend_add', 'extend'])) {
+            $read->exeRead($this->entity);
+            if ($read->getResult()) {
+                foreach ($read->getResult() as $ent) {
+                    if (!empty($ent[$dados['column']]))
+                        $delete->exeDelete($dados['relation'], "WHERE id = :id", "id={$ent[$dados['column']]}");
+                }
+            }
 
-        } elseif ($id < 10000){
+        } elseif ($dados['format'] === 'extend_mult') {
+            $read->exeRead($this->entity);
+            if ($read->getResult()) {
+                foreach ($read->getResult() as $ent) {
+                    $read->exeRead($this->entity . "_" . $dados['column'], "WHERE {$this->entity}_id = :ii", "ii={$ent['id']}");
+                    if ($read->getResult()) {
+                        foreach ($read->getResult() as $item)
+                            $delete->exeDelete($dados['relation'], "WHERE id = :id", "id={$item[$dados['relation'] . "_id"]}");
+                    }
+                }
+            }
+        }
+
+        if ($dados['format'] === "list_mult" || $dados['format'] === "extend_mult" || $dados['format'] === "selecao_mult" || $dados['format'] === "checkbox_mult") {
+
+            //deleta dados da tabela relacional
+            $sql->exeCommand("DROP TABLE " . PRE . $this->entity . "_" . $dados['column']);
+
+        } elseif ($id < 10000) {
 
             //INDEX
             $sql->exeCommand("SHOW KEYS FROM " . PRE . $this->entity . " WHERE KEY_NAME ='index_{$id}'");
@@ -135,7 +165,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
 
                     if (in_array($dados['key'], array('extend', "extend_add", 'list', "selecao", "checkbox_rel", "selecaoUnique")))
                         parent::createIndexFk($this->entity, $dados['column'], $dados['relation'], "", $dados['key']);
-                    elseif($dados['key'] === "publisher")
+                    elseif ($dados['key'] === "publisher")
                         parent::createIndexFk($this->entity, $dados['column'], "usuarios", "", "publisher");
                 }
             }
@@ -151,9 +181,9 @@ class EntityUpdateEntityDatabase extends EntityDatabase
                 $data[$e] = $dic;
 
 
-            if(!empty($dic['select']) && (empty($this->old[$e]['select']) || $dic['select'] !== $this->old[$e]['select'])) {
+            if (!empty($dic['select']) && (empty($this->old[$e]['select']) || $dic['select'] !== $this->old[$e]['select'])) {
                 foreach ($dic['select'] as $newSelect) {
-                    if(empty($this->old[$e]['select']) || !in_array($newSelect, $this->old[$e]['select'])) {
+                    if (empty($this->old[$e]['select']) || !in_array($newSelect, $this->old[$e]['select'])) {
                         $data[$i] = parent::getSelecaoUnique($dic, $newSelect)[1];
                         $i++;
                     }

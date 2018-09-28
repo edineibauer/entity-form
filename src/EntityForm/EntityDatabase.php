@@ -18,10 +18,9 @@ abstract class EntityDatabase
         $this->entity = $entityName;
     }
 
-
     protected function createRelationalTable($dados)
     {
-        $table = $this->entity . "_" . $dados['relation'] . "_" . $dados['column'];
+        $table = $this->entity . "_" . $dados['column'];
 
         $string = "CREATE TABLE IF NOT EXISTS `" . PRE . $table . "` ("
             . "`{$this->entity}_id` INT(11) NOT NULL,"
@@ -36,11 +35,11 @@ abstract class EntityDatabase
 
     protected function createIndexFk($table, $column, $tableTarget, $col = "", $key = null)
     {
-        $delete = !$key || $key === "extend" ? "CASCADE" : ($key === "publisher" ? "SET NULL" : "RESTRICT");
+        $delete = ($key === "publisher" ? "SET NULL" : "CASCADE");
         $col = !empty($col) ? "_" . $col : "";
 
         $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_" . $column . $col . "` (`{$column}`)");
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `" . rand(1000000,10000000) . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `{$column}_" . strtotime('now') . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
     }
 
     protected function prepareSqlColumn($dados)
