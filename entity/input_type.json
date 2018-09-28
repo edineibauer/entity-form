@@ -604,6 +604,7 @@
   },
   "percent": {
     "format": "percent",
+    "nome": "porcentagem",
     "type": "float",
     "allow": {
       "regex": "/^\\d{1,4}$/"

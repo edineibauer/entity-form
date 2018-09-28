@@ -131,7 +131,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <option value="link">Link</option>
                             <option value="status">Status</option>
                             <option value="valor">R$ Valor</option>
-                            <option value="percent">Percentagem %</option>
+                            <option value="percent">Porcentagem %</option>
                             <option value="url">Url</option>
                             <option value="email">Email</option>
                             <option value="password">Password</option>
