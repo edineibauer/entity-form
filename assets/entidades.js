@@ -734,7 +734,6 @@ $(function () {
         checkEntityMultipleFields();
 
     }).off("change", ".selectInput").on("change", ".selectInput", function () {
-        console.log($(this).val());
         setFormat($(this).val());
         applyAttr(assignObject(defaults.default, defaults[getType()]));
         checkFieldsOpenOrClose();
