@@ -7,6 +7,8 @@ $del = new \ConnCrud\Delete();
 $read = new \ConnCrud\Read();
 
 $dic = new \EntityForm\Dicionario($entity);
+
+//Remove dados extendidos multiplos e tablas de relação multiplas
 if (!empty($dic->getAssociationMult())) {
     foreach ($dic->getAssociationMult() as $item) {
         if ($item->getFormat() === "extend_mult") {
@@ -20,6 +22,7 @@ if (!empty($dic->getAssociationMult())) {
     }
 }
 
+//Remove dados extendidos simples
 if (!empty($dic->getExtends())) {
     foreach ($dic->getExtends() as $extend) {
         $read->exeRead($entity);
@@ -32,21 +35,49 @@ if (!empty($dic->getExtends())) {
     }
 }
 
-//change name entity in others relations
+//change name entity in others relations AND DELETE TABLES AND COLUMNS RELATIONS
 foreach (\Helpers\Helper::listFolder(PATH_HOME . "entity/cache") as $f) {
     if ($f !== "info" && preg_match('/\.json$/i', $f)) {
+        $infoCC = json_decode(file_get_contents(PATH_HOME . "entity/cache/info/{$f}"), true);
         $cc = json_decode(file_get_contents(PATH_HOME . "entity/cache/{$f}"), true);
         $fEntity = str_replace(".json", "", $f);
         foreach ($cc as $i => $c) {
             if ($c['relation'] === $entity) {
-                if (in_array($c['format'], ['extend_mult', 'list_mult', 'selecao_mult', 'checkbox_mult']))
+
+                if (in_array($c['format'], ['extend_mult', 'list_mult', 'selecao_mult', 'checkbox_mult'])) {
+                    //DROP RELATION TABLE
                     $sql->exeCommand("DROP TABLE " . PRE . "{$fEntity}_{$c['column']}");
 
+                    if (($key = array_search($i, $infoCC[$c['format']])) !== false)
+                        unset($infoCC[$c['format']][$key]);
+
+                } elseif(in_array($c['format'], ['extend', 'list', 'selecao', 'checkbox_rel', 'extend_add', 'selecaoUnique'])) {
+
+                    //DROP FK AND INDEX
+                    $sql->exeCommand("ALTER TABLE " . PRE . $fEntity . " DROP FOREIGN KEY fk_contraint_" . $c['column'] . ", DROP INDEX fk_" . $c['column']);
+
+                    //DROP UNIQUE INDEX
+                    $sql->exeCommand("SHOW KEYS FROM " . PRE . $fEntity . " WHERE KEY_NAME ='unique_{$i}'");
+                    if ($sql->getRowCount() > 0)
+                        $sql->exeCommand("ALTER TABLE " . PRE . $fEntity . " DROP INDEX unique_" . $i);
+
+                    //DROP COLUMN
+                    $sql->exeCommand("ALTER TABLE " . PRE . $fEntity . " DROP COLUMN " . $c['column']);
+
+                    if (($key = array_search($i, $infoCC[$c['format']])) !== false)
+                        unset($infoCC[$c['format']][$key]);
+                }
+
+                //Remove from entity file
                 unset($cc[$i]);
             }
         }
         $file = fopen(PATH_HOME . "entity/cache/{$f}", "w");
         fwrite($file, json_encode($cc));
+        fclose($file);
+
+        $file = fopen(PATH_HOME . "entity/cache/info/{$f}", "w");
+        fwrite($file, json_encode($infoCC));
         fclose($file);
     }
 }

@@ -38,8 +38,8 @@ abstract class EntityDatabase
         $delete = ($key === "publisher" ? "SET NULL" : "CASCADE");
         $col = !empty($col) ? "_" . $col : "";
 
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_" . $column . $col . "` (`{$column}`)");
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `{$column}_" . strtotime('now') . "` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_" . $column . "` (`{$column}`)");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `fk_contraint_{$column}` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
     }
 
     protected function prepareSqlColumn($dados)
