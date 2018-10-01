@@ -425,7 +425,7 @@ class Meta
     {
         if (!empty($dados)) {
             if (!$default)
-                $default = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true)['default'];
+                $default = json_decode(file_get_contents(PATH_HOME . (DOMINIO === "entity-form" ? "" : VENDOR . "entity-form/") . "entity/input_type.json"), true)['default'];
 
             foreach (array_replace_recursive($default, $dados) as $dado => $value) {
                 switch ($dado) {
@@ -608,7 +608,7 @@ class Meta
      */
     private function defaultForm(): array
     {
-        $input = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : "vendor/conn/entity-form/") . "entity/input_type.json"), true);
+        $input = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : VENDOR . "entity-form/") . "entity/input_type.json"), true);
         return $input['default']['form'];
     }
 }

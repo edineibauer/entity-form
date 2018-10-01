@@ -18,7 +18,7 @@ class React
         $this->checkReact(PATH_HOME, $entity, $action, $dados, $dadosOld);
 
         foreach (Helper::listFolder(PATH_HOME . "vendor/conn") as $lib)
-            $this->checkReact(PATH_HOME . "vendor/conn/{$lib}/", $entity, $action, $dados, $dadosOld);
+            $this->checkReact(PATH_HOME . VENDOR . "{$lib}/", $entity, $action, $dados, $dadosOld);
     }
 
     /**
