@@ -63,10 +63,8 @@ class React
     {
         if(!empty($actions['entity']) && !empty($actions['action']) && !empty($actions['function'])) {
             if ((is_string($actions['entity']) && $actions['entity'] === $entity) || (is_array($actions['entity']) && in_array($entity, $actions['entity']))) {
-                if (is_string($actions['action']) && $actions['action'] === $action)
-                    include_once "{$path}/react/{$actions['function']}.php";
-                elseif (is_array($actions['action']) && in_array($action, $actions['action']))
-                    include_once "{$path}/react/{$actions['function']}.php";
+                if ((is_string($actions['action']) && $actions['action'] === $action) || (is_array($actions['action']) && in_array($action, $actions['action'])))
+                    include_once "{$path}/react/function/{$actions['function']}.php";
             }
         }
     }
