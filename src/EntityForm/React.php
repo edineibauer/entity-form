@@ -32,10 +32,10 @@ class React
      */
     private function checkReact(string $path, string $entity, string $acao, array $dados, array $dadosOld)
     {
-        if (file_exists("{$path}/react/")) {
-            foreach (Helper::listFolder("{$path}/react/") as $react) {
+        if (file_exists("{$path}react/")) {
+            foreach (Helper::listFolder("{$path}react/") as $react) {
                 if(preg_match('/\.json$/i', $react)) {
-                    $actions = json_decode(file_get_contents("{$path}/entity/react/{$react}"), true);
+                    $actions = json_decode(file_get_contents("{$path}react/{$react}"), true);
 
                     if (is_array($actions) && !isset($actions['entity'])) {
                         foreach ($actions as $ac)
@@ -64,7 +64,7 @@ class React
         if(!empty($actions['entity']) && !empty($actions['action']) && !empty($actions['function'])) {
             if ((is_string($actions['entity']) && $actions['entity'] === $entity) || (is_array($actions['entity']) && in_array($entity, $actions['entity']))) {
                 if ((is_string($actions['action']) && $actions['action'] === $action) || (is_array($actions['action']) && in_array($action, $actions['action'])))
-                    include_once "{$path}/react/function/{$actions['function']}.php";
+                    include_once "{$path}react/function/{$actions['function']}.php";
             }
         }
     }
