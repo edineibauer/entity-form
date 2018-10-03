@@ -367,8 +367,12 @@ class Dicionario
             if (!$this->getError() || !empty($id))
                 $this->saveAssociacaoSimples();
 
-            if (!empty($id))
+            if (!empty($id)) {
+                $dd = new Dicionario($this->entity);
+                $dd->setData($id);
+                $oldDados = $dd->getDataForm();
                 $this->updateTableData();
+            }
             elseif (!$this->getError())
                 $this->createTableData();
 
@@ -380,8 +384,6 @@ class Dicionario
 
                 $dados = $this->getDataForm();
                 if (!empty($id)) {
-                    $dd = new Dicionario($this->entity);
-                    $oldDados = $dd->getDataForm();
                     new React("update", $this->entity, $dados, $oldDados);
                 } else {
                     new React("create", $this->entity, $dados);
