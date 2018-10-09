@@ -2,6 +2,7 @@
 
 namespace EntityForm;
 
+use Config\Config;
 use ConnCrud\SqlCommand;
 use Helpers\Check;
 
@@ -114,17 +115,9 @@ abstract class EntityDatabase
         $field = "JSON_SUPPORT";
         $value = !$sql->getResult();
 
-        $file = file_get_contents(PATH_HOME . "_config/config.php");
-        if (preg_match("/\'{$field}\',/i", $file)) {
-            $valueOld = explode("'", explode("('{$field}', '", $file)[1])[0];
-            $file = str_replace("'{$field}', '{$valueOld}'", "'{$field}', '{$value}'", $file);
-        } else {
-            $file = str_replace("<?php", "<?php\ndefine('{$field}', '{$value}');", $file);
-        }
-
-        $f = fopen(PATH_HOME . "_config/config.php", "w+");
-        fwrite($f, $file);
-        fclose($f);
+        $config = json_decode(file_get_contents(PATH_HOME . "_config/config.json"), true);
+        $config[$field] = $value;
+        Config::createConfig($config);
 
         if ($value)
             $sql->exeCommand("DROP TABLE `testJsonSupport`");
