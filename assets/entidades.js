@@ -460,8 +460,8 @@ function allowName(nome, tipo) {
         }
 
         //tamanho máximo de caracteres
-        if (nome.length > 20) {
-            toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 20 caracteres. [" + nome.length + "]", 4500, "warning");
+        if (nome.length > 28) {
+            toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 28 caracteres. [" + nome.length + "]", 4500, "warning");
             $(".requireName").addClass("hide");
             return false;
         }
