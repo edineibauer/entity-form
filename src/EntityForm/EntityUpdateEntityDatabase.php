@@ -103,8 +103,11 @@ class EntityUpdateEntityDatabase extends EntityDatabase
         $read = new Read();
         $delete = new Delete();
         $sql = new SqlCommand();
+
+        $constraint = substr("c_{$this->entity}_{$dados['column']}_{$dados['relation']}", 0, 64);
+
         if (in_array($dados['format'], ["list", "extend", "extend_add", "selecao", "checkbox_rel", "selecaoUnique", "publisher"]))
-            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY c_{$this->entity}_{$dados['column']}_{$dados['relation']}, DROP INDEX fk_" . $dados['column']);
+            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY {$constraint}, DROP INDEX fk_" . $dados['column']);
 
         //deleta dados armazenados da extensão
         if (in_array($dados['format'], ['extend_add', 'extend'])) {
