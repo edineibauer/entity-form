@@ -32,7 +32,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
     public function start()
     {
         $this->checkChanges();
-        $this->removeColumnsToEntity();
+        $this->removeColumnsFromEntity();
         $this->addColumnsToEntity();
         $this->createKeys();
     }
@@ -64,7 +64,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
     /**
      * Remove colunas que existiam
      */
-    private function removeColumnsToEntity()
+    private function removeColumnsFromEntity()
     {
         $del = $this->getDeletes();
 
@@ -104,7 +104,7 @@ class EntityUpdateEntityDatabase extends EntityDatabase
         $delete = new Delete();
         $sql = new SqlCommand();
         if (in_array($dados['format'], ["list", "extend", "extend_add", "selecao", "checkbox_rel", "selecaoUnique", "publisher"]))
-            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY fk_contraint_" . $dados['column'] . ", DROP INDEX fk_" . $dados['column']);
+            $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " DROP FOREIGN KEY c_{$this->entity}_{$dados['column']}_{$dados['relation']}, DROP INDEX fk_" . $dados['column']);
 
         //deleta dados armazenados da extensão
         if (in_array($dados['format'], ['extend_add', 'extend'])) {

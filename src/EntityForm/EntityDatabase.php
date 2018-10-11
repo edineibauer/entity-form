@@ -34,13 +34,14 @@ abstract class EntityDatabase
         $this->createIndexFk($table, $dados['relation'] . "_id", $dados['relation'], $dados['column']);
     }
 
-    protected function createIndexFk($table, $column, $tableTarget, $col = "", $key = null)
+    protected function createIndexFk($table, $column, $tableTarget, $col = null, $key = null)
     {
         $delete = ($key === "publisher" ? "SET NULL" : "CASCADE");
-        $col = !empty($col) ? "_" . $col : "";
+        if(empty($col))
+            $col = $column;
 
         $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD KEY `fk_" . $column . "` (`{$column}`)");
-        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `fk_contraint_{$column}` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
+        $this->exeSql("ALTER TABLE `" . PRE . $table . "` ADD CONSTRAINT `c_{$this->entity}_{$col}_{$tableTarget}` FOREIGN KEY (`{$column}`) REFERENCES `" . PRE . $tableTarget . "` (`id`) ON DELETE " . $delete . " ON UPDATE NO ACTION");
     }
 
     protected function prepareSqlColumn($dados)

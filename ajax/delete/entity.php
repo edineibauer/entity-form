@@ -54,7 +54,7 @@ foreach (\Helpers\Helper::listFolder(PATH_HOME . "entity/cache") as $f) {
                 } elseif(in_array($c['format'], ['extend', 'list', 'selecao', 'checkbox_rel', 'extend_add', 'selecaoUnique'])) {
 
                     //DROP FK AND INDEX
-                    $sql->exeCommand("ALTER TABLE " . PRE . $fEntity . " DROP FOREIGN KEY fk_contraint_" . $c['column'] . ", DROP INDEX fk_" . $c['column']);
+                    $sql->exeCommand("ALTER TABLE " . PRE . $fEntity . " DROP FOREIGN KEY c_{$fEntity}_{$c['column']}_{$c['relation']}, DROP INDEX fk_" . $c['column']);
 
                     //DROP UNIQUE INDEX
                     $sql->exeCommand("SHOW KEYS FROM " . PRE . $fEntity . " WHERE KEY_NAME ='unique_{$i}'");
