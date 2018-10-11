@@ -140,6 +140,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <option value="cnpj">Cnpj</option>
                             <option value="ie">Inscrição Estadual</option>
                             <option value="rg">RG</option>
+                            <option value="card_number">Número de Cartão</option>
                             <option value="cep">Cep</option>
                             <option value="date">Data</option>
                             <option value="datetime">Data & Hora</option>

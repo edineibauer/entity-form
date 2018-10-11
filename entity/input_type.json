@@ -612,5 +612,15 @@
     "form": {
       "input": "percent"
     }
+  },
+  "card_number": {
+    "format": "card_number",
+    "nome": "Número do Cartão",
+    "allow": {
+      "regex": "/^\\d{14,20}$/"
+    },
+    "form": {
+      "input": "card_number"
+    }
   }
 }
