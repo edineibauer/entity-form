@@ -6,6 +6,7 @@
   "cpf",
   "cnpj",
   "valor",
+  "card_number",
   "percent",
   "text",
   "textarea",
