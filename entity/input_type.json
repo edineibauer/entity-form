@@ -51,7 +51,7 @@
     }
   },
   "string": {
-    "format": "string",
+    "format": "information",
     "type": "varchar",
     "nome": "Informação",
     "size": 8192,
