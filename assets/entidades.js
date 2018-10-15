@@ -594,31 +594,35 @@ function checkAttrRelationToShow() {
     //check if fields exist
     if (entity.edit !== null) {
         let dic = dicionarios[entity.name][entity.edit];
-        if (dic['form'] !== false && (typeof (dic['form']['fields']) === "undefined" || typeof (dic['form']['defaults']) === "undefined")) {
-            dic['form']['fields'] = [];
-            dic['form']['defaults'] = {};
+
+        if (dic.form !== !1 && (typeof(dic.form.fields) === "undefined" || typeof(dic.form.defaults) === "undefined")) {
+            dic.form.fields = [];
+            dic.form.defaults = {};
             $.each(dicRelation, function (i, e) {
                 dic.form.fields.push(parseInt(i));
-                dic.form.defaults[parseInt(i)] = "";
+                dic.form.defaults[parseInt(i)] = ""
             });
-
             $.each(dicRelation, function (i, e) {
                 i = parseInt(i);
-                var checked = $.inArray(i, dic.form.fields) > -1 ? 'checked="checked"' : '';
-                var value = typeof (dic.form.defaults[i]) !== "undefined" ? dic.form.defaults[i] : "";
+                let checked = $.inArray(i, dic.form.fields) > -1 ? 'checked="checked"' : '';
+                let value = typeof(dic.form.defaults[i]) !== "undefined" ? dic.form.defaults[i] : "";
                 copy("#tpl_relation_fields_show", "#relation_fields_show", {0: i, 1: e.nome, 2: checked}, "append");
-                copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: value}, "append");
-            });
+                copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: value}, "append")
+            })
         } else {
             $.each(dicRelation, function (i, e) {
                 i = parseInt(i);
                 copy("#tpl_relation_fields_show", "#relation_fields_show", {
                     0: i,
                     1: e.nome,
-                    2: 'checked="checked"'
+                    2: $.inArray(i, dic.form.fields) > -1 ? 'checked="checked"' : ''
                 }, "append");
-                copy("#tpl_relation_fields_default", "#relation_fields_default", {0: i, 1: e.nome, 2: ''}, "append");
-            });
+                copy("#tpl_relation_fields_default", "#relation_fields_default", {
+                    0: i,
+                    1: e.nome,
+                    2: (typeof(dic.form.defaults[i]) !== "undefined" ? dic.form.defaults[i] : "")
+                }, "append")
+            })
         }
     } else {
 
