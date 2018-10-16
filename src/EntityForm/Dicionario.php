@@ -372,9 +372,9 @@ class Dicionario
                 $dd->setData($id);
                 $oldDados = $dd->getDataForm();
                 $this->updateTableData();
-            }
-            elseif (!$this->getError())
+            } elseif (!$this->getError()) {
                 $this->createTableData();
+            }
 
             if (!$this->getError() || !empty($id)) {
                 if (!$this->info)
@@ -473,21 +473,16 @@ class Dicionario
 
     private function saveAssociacaoSimples()
     {
-        if (!$this->info)
-            $this->info = Metadados::getInfo($this->entity);
+        foreach ($this->getAssociationSimple() as $metaOne) {
+            $d = $metaOne->getValue();
+            if (!empty($d) && is_object($d) && get_class($d) === "EntityForm\Dicionario") {
+                $d->save();
 
-        if (!empty($this->info["extend"])) {
-            foreach ($this->info["extend"] as $simple) {
-                $d = $this->dicionario[$simple]->getValue();
-                if (is_object($d) && get_class($d) === "EntityForm\Dicionario") {
-                    $d->save();
+                if (!empty($d->getError()))
+                    $this->dicionario[$metaOne->getId()]->setError($d->getError()[$d->getEntity()]);
 
-                    if (!empty($d->getError()))
-                        $this->dicionario[$simple]->setError($d->getError()[$d->getEntity()]);
-
-                    if (!empty($d->search(0)->getValue()))
-                        $this->dicionario[$simple]->setValue((int)$d->search(0)->getValue(), false);
-                }
+                if (!empty($d->search(0)->getValue()))
+                    $this->dicionario[$metaOne->getId()]->setValue((int)$d->search(0)->getValue(), false);
             }
         }
     }
@@ -497,17 +492,15 @@ class Dicionario
         $create = new Create();
         $del = new Delete();
         $id = $this->search(0)->getValue();
-        if (!empty($this->getAssociationMult())) {
-            foreach ($this->getAssociationMult() as $meta) {
-                if (!empty($meta->getValue())) {
-                    $entityRelation = PRE . $this->entity . "_" . $meta->getColumn();
-                    $del->exeDelete($entityRelation, "WHERE {$this->entity}_id = :eid", "eid={$id}");
-                    $listId = [];
-                    foreach (json_decode($meta->getValue(), true) as $idRelation) {
-                        if (!in_array($idRelation, $listId)) {
-                            $listId[] = $idRelation;
-                            $create->exeCreate($entityRelation, [$this->entity . "_id" => $id, $meta->getRelation() . "_id" => $idRelation]);
-                        }
+        foreach ($this->getAssociationMult() as $meta) {
+            if (!empty($meta->getValue())) {
+                $entityRelation = PRE . $this->entity . "_" . $meta->getColumn();
+                $del->exeDelete($entityRelation, "WHERE {$this->entity}_id = :eid", "eid={$id}");
+                $listId = [];
+                foreach (json_decode($meta->getValue(), true) as $idRelation) {
+                    if (!in_array($idRelation, $listId)) {
+                        $listId[] = $idRelation;
+                        $create->exeCreate($entityRelation, [$this->entity . "_id" => $id, $meta->getRelation() . "_id" => $idRelation]);
                     }
                 }
             }
