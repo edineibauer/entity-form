@@ -496,8 +496,11 @@ function checkUniqueNameColumn() {
 }
 
 function deleteAttr(id) {
-    delete dicionarios[entity.name][id];
-    showEntity();
+    if(confirm("Remover Atributo?")) {
+        delete dicionarios[entity.name][id];
+        resetAttr();
+        showEntity();
+    }
 }
 
 function removeEntity(entity) {
