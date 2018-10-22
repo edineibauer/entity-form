@@ -472,11 +472,15 @@ function checkRequiresFields() {
 }
 
 function checkFieldsOpenOrClose(nome) {
-    if (allowName(nome, 2)) {
-        if (checkRequiresFields())
-            $(".requireName").removeClass("hide");
-        else
-            $(".requireName").addClass("hide");
+    if(typeof nome === "undefined") {
+        $(".requireName").removeClass("hide");
+    } else {
+        if (allowName(nome, 2)) {
+            if (checkRequiresFields())
+                $(".requireName").removeClass("hide");
+            else
+                $(".requireName").addClass("hide");
+        }
     }
 }
 
@@ -735,7 +739,7 @@ $(function () {
     readDicionarios();
     entityReset();
 
-    $("#content").off("keyup change focus", "#entityName").on("keyup change focus", "#entityName", function () {
+    $("#core-content").off("keyup change focus", "#entityName").on("keyup change focus", "#entityName", function () {
         if ($(this).val().length > 2)
             $("#requireNameEntity").removeClass("hide");
         else
