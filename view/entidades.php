@@ -100,7 +100,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
     </div>
 
     <div id="main" class="row color-gray-light space-header">
-        <div class="col s12 hide" id="requireNameEntity">
+        <div class="col s12 requireName hide" id="requireNameEntity">
             <div class="card padding-medium">
                 <div class="row">
                     <div class="col s12 m4 padding-small pad">
