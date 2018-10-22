@@ -492,7 +492,7 @@ function allowName(nome, tipo) {
 
         //tamanho máximo de caracteres
         if (nome.length > 28) {
-            toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 28 caracteres. [" + nome.length + "]", 4500, "warning");
+            toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 28 caracteres. [" + nome.length + "]", 4500, "toast-warning");
             $(".requireName").addClass("hide");
             return false;
         }
@@ -502,7 +502,7 @@ function allowName(nome, tipo) {
             let tt = slug(nome, "_");
             $.each(dicionarios[entity.name], function (i, e) {
                 if (tt === e.column) {
-                    toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " já esta em uso", 4500, "warning");
+                    toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " já esta em uso", 4500, "toast-warning");
                     $(".requireName").addClass("hide");
                     return false;
                 }
@@ -517,7 +517,7 @@ function checkUniqueNameColumn() {
     $.each(dicionarios[entity.name], function (j, k) {
         $.each(dicionarios[entity.name], function (i, e) {
             if (k.column === e.column) {
-                toast("Nome do Campo" + k.column + " precisa ser único", 4500, "warning");
+                toast("Nome do Campo" + k.column + " precisa ser único", 4500, "toast-warning");
                 return false;
             }
         });
@@ -560,9 +560,9 @@ function sendImport() {
             success: function (data) {
                 if (data) {
                     if (data === "existe") {
-                        toast("Entidade já Existe", "warning", 2500);
+                        toast("Entidade já Existe", 2500, "toast-warning");
                     } else {
-                        toast("Rejeitado! Chave Estrangeira Ausente", "warning", 4000);
+                        toast("Rejeitado! Chave Estrangeira Ausente", 4000, "toast-warning");
                         post('entity-form', 'delete/import', {entity: $('#import').val()}, function (g) {
                         });
                     }
