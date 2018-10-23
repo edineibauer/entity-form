@@ -623,7 +623,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     </label>
                 </div>
 
-                <div class="clearfix"></div>
+                <div class="clearfix col"></div>
             </div>
 
             <div class="clearfix"><br></div>
@@ -649,11 +649,11 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         </div>
                     </div>
 
-                    <div class="clearfix"></div>
+                    <div class="clearfix col"></div>
                 </div>
             </li>
         </div>
-        <div class="clearfix"><br><br><br><br></div>
+        <div class="clearfix col"><br><br><br></div>
     </div>
     <?php
 
