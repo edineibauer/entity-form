@@ -27,7 +27,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             <div class="col s12 hide" id="tpl-entity">
                 <div class="col s7 padding-small">__$__</div>
                 <div class="padding-small col s5 align-right">
-                    <button class="color-text-white radius pointer right padding-tiny btn-flat" style="height: 26px;" onclick="removeEntity('__$__')">
+                    <button class="color-text-white opacity radius pointer right padding-tiny btn-flat" style="height: 26px;" onclick="removeEntity('__$__')">
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">delete</i>
                     </button>
                     <button class="color-text-white radius pointer right padding-tiny btn-flat" style="margin-right: 5px;height: 26px;"
@@ -43,11 +43,11 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
         <header class="row">
             <div class="panel">
                 <div class="col s12 padding-tiny">
-                    <button class="btn color-blue left" id="saveEntityBtn" onclick="saveEntity()">
+                    <button class="btn theme left" id="saveEntityBtn" onclick="saveEntity()">
                         salvar
                         <i class="material-icons right padding-left">check</i>
                     </button>
-                    <button class="btn color-grey right" title="Novo Atributo" id="saveAttrBtn" onclick="editAttr()">
+                    <button class="color-grey right btn-floating" title="Novo Atributo" id="saveAttrBtn" onclick="editAttr()">
                         <i class="material-icons right">add</i>
                     </button>
                 </div>
@@ -254,7 +254,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             <div class="hide card padding-medium relation_container requireName" id="requireListFilter">
                 <header class="row padding-small">
                     <span class="left padding-medium" style="padding-left: 0!important;">Filtrar Lista</span>
-                    <button class="btn-floating color-blue opacity hover-opacity-off" onclick="addFilter()"><i
+                    <button class="btn-floating theme opacity hover-opacity-off" onclick="addFilter()"><i
                                 class="material-icons">add</i></button>
                 </header>
 
@@ -477,7 +477,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     <i class="material-icons left">assignment</i>
                     <span class="left padding-left">Valores Permitidos &nbsp;&nbsp;</span>
                 </span>
-                    <span class="btn-floating left color-green" id="allowBtnAdd"
+                    <span class="btn-floating left theme" id="allowBtnAdd"
                           onclick="copy('#tplValueAllow', '#spaceValueAllow');$('#spaceValueAllow').find('.allow:first-child').find('.values').focus()">
                     <i class="material-icons">add</i>
                 </span>
@@ -652,10 +652,8 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     <div class="clearfix"></div>
                 </div>
             </li>
-
-            <div class="clearfix"><br><br><br><br></div>
         </div>
-        <div class="clearfix"><br></div>
+        <div class="clearfix"><br><br><br><br></div>
     </div>
     <?php
 
