@@ -700,9 +700,10 @@ function getType() {
 }
 
 $(function () {
-    $("#space-attr-entity").css("height", $(document).height() - $(".header").height() - 16 - 72.3 - 32);
-    $("#entity-space").css("height", $(document).height() - $(".header").height() - 16 - 72.3);
-    $("#main").css("height", $(document).height() - $(".header").height() - 16);
+    let headerHeight = $("#core-header").height() + parseInt($("#core-header").css("padding-top")) + parseInt($("#core-header").css("padding-bottom"));
+    $("#entity-space").css("height", $(document).height() - headerHeight - 64);
+    $("#space-attr-entity").css("height", $(document).height() - headerHeight - 16 - 76.28);
+    $("#main").css("height", $(document).height() - headerHeight);
 
     readDefaults();
     readDicionarios();
