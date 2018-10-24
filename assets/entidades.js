@@ -1,5 +1,6 @@
 var entity = {};
 var dicionarios = {};
+var info = {};
 var dicionariosNomes = {};
 var identifier = {};
 var defaults = {};
@@ -15,6 +16,12 @@ var data = {
 function readDefaults() {
     post("entity-form", "load/defaults", function (data) {
         defaults = data;
+    });
+}
+
+function readInfo() {
+    post("entity-form", "load/info", function (data) {
+        info = data;
     });
 }
 
@@ -41,6 +48,7 @@ function readDicionarios() {
 function entityReset() {
     entity = {
         "name": "",
+        "icon": "",
         "edit": null
     };
 }
@@ -51,8 +59,10 @@ function entityEdit(id) {
         saveEntity(true);
         entityReset();
 
-        if (typeof(id) !== "undefined")
+        if (typeof(id) !== "undefined") {
             entity.name = id;
+            entity.icon = info[id]["icon"];
+        }
 
         showEntity();
     } else {
@@ -68,6 +78,7 @@ function uploadEntity() {
 
 function showEntity() {
     $("#entityName").val(entity.name).focus();
+    $("#entityIcon").val(entity.icon);
     $("#entityAttr").html("");
 
     let maxIndice = 1;
@@ -90,8 +101,10 @@ function showEntity() {
 function saveEntity(silent) {
     if (checkSaveAttr() && entity.name.length > 2 && typeof(dicionarios[entity.name]) !== "undefined" && !$.isEmptyObject(dicionarios[entity.name])) {
         let newName = slug($("#entityName").val(), "_");
+        info[entity.name]["icon"] = $("#entityIcon").val();
         post("entity-form", "save/entity", {
             "name": entity.name,
+            "icon": $("#entityIcon").val(),
             "dados": dicionarios[entity.name],
             "id": identifier[entity.name],
             "newName": newName
@@ -706,6 +719,7 @@ $(function () {
     $("#main").css("height", $(document).height() - headerHeight);
 
     readDefaults();
+    readInfo();
     readDicionarios();
     entityReset();
 

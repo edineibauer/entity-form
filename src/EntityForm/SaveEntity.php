@@ -13,10 +13,11 @@ class SaveEntity
      * Nome da entidade, dicionário de dados e identificador atual
      *
      * @param string $entity
+     * @param string $icon
      * @param array $data
      * @param int $id
      */
-    public function __construct(string $entity = null, $data = null, int $id = 0)
+    public function __construct(string $entity = null, string $icon = null, $data = null, int $id = 0)
     {
         if ($entity) {
             $this->entity = $entity;
@@ -24,7 +25,7 @@ class SaveEntity
                 $this->id = $id;
 
             if ($data)
-                $this->start($data);
+                $this->start($data, $icon);
         }
     }
 
@@ -43,7 +44,11 @@ class SaveEntity
         new EntityCreateEntityDatabase($this->entity, []);
     }
 
-    private function start($metadados = null)
+    /**
+     * @param null $metadados
+     * @param string|null $icon
+     */
+    private function start($metadados = null, string $icon = null)
     {
         try {
             $data['dicionario'] = Metadados::getDicionario($this->entity);
@@ -58,7 +63,7 @@ class SaveEntity
 
             $metadados["0"] = $this->generatePrimary();
             $this->createEntityJson($metadados);
-            $this->createEntityJson($this->generateInfo($metadados), "info");
+            $this->createEntityJson($this->generateInfo($metadados, $icon), "info");
 
             new EntityCreateEntityDatabase($this->entity, $data);
 
@@ -113,11 +118,13 @@ class SaveEntity
 
     /**
      * @param array $metadados
+     * @param string $icon
      * @return array
      */
-    private function generateInfo(array $metadados): array
+    private function generateInfo(array $metadados, string $icon = null): array
     {
         $data = [
+            "icon" => $icon,
             "identifier" => $this->id, "title" => null, "link" => null, "status" => null, "date" => null, "datetime" => null, "valor" => null, "email" => null, "password" => null, "tel" => null, "cpf" => null, "cnpj" => null, "cep" => null, "time" => null, "week" => null, "month" => null, "year" => null,
             "required" => null, "unique" => null, "publisher" => null, "constant" => null, "extend" => null, "extend_add" => null, "extend_mult" => null, "list" => null, "list_mult" => null, "selecao" => null, "selecao_mult" => null, "checkbox_rel" => null, "checkbox_mult" => null, "owner" => null, "ownerPublisher" => null,
             "source" => [

@@ -58,10 +58,21 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             <div class="row">
                 <label class="col s12">
                     <span>Nome da Entidade</span>
-                    <input id="entityName" type="text" placeholder="entidade..." class="font-large">
+                    <input id="entityName" type="text" placeholder="entidade..." class="font-large" style="margin:0">
                 </label>
+
+                <div class="row font-small">
+                    <div class="col right padding-tiny" style="width: 33px; height: 33px">
+                        <a href="https://material.io/tools/icons/?style=baseline" target="_blank"
+                           class="right btn-flat font-small theme-text margin-0" style="width: 33px; height: 33px">
+                            <i class="material-icons padding-tiny padding-4">list</i>
+                        </a>
+                    </div>
+                    <div class="rest">
+                        <input id="entityIcon" placeholder="ícone" type="text" class="rest">
+                    </div>
+                </div>
             </div>
-            <div class="col s12"><br></div>
 
             <div class="col hide overflow-hidden relative" id="importForm">
                 <hr><br>
