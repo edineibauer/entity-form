@@ -62,6 +62,7 @@ function entityEdit(id) {
         if (typeof(id) !== "undefined") {
             entity.name = id;
             entity.icon = info[id]["icon"];
+            $("#entityIconDemo").text(entity.icon);
         }
 
         showEntity();
@@ -827,5 +828,7 @@ $(function () {
                 return false;
             }
         });
+    }).off("change keyup", "#entityIcon").on("change keyup", "#entityIcon", function () {
+        $("#entityIconDemo").text($(this).val());
     });
 });
