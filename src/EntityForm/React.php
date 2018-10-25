@@ -32,19 +32,19 @@ class React
      */
     private function checkReact(string $path, string $entity, string $acao, array $dados, array $dadosOld)
     {
-        if (file_exists("{$path}react/")) {
-            foreach (Helper::listFolder("{$path}react/") as $react) {
-                if(preg_match('/\.json$/i', $react)) {
-                    $actions = json_decode(file_get_contents("{$path}react/{$react}"), true);
+        /* CRUD REACT DEFAULT */
+        if(file_exists("{$path}react/function/{$entity}/{$acao}.php"))
+            include "{$path}react/function/{$entity}/{$acao}.php";
 
-                    if (is_array($actions) && !isset($actions['entity'])) {
-                        foreach ($actions as $ac)
-                            $this->loadReact($ac, $path, $acao, $entity, $dados, $dadosOld);
+        /* REACT FILE DEFAULT */
+        if (file_exists("{$path}react/{$entity}.json")) {
+            $actions = json_decode(file_get_contents("{$path}react/{$entity}.json"), true);
 
-                    } else {
-                        $this->loadReact($actions, $path, $acao, $entity, $dados, $dadosOld);
-                    }
-                }
+            if (is_array($actions) && !isset($actions['action'])) {
+                foreach ($actions as $ac)
+                    $this->loadReact($ac, $path, $acao, $entity, $dados, $dadosOld);
+            } else {
+                $this->loadReact($actions, $path, $acao, $entity, $dados, $dadosOld);
             }
         }
     }
@@ -59,12 +59,14 @@ class React
      * @param array $dados
      * @param array $dadosOld
      */
-    private function loadReact(array $actions, string $path, string $action, string $entity, array $dados, array $dadosOld)
+    private function loadReact(array $ac, string $path, string $acao, string $entity, array $dados, array $dadosOld)
     {
-        if(!empty($actions['entity']) && !empty($actions['action']) && !empty($actions['function'])) {
-            if ((is_string($actions['entity']) && $actions['entity'] === $entity) || (is_array($actions['entity']) && in_array($entity, $actions['entity']))) {
-                if ((is_string($actions['action']) && $actions['action'] === $action) || (is_array($actions['action']) && in_array($action, $actions['action'])))
-                    include_once "{$path}react/function/{$actions['function']}.php";
+        if(((is_string($ac['action']) && $ac['action'] === $acao) || (is_array($ac['action']) && in_array($acao, $ac['action']))) && !empty($ac['function'])){
+            if(is_array($ac['function'])){
+                foreach ($ac['function'] as $item)
+                    include "{$path}react/function/{$item}.php";
+            } elseif(is_string($ac['function'])) {
+                include "{$path}react/function/{$ac['function']}.php";
             }
         }
     }
