@@ -609,7 +609,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                     <span>Todas</span>
                                 </label>
                                 <?php
-                                $document = ["html", "css", "scss", "js", "tpl", "json", "xml", "md", "sql", "dll"];
+                                $document = ["html", "css", "scss", "js", "tpl", "json", "xml", "md", "sql", "dll", "eot", "woff", "woff2", "ttf"];
                                 foreach ($document as $id) {
                                     echo "<label class='col s6 m2 relative'><input type='checkbox' class='denveloper-format oneformat' rel='denveloper' id='{$id}'/><span class='upper'>{$id}</span></label>";
                                 }
