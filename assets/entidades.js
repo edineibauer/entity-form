@@ -102,7 +102,6 @@ function showEntity() {
 function saveEntity(silent) {
     if (checkSaveAttr() && entity.name.length > 2 && typeof(dicionarios[entity.name]) !== "undefined" && !$.isEmptyObject(dicionarios[entity.name])) {
         let newName = slug($("#entityName").val(), "_");
-        info[entity.name]["icon"] = $("#entityIcon").val();
         post("entity-form", "save/entity", {
             "name": entity.name,
             "icon": $("#entityIcon").val(),
@@ -113,6 +112,9 @@ function saveEntity(silent) {
             if (entity.name !== $("#entityName").val()) {
                 dicionarios[newName] = dicionarios[entity.name];
                 entity.name = newName;
+                readInfo();
+                if(typeof(info[entity.name]) !== "undefined")
+                    info[entity.name]["icon"] = $("#entityIcon").val();
             }
             toast("Salvo");
             if (g && typeof(silent) === "undefined")
