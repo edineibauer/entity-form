@@ -208,11 +208,10 @@
   },
   "select": {
     "format": "select",
-    "type": "tinyint",
     "default": 1,
     "allow": {
-      "values": [1,2],
-      "names": ["opção 1", "opção 2"]
+      "values": [1],
+      "names": ["opção 1"]
     },
     "form": {
       "input": "select"
@@ -223,8 +222,8 @@
     "type": "tinyint",
     "default": 1,
     "allow": {
-      "values": [1,2],
-      "names": ["opção 1", "opção 2"]
+      "values": [1],
+      "names": ["opção 1"]
     },
     "form": {
       "input": "radio"
@@ -234,8 +233,8 @@
     "format": "checkbox",
     "type": "json",
     "allow": {
-      "values": [1,2],
-      "names": ["opção 1", "opção 2"]
+      "values": [1],
+      "names": ["opção 1"]
     },
     "form": {
       "input": "checkbox"
