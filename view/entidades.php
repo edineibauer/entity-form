@@ -624,7 +624,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                 <div class="col s12 font-medium hide allow" id="tplValueAllow">
                     <label class="input-field col s12 m4 padding-small">
                         <span>Valor</span>
-                        <input class="values" type="number" min="1" max="99"
+                        <input class="values" type="text"
                                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 49 && event.charCode <= 57">
                     </label>
 
