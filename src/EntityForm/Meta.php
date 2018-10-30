@@ -441,6 +441,9 @@ class Meta
                     case 'default':
                         $this->setDefault($value);
                         break;
+                    case 'update':
+                        $this->setUpdate($value);
+                        break;
                     case 'filter':
                         $this->setFilter($value);
                         break;
