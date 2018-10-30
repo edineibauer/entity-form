@@ -208,7 +208,6 @@
   },
   "select": {
     "format": "select",
-    "default": 1,
     "allow": {
       "values": [1],
       "names": ["opção 1"]
