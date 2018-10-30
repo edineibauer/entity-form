@@ -412,7 +412,7 @@ class Dicionario
             $up = new Update();
             $dadosEntity = $this->getDataOnlyEntity();
             foreach ($this->dicionario as $meta) {
-                if ($meta->getError() || !in_array($meta->getColumn(), $this->metasEdited))
+                if ($meta->getError() || !$meta->getUpdate() || !in_array($meta->getColumn(), $this->metasEdited))
                     unset($dadosEntity[$meta->getColumn()]);
             }
 
