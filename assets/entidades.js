@@ -443,7 +443,7 @@ function setFormat(val) {
 }
 
 function getSelectInput(val) {
-    if (["text", "textarea", "html", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source", "sources", "string"].indexOf(val) > -1)
+    if (["text", "textarea", "html", "int", "float", "boolean", "select", "radio", "checkbox", "range", "color", "source", "sources", "information"].indexOf(val) > -1)
         return $("#funcaoPrimary");
     else if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult", "publisher", "owner", "passwordRequired"].indexOf(val) > -1)
         return $("#funcaoRelation");

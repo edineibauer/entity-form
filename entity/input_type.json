@@ -50,7 +50,7 @@
       "input": "textarea"
     }
   },
-  "string": {
+  "information": {
     "format": "information",
     "type": "varchar",
     "nome": "Informação",
