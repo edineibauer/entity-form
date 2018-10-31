@@ -262,7 +262,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
             <option id="optionTpl" class="hide" value="__$0____$2__">__$1__</option>
 
-            <div class="hide card padding-medium relation_container requireName" id="requireListFilter">
+            <div class="hide card padding-medium" id="requireListFilter">
                 <header class="row padding-small">
                     <span class="left padding-medium" style="padding-left: 0!important;">Filtrar Lista</span>
                     <button class="btn-floating theme opacity hover-opacity-off" onclick="addFilter()"><i
@@ -525,7 +525,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     </div>
 
                     <div class="panel">
-                        <div class="col s12 hide" id="formato-image">
+                        <div class="col s12 formato-div hide" id="formato-image">
                             <div class="row padding-small"></div>
                             <div class="padding-medium row color-grey-light round">
                                 <label class="col s6 m2 relative">
@@ -540,7 +540,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                 ?>
                             </div>
                         </div>
-                        <div class="col s12 hide" id="formato-video">
+                        <div class="col s12 formato-div hide" id="formato-video">
                             <div class="row padding-small"></div>
                             <div class="padding-medium row color-grey-light round">
                                 <label class="col s6 m2 relative">
@@ -555,7 +555,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                 ?>
                             </div>
                         </div>
-                        <div class="col s12 hide" id="formato-audio">
+                        <div class="col s12 formato-div hide" id="formato-audio">
                             <div class="row padding-small"></div>
                             <div class="padding-medium row color-grey-light round">
                                 <label class="col s6 m2 relative">
@@ -570,7 +570,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                 ?>
                             </div>
                         </div>
-                        <div class="col s12 hide" id="formato-document">
+                        <div class="col s12 formato-div hide" id="formato-document">
                             <div class="row padding-small"></div>
                             <div class="padding-medium row color-grey-light round">
                                 <label class="col s6 m2 relative">
@@ -586,7 +586,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                 ?>
                             </div>
                         </div>
-                        <div class="col s12 hide" id="formato-compact">
+                        <div class="col s12 formato-div hide" id="formato-compact">
                             <div class="row padding-small"></div>
                             <div class="padding-medium row color-grey-light round">
                                 <label class="col s6 m2 relative">
@@ -601,7 +601,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                 ?>
                             </div>
                         </div>
-                        <div class="col s12 hide" id="formato-denveloper">
+                        <div class="col s12 formato-div hide" id="formato-denveloper">
                             <div class="row padding-small"></div>
                             <div class="padding-medium row color-grey-light round">
                                 <label class="col s6 m2 relative">
@@ -609,7 +609,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                                     <span>Todas</span>
                                 </label>
                                 <?php
-                                $document = ["html", "css", "scss", "js", "tpl", "json", "xml", "md", "sql", "dll", "eot", "woff", "woff2", "ttf"];
+                                $document = ["html", "css", "scss", "js", "tpl", "mst", "json", "xml", "md", "sql", "dll", "eot", "woff", "woff2", "ttf"];
                                 foreach ($document as $id) {
                                     echo "<label class='col s6 m2 relative'><input type='checkbox' class='denveloper-format oneformat' rel='denveloper' id='{$id}'/><span class='upper'>{$id}</span></label>";
                                 }

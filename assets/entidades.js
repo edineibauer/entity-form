@@ -131,7 +131,8 @@ function resetAttr(id) {
     entity.edit = typeof(id) !== "undefined" ? id : null;
     $("#atributos, #template, #style, #class").val("");
     $(".selectInput").css("color", "#CCCCCC").val("");
-    $("#format-source, #requireListExtend, .relation_container, .relation_creation_container").addClass("hide");
+    $(".allformat").prop("checked", false);
+    $("#format-source, .formato-div, #requireListExtend, .relation_container, #requireListFilter, .relation_creation_container").addClass("hide");
     $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
     $("#spaceValueAllow, #requireListExtendDiv, #list-filter, #relation_fields_show, #relation_fields_default").html("");
     $(".file-format").each(function () {
@@ -439,14 +440,11 @@ function setFormat(val) {
         $("#format-source").removeClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").addClass("hide");
     } else {
-        $("#format-source, .relation_creation_container, .relation_container").addClass("hide");
+        $("#format-source, .relation_creation_container, #requireListFilter, .relation_container").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
-        if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"].indexOf(val) > -1) {
+        if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"].indexOf(val) > -1)
             $(".relation_container").removeClass("hide");
-            if (["selecao", "selecao_mult", "checkbox_mult"].indexOf(val) === -1)
-                $(".relation_creation_container").removeClass("hide");
-        }
     }
 
     $(".requireName, #nomeAttr").removeClass("hide");
@@ -700,7 +698,6 @@ function checkEntityMultipleFields(values) {
             $("#requireListExtend").removeClass("hide");
         }
     });
-    checkFilterToApply();
     checkAttrRelationToShow();
 }
 
@@ -763,6 +760,11 @@ $(function () {
     }).off("change", "#relation").on("change", "#relation", function () {
         checkFieldsOpenOrClose();
         checkEntityMultipleFields();
+        checkFilterToApply();
+
+        let val = $("#funcaoRelation").val();
+        if (["selecao", "selecao_mult", "checkbox_mult"].indexOf(val) === -1)
+            $(".relation_creation_container").removeClass("hide");
 
     }).off("change", ".selectInput").on("change", ".selectInput", function () {
         setFormat($(this).val());
