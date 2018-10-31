@@ -32,6 +32,7 @@ function readIdentifier() {
 }
 
 function readDicionarios() {
+    readInfo();
     readIdentifier();
     post("entity-form", "load/dicionarios", function (data) {
         dicionarios = data;
@@ -56,7 +57,7 @@ function entityReset() {
 function entityEdit(id) {
     $("#importForm").addClass("hide");
     if ((typeof(id) === "undefined" && entity.name !== "") || (typeof(id) !== "undefined" && id !== entity.name)) {
-        saveEntity(true);
+        resetAttr();
         entityReset();
 
         if (typeof(id) !== "undefined") {
@@ -116,7 +117,10 @@ function saveEntity(silent) {
                 if(typeof(info[entity.name]) !== "undefined")
                     info[entity.name]["icon"] = $("#entityIcon").val();
             }
-            toast("Salvo");
+
+            if(typeof(silent) === "undefined")
+                toast("Salvo", 1500);
+
             if (g && typeof(silent) === "undefined")
                 readDicionarios()
         });
@@ -178,6 +182,7 @@ function editAttr(id) {
     }
 }
 
+let alert = false;
 function checkSaveAttr() {
     var yes = true;
     if (checkRequiresFields()) {
@@ -185,14 +190,20 @@ function checkSaveAttr() {
             if (entity.name === "") {
                 let temp = slug($("#entityName").val(), '_');
                 $.each(dicionarios, function (nome, data) {
-                    if (nome === temp) {
+                    if (nome === temp && !alert) {
                         toast("Nome de Entidade já existe", 2000, "toast-warning");
+                        alert = true;
                         yes = false;
+
+                        setTimeout(function () {
+                            alert = false;
+                        },2000);
                     }
                 });
 
                 if (yes && allowName(temp, 1)) {
                     entity.name = temp;
+                    entity.icon = $("#entityIcon").val();
                     identifier[entity.name] = 1;
                     dicionarios[entity.name] = {};
                 }
@@ -481,7 +492,13 @@ function allowName(nome, tipo) {
 
         //tamanho máximo de caracteres
         if (nome.length > 28) {
-            toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 28 caracteres. [" + nome.length + "]", 4500, "toast-warning");
+            if(!alert) {
+                alert = true;
+                toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " deve ter no máximo 28 caracteres. [" + nome.length + "]", 3000, "toast-warning");
+                setTimeout(function () {
+                    alert = false;
+                }, 3000);
+            }
             $(".requireName").addClass("hide");
             return false;
         }
@@ -491,7 +508,13 @@ function allowName(nome, tipo) {
             let tt = slug(nome, "_");
             $.each(dicionarios[entity.name], function (i, e) {
                 if (tt === e.column) {
-                    toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " já esta em uso", 4500, "toast-warning");
+                    if(!alert) {
+                        alert = true;
+                        toast("Nome " + (tipo === 1 ? "da Entidade" : "do Campo") + " já esta em uso", 4500, "toast-warning");
+                        setTimeout(function () {
+                            alert = false;
+                        }, 3000);
+                    }
                     $(".requireName").addClass("hide");
                     return false;
                 }
@@ -506,7 +529,13 @@ function checkUniqueNameColumn() {
     $.each(dicionarios[entity.name], function (j, k) {
         $.each(dicionarios[entity.name], function (i, e) {
             if (k.column === e.column) {
-                toast("Nome do Campo" + k.column + " precisa ser único", 4500, "toast-warning");
+                if(!alert) {
+                    alert = true;
+                    toast("Nome do Campo" + k.column + " precisa ser único", 3000, "toast-warning");
+                    setTimeout(function () {
+                        alert = false;
+                    }, 3000);
+                }
                 return false;
             }
         });
@@ -722,7 +751,6 @@ $(function () {
     $("#main").css("height", $(document).height() - headerHeight);
 
     readDefaults();
-    readInfo();
     readDicionarios();
     entityReset();
 
