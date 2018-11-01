@@ -48,15 +48,9 @@ abstract class EntityDatabase
 
     protected function prepareSqlColumn($dados)
     {
-        if (!defined("JSON_SUPPORT")) {
-            $value = $this->createJsonConstant();
-            if (!$value && $dados['type'] === "json") {
-                $dados['type'] = "varchar";
-                $dados['size'] = 8192;
-            }
-        } elseif (!JSON_SUPPORT && $dados['type'] === "json") {
+        if ($dados['type'] === "json") {
             $dados['type'] = "varchar";
-            $dados['size'] = 8192;
+            $dados['size'] = !empty($dados['size']) ? $dados['size'] : 8192;
         }
 
         $type = in_array($dados['type'], ["float", "real", "double"]) ? "double" : $dados['type'];
@@ -106,25 +100,5 @@ abstract class EntityDatabase
             return "DEFAULT {$default}";
 
         return "DEFAULT '{$default}'";
-    }
-
-    /**
-     * @return bool
-     */
-    private function createJsonConstant() :bool
-    {
-        $sql = new SqlCommand();
-        $sql->exeCommand("CREATE TABLE IF NOT EXISTS `testJsonSupport` (`json_test` json DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8");
-        $field = "JSON_SUPPORT";
-        $value = !$sql->getResult();
-
-        $config = json_decode(file_get_contents(PATH_HOME . "_config/config.json"), true);
-        $config[$field] = $value;
-        Config::createConfig($config);
-
-        if ($value)
-            $sql->exeCommand("DROP TABLE `testJsonSupport`");
-
-        return $value;
     }
 }
