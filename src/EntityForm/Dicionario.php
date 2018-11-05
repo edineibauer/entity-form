@@ -416,9 +416,11 @@ class Dicionario
                     unset($dadosEntity[$meta->getColumn()]);
             }
 
-            $up->exeUpdate($this->entity, $dadosEntity, "WHERE id = :id", "id={$id}");
-            if ($up->getErro())
-                $this->search(0)->setError($up->getErro());
+            if(!empty($dadosEntity)) {
+                $up->exeUpdate($this->entity, $dadosEntity, "WHERE id = :id", "id={$id}");
+                if ($up->getErro())
+                    $this->search(0)->setError($up->getErro());
+            }
         } else {
             $this->search(0)->setValue(null, false);
         }
