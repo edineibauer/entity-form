@@ -328,7 +328,19 @@ class Dicionario
 
             //busca específica
             foreach ($this->dicionario as $item) {
-                if ($item->get($attr) === $value) {
+                $metaColumn = $item->get($attr);
+                if(is_array($metaColumn) && is_array($value)) {
+                    $valid = true;
+                    foreach ($value as $name => $v) {
+                        if(!isset($metaColumn[$name]) || $metaColumn[$name] !== $v)
+                            $valid = false;
+                    }
+
+                    if($valid){
+                        $result = $item;
+                        break;
+                    }
+                } elseif($metaColumn === $value) {
                     $result = $item;
                     break;
                 }
