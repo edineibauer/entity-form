@@ -401,7 +401,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
 
             <div class="requireName hide card padding-medium">
                 <header class="row padding-small">
-                    <span class="left padding-medium">DataGrid</span>
+                    <span class="left padding-medium">Tabela</span>
                     <label class="switch">
                         <input type="checkbox" class="input" id="datagrid">
                         <div class="slider"></div>
@@ -412,19 +412,19 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     <div class="clearfix"></div>
 
                     <div class="col s4 padding-small grid_body">
-                        <label>Importância</label>
+                        <label>Posição</label>
                         <select class="input" id="relevant">
                             <option value="" selected disabled>auto</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
+                            <option value="1">1°</option>
+                            <option value="2">2°</option>
+                            <option value="3">3°</option>
+                            <option value="4">4°</option>
+                            <option value="5">5°</option>
+                            <option value="6">6°</option>
                         </select>
                     </div>
                     <div class="col s4 padding-small grid_body">
-                        <label>Colunas Small</label>
+                        <label>Small Screen</label>
                         <select class="input form_body" id="gridm">
                             <option value="" selected disabled>auto</option>
                             <option value="12">12/12</option>
@@ -439,10 +439,11 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <option value="3">3/12</option>
                             <option value="2">2/12</option>
                             <option value="1">1/12</option>
+                            <option value="0">0/12</option>
                         </select>
                     </div>
                     <div class="col s4 padding-small grid_body">
-                        <label>Colunas Desktop</label>
+                        <label>Big Screen</label>
                         <select class="input form_body" id="gridl">
                             <option value="" selected disabled>auto</option>
                             <option value="12">12/12</option>
