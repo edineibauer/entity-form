@@ -16,6 +16,7 @@ class Meta
     private $error;
     private $filter;
     private $form;
+    private $datagrid;
     private $format;
     private $key;
     private $group;
@@ -140,6 +141,22 @@ class Meta
             }
         } else {
             $this->form = false;
+        }
+    }
+
+    /**
+     * @param mixed $grid
+     */
+    public function setDatagrid($grid = null)
+    {
+        $default = array_keys($this->defaultDatagrid());
+        if (!empty($grid) && is_array($grid)) {
+            foreach ($grid as $name => $value) {
+                if (in_array($name, $default))
+                    $this->datagrid[$name] = $value;
+            }
+        } else {
+            $this->datagrid = false;
         }
     }
 
@@ -290,6 +307,14 @@ class Meta
     /**
      * @return mixed
      */
+    public function getDatagrid()
+    {
+        return $this->datagrid ?? $this->defaultDatagrid();
+    }
+
+    /**
+     * @return mixed
+     */
     public function getFormat()
     {
         return $this->format;
@@ -400,6 +425,7 @@ class Meta
             "default" => $this->default,
             "filter" => $this->filter,
             "form" => $this->form,
+            "datagrid" => $this->datagrid,
             "format" => $this->format,
             "key" => $this->key,
             "indice" => $this->indice,
@@ -425,7 +451,7 @@ class Meta
     {
         if (!empty($dados)) {
             if (!$default)
-                $default = json_decode(file_get_contents(PATH_HOME . (DOMINIO === "entity-form" ? "" : VENDOR . "entity-form/") . "entity/input_type.json"), true)['default'];
+                $default = json_decode(file_get_contents(PATH_HOME . VENDOR . "entity-form/entity/input_type.json"), true)['default'];
 
             foreach (array_replace_recursive($default, $dados) as $dado => $value) {
                 switch ($dado) {
@@ -449,6 +475,9 @@ class Meta
                         break;
                     case 'form':
                         $this->setForm($value);
+                        break;
+                    case 'datagrid':
+                        $this->setDatagrid($value);
                         break;
                     case 'format':
                         $this->setFormat($value);
@@ -613,5 +642,15 @@ class Meta
     {
         $input = json_decode(file_get_contents(PATH_HOME . (DEV && DOMINIO === "entity-form" ? "" : VENDOR . "entity-form/") . "entity/input_type.json"), true);
         return $input['default']['form'];
+    }
+
+    /**
+     * Retorna grid padrão caso o campo não tenha grid, mas tenha sido solicitado nos $this->fields
+     * @return array
+     */
+    private function defaultDatagrid(): array
+    {
+        $input = json_decode(file_get_contents(PATH_HOME . VENDOR . "entity-form/entity/input_type.json"), true);
+        return $input['default']['datagrid'];
     }
 }
