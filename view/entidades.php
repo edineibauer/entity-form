@@ -1,5 +1,5 @@
 <?php
-if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $_SESSION['userlogin']['nivel'] !== "1") {
+if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $_SESSION['userlogin']['nivel'] !== "1") {
     $data['response'] = 3;
     $data['data'] = HOME . "login";
 } else {
@@ -27,10 +27,12 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             <div class="col s12 hide" id="tpl-entity">
                 <div class="col s7 padding-small">__$__</div>
                 <div class="padding-small col s5 align-right">
-                    <button class="color-text-white opacity radius pointer right padding-tiny btn-flat" style="height: 26px;" onclick="removeEntity('__$__')">
+                    <button class="color-text-white opacity radius pointer right padding-tiny btn-flat"
+                            style="height: 26px;" onclick="removeEntity('__$__')">
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">delete</i>
                     </button>
-                    <button class="color-text-white radius pointer right padding-tiny btn-flat" style="margin-right: 5px;height: 26px;"
+                    <button class="color-text-white radius pointer right padding-tiny btn-flat"
+                            style="margin-right: 5px;height: 26px;"
                             onclick="entityEdit('__$__')">
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">edit</i>
                     </button>
@@ -47,7 +49,8 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         salvar
                         <i class="material-icons right padding-left">check</i>
                     </button>
-                    <button class="color-grey right btn-floating" title="Novo Atributo" id="saveAttrBtn" onclick="editAttr()">
+                    <button class="color-grey right btn-floating" title="Novo Atributo" id="saveAttrBtn"
+                            onclick="editAttr()">
                         <i class="material-icons right">add</i>
                     </button>
                 </div>
@@ -75,7 +78,8 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
             </div>
 
             <div class="col hide overflow-hidden relative" id="importForm">
-                <hr><br>
+                <hr>
+                <br>
                 <span class="row">
                     <label for="import">Importar Entidade</label>
                     <input type="file" name="import" id="import"/>
@@ -87,9 +91,11 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
 
             <ul class="row" id="entityAttr"></ul>
 
-            <li class="col s12 list-att-__$0__ hide" id="tpl-attrEntity" style="border-bottom: solid 1px #EEE;padding-left:0">
+            <li class="col s12 list-att-__$0__ hide" id="tpl-attrEntity"
+                style="border-bottom: solid 1px #EEE;padding-left:0">
                 <div class="left" style="width: 27px">
-                    <button class="btn-flat z-depth-0 pointer left color-white color-text-grey radius padding-0" style="margin-bottom: 1px"
+                    <button class="btn-flat z-depth-0 pointer left color-white color-text-grey radius padding-0"
+                            style="margin-bottom: 1px"
                             onclick="indiceChange(__$0__,-1)">
                         <i class="material-icons right font-large">keyboard_arrow_up</i>
                     </button>
@@ -99,7 +105,8 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     </button>
                 </div>
                 <span class="left overflow-hidden padding-4" style="width: 150px">__$1__</span>
-                <button class="btn-flat pointer right opacity color-text-white radius"style="padding: 9px 5px" onclick="deleteAttr(__$0__)">
+                <button class="btn-flat pointer right opacity color-text-white radius" style="padding: 9px 5px"
+                        onclick="deleteAttr(__$0__)">
                     <i class="material-icons right font-large">delete</i>
                 </button>
                 <button class="btn-flat pointer right color-text-white radius" style="margin-right: 5px;padding: 9px"
@@ -307,7 +314,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <div class="col" id="relation_fields_show"></div>
 
                             <label class="col s12 relativep pointer border-bottom hide" id="tpl_relation_fields_show">
-                                <input type="checkbox" class="relation_fields_show" rel="__$0__" __$2__ />
+                                <input type="checkbox" class="relation_fields_show" rel="__$0__" __$2__/>
                                 <span class="left padding-8 font-medium">__$1__</span>
                             </label>
                         </div>
@@ -316,14 +323,15 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                             <div class="col" id="relation_fields_default" style="padding-top:4px"></div>
 
                             <div class="col hide" id="tpl_relation_fields_default">
-                                <input type="text" class="col font-medium relation_fields_default" value="__$2__" style="margin-bottom: 4px;" rel="__$0__">
+                                <input type="text" class="col font-medium relation_fields_default" value="__$2__"
+                                       style="margin-bottom: 4px;" rel="__$0__">
                             </div>
                         </div>
                         <div class="col padding-12"></div>
                     </div>
 
                     <div class="col s4 padding-small form_body">
-                        <label>Colunas</label>
+                        <label>Colunas Smartphone</label>
                         <select class="input form_body" id="cols">
                             <option value="12" selected>12/12</option>
                             <option value="11">11/12</option>
@@ -341,7 +349,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                     </div>
 
                     <div class="col s4 padding-small form_body">
-                        <label>Colunas Table</label>
+                        <label>Colunas Tablet</label>
                         <select class="input form_body" id="colm">
                             <option value="" selected disabled></option>
                             <option value="12">12/12</option>
@@ -413,7 +421,7 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
 
                     <div class="col s4 padding-small grid_body">
                         <label>Posição</label>
-                        <select class="input" id="relevant">
+                        <select class="input" id="grid_relevant">
                             <option value="" selected disabled>auto</option>
                             <option value="1">1°</option>
                             <option value="2">2°</option>
@@ -424,41 +432,37 @@ if(empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || $
                         </select>
                     </div>
                     <div class="col s4 padding-small grid_body">
-                        <label>Small Screen</label>
-                        <select class="input form_body" id="gridm">
-                            <option value="" selected disabled>auto</option>
-                            <option value="12">12/12</option>
-                            <option value="11">11/12</option>
-                            <option value="10">10/12</option>
-                            <option value="9">9/12</option>
-                            <option value="8">8/12</option>
-                            <option value="7">7/12</option>
-                            <option value="6">6/12</option>
-                            <option value="5">5/12</option>
-                            <option value="4">4/12</option>
-                            <option value="3">3/12</option>
-                            <option value="2">2/12</option>
-                            <option value="1">1/12</option>
-                            <option value="0">0/12</option>
-                        </select>
+                        <label for="class">Class</label>
+                        <input id="grid_class" type="text" class="input grid_body">
                     </div>
                     <div class="col s4 padding-small grid_body">
-                        <label>Big Screen</label>
-                        <select class="input form_body" id="gridl">
-                            <option value="" selected disabled>auto</option>
-                            <option value="12">12/12</option>
-                            <option value="11">11/12</option>
-                            <option value="10">10/12</option>
-                            <option value="9">9/12</option>
-                            <option value="8">8/12</option>
-                            <option value="7">7/12</option>
-                            <option value="6">6/12</option>
-                            <option value="5">5/12</option>
-                            <option value="4">4/12</option>
-                            <option value="3">3/12</option>
-                            <option value="2">2/12</option>
-                            <option value="1">1/12</option>
-                        </select>
+                        <label for="class">Style</label>
+                        <input id="grid_style" type="text" class="input grid_body">
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row padding-top hide relation_container">
+                        <div class="col s4 padding-small grid_body">
+                            <label>Posição na Tabela Relacional</label>
+                            <select class="input" id="grid_relevant_relational">
+                                <option value="" selected disabled>não</option>
+                                <option value="1">1°</option>
+                                <option value="2">2°</option>
+                                <option value="3">3°</option>
+                                <option value="4">4°</option>
+                                <option value="5">5°</option>
+                                <option value="6">6°</option>
+                            </select>
+                        </div>
+                        <div class="col s4 padding-small grid_body">
+                            <label for="class">Class na Tabela Relacional</label>
+                            <input id="grid_class_relational" type="text" class="input grid_body">
+                        </div>
+                        <div class="col s4 padding-small grid_body">
+                            <label for="class">Style na Tabela Relacional</label>
+                            <input id="grid_style_relational" type="text" class="input grid_body">
+                        </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>

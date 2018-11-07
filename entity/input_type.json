@@ -29,9 +29,12 @@
       "template": null
     },
     "datagrid": {
-      "relevant": null,
-      "gridm": null,
-      "gridl": null
+      "grid_relevant": null,
+      "grid_class": null,
+      "grid_style": null,
+      "grid_relevant_relational": null,
+      "grid_class_relational": null,
+      "grid_style_relational": null
     },
     "select": [],
     "filter": [],

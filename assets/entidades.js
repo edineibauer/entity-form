@@ -350,7 +350,7 @@ function saveAttrValue($input) {
         dicionarios[entity.name][entity.edit][name] = $input.prop("checked") ? {} : false;
     else if (dicionarios[entity.name][entity.edit]['form'] !== false && ["class", "style", "template", "atributos", "coll", "cols", "colm", "input"].indexOf(name) > -1)
         dicionarios[entity.name][entity.edit]['form'][name] = $input.val();
-    else if (dicionarios[entity.name][entity.edit]['datagrid'] !== false && ["relevant", "gridm", "gridl"].indexOf(name) > -1)
+    else if (dicionarios[entity.name][entity.edit]['datagrid'] !== false && ["relevant", "grid_class", "grid_style"].indexOf(name) > -1)
         dicionarios[entity.name][entity.edit]['datagrid'][name] = $input.val();
     else if ("regex" === name)
         dicionarios[entity.name][entity.edit]['allow'][name] = $input.val();
@@ -443,8 +443,9 @@ function setFormat(val) {
         $("#format-source, .relation_creation_container, #requireListFilter, .relation_container").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
-        if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"].indexOf(val) > -1)
+        if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"].indexOf(val) > -1) {
             $(".relation_container").removeClass("hide");
+        }
     }
 
     $(".requireName, #nomeAttr").removeClass("hide");
