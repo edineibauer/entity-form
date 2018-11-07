@@ -400,6 +400,7 @@ class Dicionario
                 } else {
                     new React("create", $this->entity, $dados);
                 }
+                $this->setData($this->search(0)->getValue());
             }
         } else {
             $passCheck->setError("Senha Inválida");
