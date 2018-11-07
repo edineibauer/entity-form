@@ -422,7 +422,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                     <div class="col s4 padding-small">
                         <label for="grid_relevant">Posição</label>
                         <select class="input" id="grid_relevant">
-                            <option value="" selected disabled>auto</option>
+                            <option value="" selected>auto</option>
                             <option value="1">1°</option>
                             <option value="2">2°</option>
                             <option value="3">3°</option>
@@ -446,7 +446,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                         <div class="col s4 padding-small">
                             <label for="grid_relevant_relational">Posição na Tabela Relacional</label>
                             <select class="input" id="grid_relevant_relational">
-                                <option value="" selected disabled>não</option>
+                                <option value="" selected>não</option>
                                 <option value="1">1°</option>
                                 <option value="2">2°</option>
                                 <option value="3">3°</option>
