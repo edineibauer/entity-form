@@ -204,6 +204,39 @@ class SaveEntity
             }
         }
 
+
+        /* Remove all belongsTo */
+        foreach (Helper::listFolder(PATH_HOME . "entity/cache") as $item) {
+            if(preg_match('/\.json$/i', $item))
+                $general[str_replace(".json", "", $item)]['belongsTo'] = [];
+        }
+
+        /* Add belongsTo */
+        foreach (Helper::listFolder(PATH_HOME . "entity/cache") as $item) {
+            if(preg_match('/\.json$/i', $item)){
+                $itemEntity = str_replace(".json", "", $item);
+                foreach (json_decode(file_get_contents(PATH_HOME . "entity/cache/{$item}"), true) as $meta) {
+                    if(!empty($meta['relation'])){
+                        $dd = new Dicionario($itemEntity);
+                        $columnRelevant = "";
+                        if($relevant = $dd->getRelevant())
+                            $columnRelevant = $relevant->getColumn();
+
+                        $general[$meta['relation']]['belongsTo'][] = [
+                            $itemEntity => [
+                                "column" => $meta['column'],
+                                "key" => $meta['key'],
+                                "relevant" => $columnRelevant,
+                                "datagrid" => !empty($meta['datagrid']['grid_relevant_relational']) ? $meta['datagrid']['grid_relevant_relational'] : null
+                            ]
+                        ];
+                    }
+                }
+            }
+        }
+
+        /* Create General */
+
         Helper::createFolderIfNoExist(PATH_HOME . "entity/general");
         $fp = fopen(PATH_HOME . "entity/general/general_info.json", "w");
         fwrite($fp, json_encode($general));

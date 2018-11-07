@@ -290,7 +290,7 @@
   },
   "extend_mult": {
     "format": "extend_mult",
-    "type": "json",
+    "type": "int",
     "key": "extend_mult",
     "group": "relation",
     "form": {
@@ -334,7 +334,7 @@
   },
   "list_mult": {
     "format": "list_mult",
-    "type": "json",
+    "type": "int",
     "key": "list_mult",
     "group": "relation",
     "form": {
@@ -345,7 +345,7 @@
   },
   "selecao_mult": {
     "format": "selecao_mult",
-    "type": "json",
+    "type": "int",
     "key": "selecao_mult",
     "group": "relation",
     "form": {
@@ -367,7 +367,7 @@
   },
   "checkbox_mult": {
     "format": "checkbox_mult",
-    "type": "json",
+    "type": "int",
     "key": "checkbox_mult",
     "group": "relation",
     "form": {
