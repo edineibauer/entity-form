@@ -419,9 +419,9 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                 <div class="row hide datagrid_body">
                     <div class="clearfix"></div>
 
-                    <div class="col s4 padding-small">
+                    <div class="col s12 m6 l2 padding-small">
                         <label for="grid_relevant">Posição</label>
-                        <select class="input" id="grid_relevant">
+                        <select class="input" id="grid_relevant" style="padding: 8px 0 5px;">
                             <option value="" selected>auto</option>
                             <option value="1">1°</option>
                             <option value="2">2°</option>
@@ -431,21 +431,31 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                             <option value="6">6°</option>
                         </select>
                     </div>
-                    <div class="col s4 padding-small">
+                    <div class="col s6 m6 l3 padding-small">
                         <label for="grid_class">Class</label>
                         <input id="grid_class" type="text" class="input">
                     </div>
-                    <div class="col s4 padding-small">
+                    <div class="col s6 m4 padding-small">
                         <label for="grid_style">Style</label>
                         <input id="grid_style" type="text" class="input">
+                    </div>
+                    <div class="col s6 m6 l3 padding-small">
+                        <label for="grid_template">Template</label>
+                        <input id="grid_template" type="text" class="input">
                     </div>
 
                     <div class="clearfix"></div>
 
+                    <div class="col padding-top margin-top margin-bottom theme-text upper">
+                        <div class="col border-bottom margin-small" style="width: 400px">
+                            Tabela Relacional
+                        </div>
+                    </div>
+
                     <div class="row padding-top hide relation_container">
-                        <div class="col s4 padding-small">
-                            <label for="grid_relevant_relational">Posição na Tabela Relacional</label>
-                            <select class="input" id="grid_relevant_relational">
+                        <div class="col s12 m4 l2 padding-small">
+                            <label for="grid_relevant_relational">Posição</label>
+                            <select class="input" id="grid_relevant_relational" style="padding: 8px 0 5px;">
                                 <option value="" selected>não</option>
                                 <option value="1">1°</option>
                                 <option value="2">2°</option>
@@ -455,13 +465,17 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <option value="6">6°</option>
                             </select>
                         </div>
-                        <div class="col s4 padding-small">
-                            <label for="grid_class_relational">Class na Tabela Relacional</label>
+                        <div class="col s6 m6 l3 padding-small">
+                            <label for="grid_class_relational">Class</label>
                             <input id="grid_class_relational" type="text" class="input">
                         </div>
-                        <div class="col s4 padding-small">
-                            <label for="grid_style_relational">Style na Tabela Relacional</label>
+                        <div class="col s6 m4 padding-small">
+                            <label for="grid_style_relational">Style</label>
                             <input id="grid_style_relational" type="text" class="input">
+                        </div>
+                        <div class="col s6 m6 l3 padding-small">
+                            <label for="grid_template_relational">Template</label>
+                            <input id="grid_template_relational" type="text" class="input">
                         </div>
                     </div>
                     <div class="clearfix"></div>
