@@ -446,13 +446,13 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
 
                     <div class="clearfix"></div>
 
-                    <div class="col padding-top margin-top margin-bottom theme-text upper">
-                        <div class="col border-bottom margin-small" style="width: 400px">
-                            Tabela Relacional
-                        </div>
-                    </div>
-
                     <div class="row padding-top hide relation_container">
+
+                        <div class="col padding-top margin-top margin-bottom theme-text upper">
+                            <div class="col border-bottom margin-small" style="width: 400px">
+                                Tabela Relacional
+                            </div>
+                        </div>
                         <div class="col s12 m4 l2 padding-small">
                             <label for="grid_relevant_relational">Posição</label>
                             <select class="input" id="grid_relevant_relational" style="padding: 8px 0 5px;">
