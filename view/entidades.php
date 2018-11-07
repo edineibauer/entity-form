@@ -419,8 +419,8 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                 <div class="row hide datagrid_body">
                     <div class="clearfix"></div>
 
-                    <div class="col s4 padding-small grid_body">
-                        <label>Posição</label>
+                    <div class="col s4 padding-small">
+                        <label for="grid_relevant">Posição</label>
                         <select class="input" id="grid_relevant">
                             <option value="" selected disabled>auto</option>
                             <option value="1">1°</option>
@@ -431,20 +431,20 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                             <option value="6">6°</option>
                         </select>
                     </div>
-                    <div class="col s4 padding-small grid_body">
-                        <label for="class">Class</label>
-                        <input id="grid_class" type="text" class="input grid_body">
+                    <div class="col s4 padding-small">
+                        <label for="grid_class">Class</label>
+                        <input id="grid_class" type="text" class="input">
                     </div>
-                    <div class="col s4 padding-small grid_body">
-                        <label for="class">Style</label>
-                        <input id="grid_style" type="text" class="input grid_body">
+                    <div class="col s4 padding-small">
+                        <label for="grid_style">Style</label>
+                        <input id="grid_style" type="text" class="input">
                     </div>
 
                     <div class="clearfix"></div>
 
                     <div class="row padding-top hide relation_container">
-                        <div class="col s4 padding-small grid_body">
-                            <label>Posição na Tabela Relacional</label>
+                        <div class="col s4 padding-small">
+                            <label for="grid_relevant_relational">Posição na Tabela Relacional</label>
                             <select class="input" id="grid_relevant_relational">
                                 <option value="" selected disabled>não</option>
                                 <option value="1">1°</option>
@@ -455,13 +455,13 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <option value="6">6°</option>
                             </select>
                         </div>
-                        <div class="col s4 padding-small grid_body">
-                            <label for="class">Class na Tabela Relacional</label>
-                            <input id="grid_class_relational" type="text" class="input grid_body">
+                        <div class="col s4 padding-small">
+                            <label for="grid_class_relational">Class na Tabela Relacional</label>
+                            <input id="grid_class_relational" type="text" class="input">
                         </div>
-                        <div class="col s4 padding-small grid_body">
-                            <label for="class">Style na Tabela Relacional</label>
-                            <input id="grid_style_relational" type="text" class="input grid_body">
+                        <div class="col s4 padding-small">
+                            <label for="grid_style_relational">Style na Tabela Relacional</label>
+                            <input id="grid_style_relational" type="text" class="input">
                         </div>
                     </div>
                     <div class="clearfix"></div>

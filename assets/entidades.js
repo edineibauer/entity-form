@@ -129,7 +129,7 @@ function saveEntity(silent) {
 
 function resetAttr(id) {
     entity.edit = typeof(id) !== "undefined" ? id : null;
-    $("#atributos, #template, #style, #class").val("");
+    $("#atributos, #template, #style, #class, .input").val("");
     $(".selectInput").css("color", "#CCCCCC").val("");
     $(".allformat").prop("checked", false);
     $("#format-source, .formato-div, #requireListExtend, .relation_container, #requireListFilter, .relation_creation_container").addClass("hide");
@@ -350,7 +350,7 @@ function saveAttrValue($input) {
         dicionarios[entity.name][entity.edit][name] = $input.prop("checked") ? {} : false;
     else if (dicionarios[entity.name][entity.edit]['form'] !== false && ["class", "style", "template", "atributos", "coll", "cols", "colm", "input"].indexOf(name) > -1)
         dicionarios[entity.name][entity.edit]['form'][name] = $input.val();
-    else if (dicionarios[entity.name][entity.edit]['datagrid'] !== false && ["relevant", "grid_class", "grid_style"].indexOf(name) > -1)
+    else if (dicionarios[entity.name][entity.edit]['datagrid'] !== false && ["grid_relevant", "grid_class", "grid_style", "grid_relevant_relational", "grid_class_relational", "grid_style_relational"].indexOf(name) > -1)
         dicionarios[entity.name][entity.edit]['datagrid'][name] = $input.val();
     else if ("regex" === name)
         dicionarios[entity.name][entity.edit]['allow'][name] = $input.val();
