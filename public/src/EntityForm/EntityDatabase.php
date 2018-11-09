@@ -5,6 +5,7 @@ namespace EntityForm;
 use Config\Config;
 use ConnCrud\SqlCommand;
 use Helpers\Check;
+use Entity\Metadados;
 
 abstract class EntityDatabase
 {
@@ -63,7 +64,7 @@ abstract class EntityDatabase
 
     protected function getSelecaoUnique(array $data, string $select)
     {
-        $inputType = json_decode(file_get_contents(PATH_HOME . VENDOR . "entity-form/entity/input_type.json"), true);
+        $inputType = json_decode(file_get_contents(PATH_HOME . VENDOR . "entity-form/public/entity/input_type.json"), true);
         $dic = Metadados::getDicionario($data['relation']);
         foreach ($dic as $item) {
             if ($item['column'] === $select) {

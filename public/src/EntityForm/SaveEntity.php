@@ -3,6 +3,8 @@
 namespace EntityForm;
 
 use Helpers\Helper;
+use Entity\Metadados;
+use Entity\Dicionario;
 
 class SaveEntity
 {

@@ -2,6 +2,8 @@
 
 namespace EntityForm;
 
+use Entity\Metadados;
+
 class EntityCreateEntityDatabase extends EntityDatabase
 {
     /**

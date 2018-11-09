@@ -5,6 +5,7 @@ namespace EntityForm;
 use ConnCrud\Delete;
 use ConnCrud\Read;
 use ConnCrud\SqlCommand;
+use Entity\Metadados;
 
 class EntityUpdateEntityDatabase extends EntityDatabase
 {
