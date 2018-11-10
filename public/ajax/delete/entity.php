@@ -6,7 +6,7 @@ $sql = new \ConnCrud\SqlCommand();
 $del = new \ConnCrud\Delete();
 $read = new \ConnCrud\Read();
 
-$dic = new \EntityForm\Dicionario($entity);
+$dic = new \Entity\Dicionario($entity);
 
 //Remove dados extendidos multiplos e tablas de relação multiplas
 if (!empty($dic->getAssociationMult())) {

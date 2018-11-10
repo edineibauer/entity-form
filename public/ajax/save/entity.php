@@ -15,7 +15,7 @@ if($name !== $newName) {
     rename(PATH_HOME . "entity/cache/info/{$name}.json",PATH_HOME . "entity/cache/info/{$newName}.json");
 
     //change name entity in others relations
-    $dic = new \EntityForm\Dicionario($newName);
+    $dic = new \Entity\Dicionario($newName);
     foreach ($dic->getAssociationMult() as $item)
         $sql->exeCommand("RENAME TABLE  `" . PRE . "{$name}_{$item->getColumn()}` TO  `" . PRE . "{$newName}_{$item->getColumn()}`");
 
