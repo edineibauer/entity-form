@@ -444,7 +444,7 @@ function setFormat(val) {
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");
 
         if (["extend", "extend_add", "extend_mult", "list", "list_mult", "selecao", "selecao_mult", "checkbox_rel", "checkbox_mult"].indexOf(val) > -1) {
-            $(".relation_container").removeClass("hide");
+            $(".relation_container, .relation_creation_container").removeClass("hide");
         }
     }
 
