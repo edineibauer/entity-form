@@ -5,17 +5,17 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
 } else {
     ob_start();
     ?>
-    <ul id="nav-entity" class="color-text-white z-depth-4 space-header theme-l1">
+    <ul id="nav-entity" class="theme-text-aux z-depth-4 space-header theme-l1">
         <div class="row">
             <div class="padding-12 col">
                 <div class="left upper padding-medium">
                     Entidades
                 </div>
                 <div class="right align-right">
-                    <button class="btn color-white btn-floating right" id="newEntityBtn" onclick="entityEdit()">
+                    <button class="btn theme-d1 btn-floating right" id="newEntityBtn" onclick="entityEdit()">
                         <i class="material-icons">add</i>
                     </button>
-                    <button class="btn color-white btn-floating right" onclick="uploadEntity()">
+                    <button class="btn theme-d1 btn-floating right" onclick="uploadEntity()">
                         <i class="material-icons">backup</i>
                     </button>
                 </div>
@@ -27,11 +27,11 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
             <div class="col s12 hide" id="tpl-entity">
                 <div class="col s7 padding-small">__$__</div>
                 <div class="padding-small col s5 align-right">
-                    <button class="color-text-white opacity radius pointer right padding-tiny btn-flat"
+                    <button class="theme-text-aux opacity radius pointer right padding-tiny btn-flat"
                             style="height: 26px;" onclick="removeEntity('__$__')">
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">delete</i>
                     </button>
-                    <button class="color-text-white radius pointer right padding-tiny btn-flat"
+                    <button class="theme-text-aux radius pointer right padding-tiny btn-flat"
                             style="margin-right: 5px;height: 26px;"
                             onclick="entityEdit('__$__')">
                         <i class="material-icons white-text font-medium" style="margin-top: 4px;">edit</i>
@@ -41,7 +41,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
         </ul>
     </ul>
 
-    <div class="col s12 m4 z-depth-2 space-header color-white" id="nav-menu">
+    <div class="col s12 m4 z-depth-2 space-header theme-d1" id="nav-menu">
         <header class="row">
             <div class="panel">
                 <div class="col s12 padding-tiny">
@@ -68,7 +68,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                     <div class="col left padding-tiny" style="width: 33px; height: 33px">
                         <a href="https://material.io/tools/icons/?style=baseline" target="_blank"
                            class="right btn-flat font-small theme-text margin-0" style="width: 33px; height: 33px">
-                            <i class="material-icons padding-tiny padding-4" id="entityIconDemo"></i>
+                            <i class="material-icons padding-tiny padding-4 theme-text-aux" id="entityIconDemo"></i>
                         </a>
                     </div>
                     <div class="rest">
@@ -94,22 +94,22 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
             <li class="col s12 list-att-__$0__ hide" id="tpl-attrEntity"
                 style="border-bottom: solid 1px #EEE;padding-left:0">
                 <div class="left" style="width: 27px">
-                    <button class="btn-flat z-depth-0 pointer left color-white color-text-grey radius padding-0"
+                    <button class="btn-flat z-depth-0 pointer left theme-d1 color-text-grey radius padding-0"
                             style="margin-bottom: 1px"
                             onclick="indiceChange(__$0__,-1)">
                         <i class="material-icons right font-large">keyboard_arrow_up</i>
                     </button>
-                    <button class="btn-flat z-depth-0 pointer left color-white color-text-grey radius padding-0"
+                    <button class="btn-flat z-depth-0 pointer left theme-d1 color-text-grey radius padding-0"
                             onclick="indiceChange(__$0__,1)">
                         <i class="material-icons right font-large">keyboard_arrow_down</i>
                     </button>
                 </div>
                 <span class="left overflow-hidden padding-4" style="width: 150px">__$1__</span>
-                <button class="btn-flat pointer right opacity color-text-white radius" style="padding: 9px 5px"
+                <button class="btn-flat pointer right opacity theme-text-aux radius" style="padding: 9px 5px"
                         onclick="deleteAttr(__$0__)">
                     <i class="material-icons right font-large">delete</i>
                 </button>
-                <button class="btn-flat pointer right color-text-white radius" style="margin-right: 5px;padding: 9px"
+                <button class="btn-flat pointer right theme-text-aux radius" style="margin-right: 5px;padding: 9px"
                         onclick="editAttr(__$0__)">
                     <i class="material-icons right font-large">edit</i>
                 </button>
