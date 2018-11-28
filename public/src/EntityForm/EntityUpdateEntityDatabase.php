@@ -44,8 +44,13 @@ class EntityUpdateEntityDatabase extends EntityDatabase
 
         if ($changes) {
             $sql = new SqlCommand();
-            foreach ($changes as $id => $dados)
-                $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " CHANGE {$dados['column']} " . parent::prepareSqlColumn($this->new[$id]));
+
+            foreach ($changes as $id => $dados) {
+                if (in_array($dados['format'], ["extend_mult", "list_mult", "selecao_mult", "checkbox_mult"]))
+                    $sql->exeCommand("RENAME TABLE `" . PRE . $this->entity . "_{$dados['column']}` TO `" . PRE . $this->entity . "_" . $this->new[$id]['column'] . "`");
+                else
+                    $sql->exeCommand("ALTER TABLE " . PRE . $this->entity . " CHANGE {$dados['column']} " . parent::prepareSqlColumn($this->new[$id]));
+            }
         }
     }
 

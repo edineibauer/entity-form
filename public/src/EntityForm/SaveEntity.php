@@ -19,7 +19,7 @@ class SaveEntity
      * @param array $data
      * @param int $id
      */
-    public function __construct(string $entity = null, string $icon = null, $data = null, int $id = 0)
+    public function __construct(string $entity = null, string $icon = null, $data = null, int $id = null)
     {
         if ($entity) {
             $this->entity = $entity;
