@@ -439,6 +439,7 @@ function setFormat(val) {
     if (val === "source" || val === "sources") {
         $("#format-source").removeClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").addClass("hide");
+        $("#image").prop("checked");
     } else {
         $("#format-source, .relation_creation_container, #requireListFilter, .relation_container").addClass("hide");
         $("#allowBtnAdd, #spaceValueAllow").removeClass("hide");

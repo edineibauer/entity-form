@@ -519,27 +519,27 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                     <div class="col s12">
                         <label class="col s6 m2 relative">
                             <input type="checkbox" class="file-format" id="image"/>
-                            <span>Imagens</span>
+                            <span class="left padding-8">Imagens</span>
                         </label>
                         <label class="col s6 m2 relative">
                             <input type="checkbox" class="file-format" id="video"/>
-                            <span>Vídeos</span>
+                            <span class="left padding-8">Vídeos</span>
                         </label>
                         <label class="col s6 m2 relative">
                             <input type="checkbox" class="file-format" id="audio"/>
-                            <span>Audios</span>
+                            <span class="left padding-8">Audios</span>
                         </label>
                         <label class="col s6 m2 relative">
                             <input type="checkbox" class="file-format" id="document"/>
-                            <span>Doc.</span>
+                            <span class="left padding-8">Doc.</span>
                         </label>
                         <label class="col s6 m2 relative">
                             <input type="checkbox" class="file-format" id="compact"/>
-                            <span>Compact.</span>
+                            <span class="left padding-8">Compact.</span>
                         </label>
                         <label class="col s6 m2 relative">
                             <input type="checkbox" class="file-format" id="denveloper"/>
-                            <span>Dev.</span>
+                            <span class="left padding-8">Dev.</span>
                         </label>
                     </div>
 
@@ -554,7 +554,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <?php
                                 $document = ["png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "psd", "svg"];
                                 foreach ($document as $id) {
-                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='image-format oneformat' rel='image' id='{$id}'/><span class='upper'>{$id}</span></label>";
+                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='image-format oneformat' rel='image' id='{$id}'/><span class='upper left padding-8'>{$id}</span></label>";
                                 }
                                 ?>
                             </div>
@@ -569,7 +569,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <?php
                                 $document = ["mp4", "avi", "mkv", "mpeg", "flv", "wmv", "mov", "rmvb", "vob", "3gp", "mpg"];
                                 foreach ($document as $id) {
-                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='video-format oneformat' rel='video' id='{$id}'/><span class='upper'>{$id}</span></label>";
+                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='video-format oneformat' rel='video' id='{$id}'/><span class='upper left padding-8'>{$id}</span></label>";
                                 }
                                 ?>
                             </div>
@@ -584,7 +584,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <?php
                                 $document = ["mp3", "aac", "ogg", "wma", "mid", "alac", "flac", "wav", "pcm", "aiff", "ac3"];
                                 foreach ($document as $id) {
-                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='audio-format oneformat' rel='audio' id='{$id}'/><span class='upper'>{$id}</span></label>";
+                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='audio-format oneformat' rel='audio' id='{$id}'/><span class='upper left padding-8'>{$id}</span></label>";
                                 }
                                 ?>
                             </div>
@@ -599,7 +599,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <?php
                                 $document = ["txt", "doc", "docx", "dot", "dotx", "dotm", "ppt", "pptx", "pps", "potm", "potx", "pdf", "xls", "xlsx", "xltx", "rtf"];
                                 foreach ($document as $id) {
-                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='document-format oneformat' rel='document' id='{$id}'/><span class='upper'>{$id}</span></label>";
+                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='document-format oneformat' rel='document' id='{$id}'/><span class='upper left padding-8'>{$id}</span></label>";
                                 }
 
                                 ?>
@@ -615,7 +615,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <?php
                                 $document = ["rar", "zip", "tar", "7z"];
                                 foreach ($document as $id) {
-                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='compact-format oneformat' rel='compact' id='{$id}'/><span class='upper'>{$id}</span></label>";
+                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='compact-format oneformat' rel='compact' id='{$id}'/><span class='upper left padding-8'>{$id}</span></label>";
                                 }
                                 ?>
                             </div>
@@ -630,7 +630,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                                 <?php
                                 $document = ["html", "css", "scss", "js", "tpl", "mst", "json", "xml", "md", "sql", "dll", "eot", "woff", "woff2", "ttf"];
                                 foreach ($document as $id) {
-                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='denveloper-format oneformat' rel='denveloper' id='{$id}'/><span class='upper'>{$id}</span></label>";
+                                    echo "<label class='col s6 m2 relative'><input type='checkbox' class='denveloper-format oneformat' rel='denveloper' id='{$id}'/><span class='upper left padding-8'>{$id}</span></label>";
                                 }
                                 ?>
                             </div>
