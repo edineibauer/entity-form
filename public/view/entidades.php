@@ -12,10 +12,10 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                     Entidades
                 </div>
                 <div class="right align-right">
-                    <button class="btn theme-d1 btn-floating right" id="newEntityBtn" onclick="entityEdit()">
+                    <button class="btn theme btn-floating right" id="newEntityBtn" onclick="entityEdit()">
                         <i class="material-icons">add</i>
                     </button>
-                    <button class="btn theme-d1 btn-floating right" onclick="uploadEntity()">
+                    <button class="btn theme btn-floating right" onclick="uploadEntity()">
                         <i class="material-icons">backup</i>
                     </button>
                 </div>
@@ -41,7 +41,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
         </ul>
     </ul>
 
-    <div class="col s12 m4 z-depth-2 space-header theme-d1" id="nav-menu">
+    <div class="col s12 m4 z-depth-2 space-header theme-l4 color-text-grey-dark-medium" id="nav-menu">
         <header class="row">
             <div class="panel">
                 <div class="col s12 padding-tiny">
@@ -49,7 +49,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                         salvar
                         <i class="material-icons right padding-left">check</i>
                     </button>
-                    <button class="color-grey right btn-floating" title="Novo Atributo" id="saveAttrBtn"
+                    <button class="theme right btn-floating" title="Novo Atributo" id="saveAttrBtn"
                             onclick="editAttr()">
                         <i class="material-icons right">add</i>
                     </button>
@@ -68,7 +68,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                     <div class="col left padding-tiny" style="width: 33px; height: 33px">
                         <a href="https://material.io/tools/icons/?style=baseline" target="_blank"
                            class="right btn-flat font-small theme-text margin-0" style="width: 33px; height: 33px">
-                            <i class="material-icons padding-tiny padding-4 theme-text-aux" id="entityIconDemo"></i>
+                            <i class="material-icons padding-tiny padding-4 theme-text-d" id="entityIconDemo"></i>
                         </a>
                     </div>
                     <div class="rest">
@@ -84,7 +84,7 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
                     <label for="import">Importar Entidade</label>
                     <input type="file" name="import" id="import"/>
                 </span>
-                <button class="col s12 btn-large color-hover-cyan" onclick="sendImport()">
+                <button class="col s12 btn-large theme-d1" onclick="sendImport()">
                     <i class="material-icons padding-right left">send</i><span class="left">Enviar</span>
                 </button>
             </div>
@@ -94,12 +94,12 @@ if (empty($_SESSION['userlogin']) || $_SESSION['userlogin']['setor'] !== "1" || 
             <li class="col s12 list-att-__$0__ hide" id="tpl-attrEntity"
                 style="border-bottom: solid 1px #EEE;padding-left:0">
                 <div class="left" style="width: 27px">
-                    <button class="btn-flat z-depth-0 pointer left theme-d1 color-text-grey radius padding-0"
+                    <button class="btn-flat z-depth-0 pointer left theme theme-text-aux radius padding-0"
                             style="margin-bottom: 1px"
                             onclick="indiceChange(__$0__,-1)">
                         <i class="material-icons right font-large">keyboard_arrow_up</i>
                     </button>
-                    <button class="btn-flat z-depth-0 pointer left theme-d1 color-text-grey radius padding-0"
+                    <button class="btn-flat z-depth-0 pointer left theme theme-text-aux radius padding-0"
                             onclick="indiceChange(__$0__,1)">
                         <i class="material-icons right font-large">keyboard_arrow_down</i>
                     </button>
