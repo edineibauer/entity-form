@@ -501,7 +501,7 @@
     "nome": "Link",
     "size": 254,
     "allow": {
-      "regex": "/^https?:\\/\\/(www\\.)?\\w{2,}\\.\\w{2,}/"
+      "regex": "/^https?:\\/\\//"
     },
     "form": {
       "input": "text"
